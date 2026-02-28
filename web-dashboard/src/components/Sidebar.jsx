@@ -1,34 +1,127 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { BarChart3, Users, Truck, TrendingUp, Leaf } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import {
+  BarChart3,
+  Users,
+  Truck,
+  TrendingUp,
+  Leaf,
+  Zap,
+  Activity,
+  Globe,
+  ChevronRight,
+} from 'lucide-react'
 
+/**
+ * Sidebar Navigation Component
+ * Features:
+ * - Collapsible navigation rail
+ * - Active state indicators
+ * - Organized sections
+ * - Responsive design
+ */
 export default function Sidebar({ open }) {
-  const menuItems = [
-    { icon: BarChart3, label: 'Dashboard', path: '/' },
-    { icon: Users, label: 'Farmer Welfare', path: '/welfare' },
-    { icon: Truck, label: 'Supply Chain', path: '/supply-chain' },
-    { icon: TrendingUp, label: 'Analytics', path: '/analytics' },
+  const location = useLocation()
+
+  const menuSections = [
+    {
+      title: 'Main',
+      items: [
+        { icon: BarChart3, label: 'Overview', path: '/', badge: null },
+        { icon: Zap, label: 'Agents', path: '/agents', badge: '6' },
+      ],
+    },
+    {
+      title: 'Operations',
+      items: [
+        { icon: Users, label: 'Farmers', path: '/farmers', badge: null },
+        { icon: Truck, label: 'Processors', path: '/processors', badge: null },
+      ],
+    },
+    {
+      title: 'Analytics',
+      items: [
+        { icon: Globe, label: 'Government View', path: '/government', badge: null },
+        { icon: Activity, label: 'System Health', path: '/health', badge: null },
+      ],
+    },
   ]
 
+  const isActive = (path) => location.pathname === path
+
   return (
-    <aside className={`${open ? 'w-64' : 'w-20'} bg-gradient-to-b from-primary to-secondary text-white transition-all duration-300 shadow-lg`}>
-      <div className="p-6 flex items-center gap-3">
-        <Leaf size={32} />
-        {open && <span className="text-xl font-bold">HarveLogix</span>}
+    <aside
+      className={`${
+        open ? 'w-64' : 'w-20'
+      } bg-gradient-primary text-white transition-all duration-300 shadow-lg flex flex-col overflow-hidden`}
+    >
+      {/* Logo Section */}
+      <div className="p-6 flex items-center gap-3 border-b border-white border-opacity-10">
+        <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Leaf size={24} />
+        </div>
+        {open && (
+          <div>
+            <h2 className="text-lg font-bold">HarveLogix</h2>
+            <p className="text-xs text-white text-opacity-70">AI for Bharat</p>
+          </div>
+        )}
       </div>
-      
-      <nav className="mt-8">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className="flex items-center gap-4 px-6 py-4 hover:bg-white hover:bg-opacity-10 transition-colors"
-          >
-            <item.icon size={20} />
-            {open && <span>{item.label}</span>}
-          </Link>
+
+      {/* Navigation Sections */}
+      <nav className="flex-1 overflow-y-auto py-6 space-y-6">
+        {menuSections.map((section) => (
+          <div key={section.title}>
+            {open && (
+              <h3 className="px-6 text-xs font-semibold text-white text-opacity-60 uppercase tracking-wider mb-3">
+                {section.title}
+              </h3>
+            )}
+
+            <div className="space-y-1">
+              {section.items.map((item) => {
+                const active = isActive(item.path)
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`
+                      flex items-center gap-3 px-6 py-3 transition-all duration-200
+                      ${
+                        active
+                          ? 'bg-white bg-opacity-20 border-r-4 border-accent-500'
+                          : 'hover:bg-white hover:bg-opacity-10'
+                      }
+                    `}
+                    title={!open ? item.label : undefined}
+                  >
+                    <item.icon size={20} className="flex-shrink-0" />
+                    {open && (
+                      <div className="flex-1 flex items-center justify-between">
+                        <span className="text-sm font-medium">{item.label}</span>
+                        {item.badge && (
+                          <span className="px-2 py-1 bg-accent-500 text-white text-xs font-semibold rounded-full">
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {open && active && <ChevronRight size={16} className="flex-shrink-0" />}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
         ))}
       </nav>
+
+      {/* Footer Info */}
+      {open && (
+        <div className="p-6 border-t border-white border-opacity-10 text-xs text-white text-opacity-70">
+          <p>v1.0.0</p>
+          <p className="mt-1">© 2026 HarveLogix AI</p>
+        </div>
+      )}
     </aside>
   )
 }

@@ -2,34 +2,206 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * HarveLogix AI - Global Styles
+ * 
+ * Design System:
+ * - Color Palette: India Digital (Blue #2457A7, Green #1E8A43, Orange #F36D20)
+ * - Typography: Noto Sans (supports Indic scripts)
+ * - Spacing: 8px base unit
+ * - Shadows: Elevation-based
+ */
+
+/* Base Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F9FAFB;
+  color: #111827;
+}
+
+/* Typography Utilities */
+.text-h1 {
+  @apply text-4xl font-bold leading-tight tracking-tight;
+}
+
+.text-h2 {
+  @apply text-3xl font-bold leading-snug tracking-tight;
+}
+
+.text-h3 {
+  @apply text-2xl font-semibold leading-snug;
+}
+
+.text-h4 {
+  @apply text-xl font-semibold leading-snug;
+}
+
+.text-h5 {
+  @apply text-lg font-semibold leading-normal;
+}
+
+.text-h6 {
+  @apply text-base font-semibold leading-normal;
+}
+
+.text-body-large {
+  @apply text-base leading-relaxed;
+}
+
+.text-body-regular {
+  @apply text-sm leading-relaxed;
+}
+
+.text-body-small {
+  @apply text-xs leading-relaxed;
+}
+
+.text-label {
+  @apply text-xs font-semibold uppercase tracking-wider;
+}
+
+.text-caption {
+  @apply text-xs leading-relaxed;
+}
+
+/* Component Utilities */
 .card {
-  @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
+  @apply bg-white rounded-lg border border-neutral-200 shadow-sm hover:shadow-md transition-shadow;
 }
 
 .btn-primary {
-  @apply bg-primary hover:bg-secondary text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  @apply bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
 
 .btn-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-colors;
+  @apply bg-secondary hover:bg-secondary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
 
-.metric-card {
-  @apply bg-gradient-to-br from-primary to-secondary text-white rounded-lg p-6 shadow-lg;
+.btn-accent {
+  @apply bg-accent hover:bg-accent-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
+
+.btn-outline {
+  @apply border border-neutral-300 text-neutral-700 hover:bg-neutral-50 font-semibold py-2 px-4 rounded-lg transition-colors;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.badge-primary {
+  @apply badge bg-primary-50 text-primary border border-primary-200;
+}
+
+.badge-success {
+  @apply badge bg-success bg-opacity-10 text-success border border-success border-opacity-30;
+}
+
+.badge-warning {
+  @apply badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-30;
+}
+
+.badge-error {
+  @apply badge bg-error bg-opacity-10 text-error border border-error border-opacity-30;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3F4F6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Focus States (Accessibility) */
+:focus-visible {
+  outline: 2px solid #2457A7;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #2457A7;
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .text-h1 {
+    @apply text-2xl;
+  }
+
+  .text-h2 {
+    @apply text-xl;
+  }
+
+  .text-h3 {
+    @apply text-lg;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
+
