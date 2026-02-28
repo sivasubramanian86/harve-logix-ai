@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "ಅವಲೋಕನ",
+    "farmers": "ರೈತರು",
+    "processors": "ಪ್ರೊಸೆಸರ್‌ಗಳು",
+    "agents": "ಏಜೆಂಟ್‌ಗಳು",
+    "governmentView": "ಸರ್ಕಾರಿ ದೃಷ್ಟಿ",
+    "systemHealth": "ವ್ಯವಸ್ಥೆ ಆರೋಗ್ಯ"
+  },
+  "overview": {
+    "title": "ಅವಲೋಕನ",
+    "farmersOnboarded": "ರೈತರು ಸೇರಿಸಲಾಗಿದೆ",
+    "processorsConnected": "ಪ್ರೊಸೆಸರ್‌ಗಳು ಸಂಪರ್ಕಿತ",
+    "wasteReduction": "ತ್ಯಾಜ್ಯ ಕಡಿತ",
+    "incomeUplift": "ಆದಾಯ ಹೆಚ್ಚಳ",
+    "waterSaved": "ನೀರು ಉಳಿತಾಯ",
+    "stateBreakdown": "ರಾಜ್ಯ/ಪ್ರದೇಶ ವಿಭಜನ",
+    "todayActivity": "ಇಂದಿನ ಏಜೆಂಟ್ ಚಟುವಟಿಕೆ",
+    "state": "ರಾಜ್ಯ",
+    "farmers": "ರೈತರು",
+    "processors": "ಪ್ರೊಸೆಸರ್‌ಗಳು",
+    "waste": "ತ್ಯಾಜ್ಯ ಕಡಿತ",
+    "income": "ಆದಾಯ ಹೆಚ್ಚಳ"
+  },
+  "farmers": {
+    "title": "ರೈತರು",
+    "search": "ಹೆಸರು ಅಥವಾ ಸ್ಥಳದಿಂದ ಹುಡುಕಿ",
+    "name": "ಹೆಸರು",
+    "location": "ಸ್ಥಳ",
+    "crops": "ಬೆಳೆಗಳು",
+    "lastDecision": "ಕೊನೆಯ ನಿರ್ಧಾರ",
+    "status": "ಸ್ಥಿತಿ",
+    "active": "ಸಕ್ರಿಯ",
+    "inactive": "ನಿಷ್ಕ್ರಿಯ",
+    "profile": "ರೈತ ಪ್ರೊಫೈಲ್",
+    "pastDecisions": "ಹಿಂದಿನ ನಿರ್ಧಾರಗಳು",
+    "aiInsights": "AI ಒಳನೋಟ",
+    "date": "ದಿನಾಂಕ",
+    "recommendation": "ಶಿಫಾರಸು",
+    "outcome": "ಫಲಿತಾಂಶ"
+  },
+  "governmentView": {
+    "title": "ಸರ್ಕಾರಿ ದೃಷ್ಟಿ",
+    "wasteReductionByState": "ರಾಜ್ಯದ ಮೂಲಕ ತ್ಯಾಜ್ಯ ಕಡಿತ",
+    "incomeUpliftByState": "ರಾಜ್ಯದ ಮೂಲಕ ಆದಾಯ ಹೆಚ್ಚಳ",
+    "adoptionRateByState": "ರಾಜ್ಯದ ಮೂಲಕ ಅಳವಡಿಕೆ ದರ",
+    "waterSavingsByState": "ರಾಜ್ಯದ ಮೂಲಕ ನೀರು ಉಳಿತಾಯ",
+    "trend": "ಪ್ರವೃತ್ತಿ",
+    "improving": "ಸುಧಾರಣೆ ಆಗುತ್ತಿದೆ",
+    "declining": "ಕುಸಿತ ಆಗುತ್ತಿದೆ"
+  },
+  "systemHealth": {
+    "title": "ವ್ಯವಸ್ಥೆ ಆರೋಗ್ಯ",
+    "agentLatency": "ಏಜೆಂಟ್ ವಿಳಂಬ",
+    "errorRate": "ದೋಷ ದರ",
+    "bedrockCallVolume": "Bedrock API ಕಾಲ್ ವಾಲ್ಯೂಮ್",
+    "eventBridgeStatus": "EventBridge ಸ್ಥಿತಿ",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "ಆರೋಗ್ಯಕರ",
+    "degraded": "ಕ್ಷೀಣಗೊಂಡ",
+    "critical": "ನಿರ್ಣಾಯಕ"
+  },
+  "aiInsights": {
+    "title": "AI ಒಳನೋಟ",
+    "cropProtection": "ಬೆಳೆ ಸುರಕ್ಷೆ",
+    "weatherAwareHarvesting": "ಹವಾಮಾನ-ಸಚೇತ ಸುಗ್ಗಿ",
+    "storageRisk": "ಸಂಗ್ರಹ ಅಪಾಯ",
+    "supplyDemandMatching": "ಪೂರೈಕೆ/ಬೇಡಿಕೆ ಹೊಂದಾಣಿಕೆ",
+    "waterOptimization": "ನೀರು ಆಪ್ಟಿಮೈಜೇಶನ್",
+    "qualityPremiums": "ಗುಣಮಾನ ಪ್ರೀಮಿಯಮ್‌ಗಳು",
+    "confidence": "ಆತ್ಮವಿಶ್ವಾಸ",
+    "high": "ಹೆಚ್ಚು",
+    "medium": "ಮಧ್ಯಮ",
+    "low": "ಕಡಿಮೆ"
+  },
+  "wowFeatures": {
+    "title": "WOW ವೈಶಿಷ್ಟ್ಯಗಳು",
+    "wasteReduction": "ತ್ಯಾಜ್ಯ ಕಡಿತ",
+    "incomeUplift": "ಆದಾಯ ಹೆಚ್ಚಳ",
+    "waterSaved": "ನೀರು ಉಳಿತಾಯ",
+    "processorMatches": "ಪ್ರೊಸೆಸರ್ ಹೊಂದಾಣಿಕೆಗಳು"
+  },
+  "common": {
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "error": "ದೋಷ",
+    "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    "demoData": "ಡೆಮೋ ಡೇಟಾ",
+    "liveData": "ಲೈವ್ ಡೇಟಾ",
+    "lastUpdated": "ಕೊನೆಯ ಬಾರಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+    "noData": "ಡೇಟಾ ಲಭ್ಯವಿಲ್ಲ",
+    "language": "ಭಾಷೆ",
+    "theme": "ಥೀಮ್",
+    "light": "ಬೆಳಕು",
+    "dark": "ಕತ್ತಲೆ"
+  }
+}

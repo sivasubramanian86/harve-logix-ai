@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "विहंगावलोकन",
+    "farmers": "शेतकरी",
+    "processors": "प्रोसेसर",
+    "agents": "एजंट",
+    "governmentView": "सरकारी दृश्य",
+    "systemHealth": "सिस्टम स्वास्थ्य"
+  },
+  "overview": {
+    "title": "विहंगावलोकन",
+    "farmersOnboarded": "शेतकरी जोडले गेले",
+    "processorsConnected": "प्रोसेसर जोडले गेले",
+    "wasteReduction": "कचरा कमी",
+    "incomeUplift": "उत्पन्न वाढ",
+    "waterSaved": "पाणी वाचवले",
+    "stateBreakdown": "राज्य/क्षेत्र विभाजन",
+    "todayActivity": "आजचे एजंट क्रियाकलाप",
+    "state": "राज्य",
+    "farmers": "शेतकरी",
+    "processors": "प्रोसेसर",
+    "waste": "कचरा कमी",
+    "income": "उत्पन्न वाढ"
+  },
+  "farmers": {
+    "title": "शेतकरी",
+    "search": "नाव किंवा स्थान द्वारे शोधा",
+    "name": "नाव",
+    "location": "स्थान",
+    "crops": "पिके",
+    "lastDecision": "शेवटचा निर्णय",
+    "status": "स्थिती",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "profile": "शेतकरी प्रोफाइल",
+    "pastDecisions": "मागील निर्णय",
+    "aiInsights": "AI अंतर्दृष्टि",
+    "date": "तारीख",
+    "recommendation": "शिफारस",
+    "outcome": "परिणाम"
+  },
+  "governmentView": {
+    "title": "सरकारी दृश्य",
+    "wasteReductionByState": "राज्य द्वारे कचरा कमी",
+    "incomeUpliftByState": "राज्य द्वारे उत्पन्न वाढ",
+    "adoptionRateByState": "राज्य द्वारे स्वीकृती दर",
+    "waterSavingsByState": "राज्य द्वारे पाणी बचत",
+    "trend": "प्रवृत्ती",
+    "improving": "सुधारणा होत आहे",
+    "declining": "घट होत आहे"
+  },
+  "systemHealth": {
+    "title": "सिस्टम स्वास्थ्य",
+    "agentLatency": "एजंट विलंब",
+    "errorRate": "त्रुटी दर",
+    "bedrockCallVolume": "Bedrock API कॉल व्हॉल्यूम",
+    "eventBridgeStatus": "EventBridge स्थिती",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "निरोगी",
+    "degraded": "खराब झाले",
+    "critical": "गंभीर"
+  },
+  "aiInsights": {
+    "title": "AI अंतर्दृष्टि",
+    "cropProtection": "पिक संरक्षण",
+    "weatherAwareHarvesting": "हवामान-जागरूक कापणी",
+    "storageRisk": "संचयन जोखीम",
+    "supplyDemandMatching": "पुरवठा/मागणी जुळवणे",
+    "waterOptimization": "पाणी अनुकूलन",
+    "qualityPremiums": "गुणवत्ता प्रीमियम",
+    "confidence": "आत्मविश्वास",
+    "high": "उच्च",
+    "medium": "मध्यम",
+    "low": "कमी"
+  },
+  "wowFeatures": {
+    "title": "WOW वैशिष्ट्ये",
+    "wasteReduction": "कचरा कमी",
+    "incomeUplift": "उत्पन्न वाढ",
+    "waterSaved": "पाणी वाचवले",
+    "processorMatches": "प्रोसेसर जुळणी"
+  },
+  "common": {
+    "loading": "लोड होत आहे...",
+    "error": "त्रुटी",
+    "retry": "पुन्हा प्रयत्न करा",
+    "demoData": "डेमो डेटा",
+    "liveData": "लाइव डेटा",
+    "lastUpdated": "शेवटचे अपडेट",
+    "noData": "डेटा उपलब्ध नाही",
+    "language": "भाषा",
+    "theme": "थीम",
+    "light": "हलका",
+    "dark": "गडद"
+  }
+}

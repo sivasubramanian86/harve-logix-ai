@@ -10,7 +10,7 @@ import {
   Activity,
   ArrowRight,
 } from 'lucide-react'
-import axios from 'axios'
+import axios from '../config/axios'
 import { Card, CardHeader, CardBody, StatusBadge } from '../components/Card'
 
 /**
@@ -28,7 +28,22 @@ export default function Agents() {
   const fetchAgentData = async () => {
     try {
       const response = await axios.get('/api/agents')
-      setAgentData(response.data)
+      const iconMap = {
+        'harvest-ready': Leaf,
+        'storage-scout': Leaf,
+        'supply-match': Truck,
+        'water-wise': Droplet,
+        'quality-hub': CheckCircle,
+        'collective-voice': Users,
+      }
+      
+      // Add icons to agents from backend
+      const agentsWithIcons = response.data.agents.map(agent => ({
+        ...agent,
+        icon: iconMap[agent.id] || Leaf,
+      }))
+      
+      setAgentData({ agents: agentsWithIcons })
     } catch (error) {
       setAgentData(getMockAgentData())
     } finally {
@@ -113,11 +128,11 @@ export default function Agents() {
     ],
   })
 
-  if (loading) {
+  if (loading || !agentData) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
           <p className="text-neutral-600">Loading agents...</p>
         </div>
       </div>
@@ -125,9 +140,9 @@ export default function Agents() {
   }
 
   const colorMap = {
-    primary: 'bg-primary',
-    secondary: 'bg-secondary',
-    accent: 'bg-accent',
+    primary: 'bg-primary-500',
+    secondary: 'bg-secondary-500',
+    accent: 'bg-accent-500',
     success: 'bg-success',
     warning: 'bg-warning',
     info: 'bg-info',
@@ -171,15 +186,15 @@ export default function Agents() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-neutral-50 rounded-lg p-3">
                     <p className="text-xs text-neutral-600 font-medium">Accuracy</p>
-                    <p className="text-xl font-bold text-primary mt-1">{agent.accuracy}%</p>
+                    <p className="text-xl font-bold text-primary-500 mt-1">{agent.accuracy}%</p>
                   </div>
                   <div className="bg-neutral-50 rounded-lg p-3">
                     <p className="text-xs text-neutral-600 font-medium">Decisions</p>
-                    <p className="text-xl font-bold text-secondary mt-1">{agent.decisions.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-secondary-500 mt-1">{agent.decisions.toLocaleString()}</p>
                   </div>
                   <div className="bg-neutral-50 rounded-lg p-3">
                     <p className="text-xs text-neutral-600 font-medium">Income Gain</p>
-                    <p className="text-lg font-bold text-accent mt-1">₹{agent.incomeGain.toLocaleString()}</p>
+                    <p className="text-lg font-bold text-accent-500 mt-1">₹{agent.incomeGain.toLocaleString()}</p>
                   </div>
                   <div className="bg-neutral-50 rounded-lg p-3">
                     <p className="text-xs text-neutral-600 font-medium">Last Run</p>
@@ -189,7 +204,7 @@ export default function Agents() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
-                  <button className="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium text-sm hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
+                  <button className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg font-medium text-sm hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
                     <Activity size={16} />
                     View Logs
                   </button>
@@ -212,15 +227,15 @@ export default function Agents() {
         <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <p className="text-4xl font-bold text-primary">92.6%</p>
+              <p className="text-4xl font-bold text-primary-500">92.6%</p>
               <p className="text-neutral-600 mt-2">Average Accuracy</p>
             </div>
             <div className="text-center">
-              <p className="text-4xl font-bold text-secondary">29.4K</p>
+              <p className="text-4xl font-bold text-secondary-500">29.4K</p>
               <p className="text-neutral-600 mt-2">Total Decisions</p>
             </div>
             <div className="text-center">
-              <p className="text-4xl font-bold text-accent">₹48K</p>
+              <p className="text-4xl font-bold text-accent-500">₹48K</p>
               <p className="text-neutral-600 mt-2">Avg Income Gain</p>
             </div>
           </div>

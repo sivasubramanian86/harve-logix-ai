@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "അവലോകനം",
+    "farmers": "കർഷകർ",
+    "processors": "പ്രോസെസറുകൾ",
+    "agents": "ഏജന്റുകൾ",
+    "governmentView": "സർക്കാർ കാഴ്ച",
+    "systemHealth": "സിസ്റ്റം ആരോഗ്യം"
+  },
+  "overview": {
+    "title": "അവലോകനം",
+    "farmersOnboarded": "കർഷകർ ഓൺബോർഡ് ചെയ്തു",
+    "processorsConnected": "പ്രോസെസറുകൾ ബന്ധിപ്പിച്ചു",
+    "wasteReduction": "മാലിന്യ കുറവ്",
+    "incomeUplift": "വരുമാന ഉയർച്ച",
+    "waterSaved": "ജലം സംരക്ഷിച്ചു",
+    "stateBreakdown": "സംസ്ഥാനം/പ്രദേശ വിഭജനം",
+    "todayActivity": "ഇന്നത്തെ ഏജന്റ് പ്രവർത്തനം",
+    "state": "സംസ്ഥാനം",
+    "farmers": "കർഷകർ",
+    "processors": "പ്രോസെസറുകൾ",
+    "waste": "മാലിന്യ കുറവ്",
+    "income": "വരുമാന ഉയർച്ച"
+  },
+  "farmers": {
+    "title": "കർഷകർ",
+    "search": "പേരോ സ്ഥലമോ കൊണ്ട് തിരയുക",
+    "name": "പേര്",
+    "location": "സ്ഥലം",
+    "crops": "വിളകൾ",
+    "lastDecision": "അവസാന തീരുമാനം",
+    "status": "സ്ഥിതി",
+    "active": "സജീവം",
+    "inactive": "നിഷ്ക്രിയം",
+    "profile": "കർഷക പ്രൊഫൈൽ",
+    "pastDecisions": "കഴിഞ്ഞ തീരുമാനങ്ങൾ",
+    "aiInsights": "AI ഉൾക്കാഴ്ച",
+    "date": "തീയതി",
+    "recommendation": "ശുപാർശ",
+    "outcome": "ഫലം"
+  },
+  "governmentView": {
+    "title": "സർക്കാർ കാഴ്ച",
+    "wasteReductionByState": "സംസ്ഥാനം അനുസരിച്ച് മാലിന്യ കുറവ്",
+    "incomeUpliftByState": "സംസ്ഥാനം അനുസരിച്ച് വരുമാന ഉയർച്ച",
+    "adoptionRateByState": "സംസ്ഥാനം അനുസരിച്ച് സ്വീകരണ നിരക്ക്",
+    "waterSavingsByState": "സംസ്ഥാനം അനുസരിച്ച് ജലം സംരക്ഷണം",
+    "trend": "പ്രവണത",
+    "improving": "മെച്ചപ്പെടുന്നു",
+    "declining": "കുറയുന്നു"
+  },
+  "systemHealth": {
+    "title": "സിസ്റ്റം ആരോഗ്യം",
+    "agentLatency": "ഏജന്റ് വിലംബം",
+    "errorRate": "പിശക് നിരക്ക്",
+    "bedrockCallVolume": "Bedrock API കോൾ വോളിയം",
+    "eventBridgeStatus": "EventBridge സ്ഥിതി",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "ആരോഗ്യകരം",
+    "degraded": "ഹ്രസ്വപ്പെട്ടു",
+    "critical": "നിർണായകം"
+  },
+  "aiInsights": {
+    "title": "AI ഉൾക്കാഴ്ച",
+    "cropProtection": "വിള സംരക്ഷണം",
+    "weatherAwareHarvesting": "കാലാവസ്ഥ-ബോധപൂർവ്വ കൊയ്ത്",
+    "storageRisk": "സംഭരണ അപകടം",
+    "supplyDemandMatching": "വിതരണം/ഡിമാൻഡ് പൊരുത്തപ്പെടുത്തൽ",
+    "waterOptimization": "ജലം ഒപ്റ്റിമൈസേഷൻ",
+    "qualityPremiums": "ഗുണനിലവാര പ്രിമിയങ്ങൾ",
+    "confidence": "ആത്മവിശ്വാസം",
+    "high": "ഉയർന്ന",
+    "medium": "മധ്യമ",
+    "low": "താഴ്ന്ന"
+  },
+  "wowFeatures": {
+    "title": "WOW സവിശേഷതകൾ",
+    "wasteReduction": "മാലിന്യ കുറവ്",
+    "incomeUplift": "വരുമാന ഉയർച്ച",
+    "waterSaved": "ജലം സംരക്ഷിച്ചു",
+    "processorMatches": "പ്രോസെസർ പൊരുത്തങ്ങൾ"
+  },
+  "common": {
+    "loading": "ലോഡ് ചെയ്യുന്നു...",
+    "error": "പിശക്",
+    "retry": "വീണ്ടും ശ്രമിക്കുക",
+    "demoData": "ഡെമോ ഡാറ്റ",
+    "liveData": "തത്സമയ ഡാറ്റ",
+    "lastUpdated": "അവസാനം അപ്ഡേറ്റ് ചെയ്തത്",
+    "noData": "ഡാറ്റ ലഭ്യമല്ല",
+    "language": "ഭാഷ",
+    "theme": "തീം",
+    "light": "പ്രകാശം",
+    "dark": "ഇരുണ്ട"
+  }
+}

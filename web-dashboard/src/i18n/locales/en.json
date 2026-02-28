@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "farmers": "Farmers",
+    "processors": "Processors",
+    "agents": "Agents",
+    "governmentView": "Government View",
+    "systemHealth": "System Health"
+  },
+  "overview": {
+    "title": "Overview",
+    "farmersOnboarded": "Farmers Onboarded",
+    "processorsConnected": "Processors Connected",
+    "wasteReduction": "Waste Reduction",
+    "incomeUplift": "Income Uplift",
+    "waterSaved": "Water Saved",
+    "stateBreakdown": "State/Region Breakdown",
+    "todayActivity": "Today's Agent Activity",
+    "state": "State",
+    "farmers": "Farmers",
+    "processors": "Processors",
+    "waste": "Waste Reduction",
+    "income": "Income Uplift"
+  },
+  "farmers": {
+    "title": "Farmers",
+    "search": "Search by name or location",
+    "name": "Name",
+    "location": "Location",
+    "crops": "Crops",
+    "lastDecision": "Last Decision",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "profile": "Farmer Profile",
+    "pastDecisions": "Past Decisions",
+    "aiInsights": "AI Insights",
+    "date": "Date",
+    "recommendation": "Recommendation",
+    "outcome": "Outcome"
+  },
+  "governmentView": {
+    "title": "Government View",
+    "wasteReductionByState": "Waste Reduction by State",
+    "incomeUpliftByState": "Income Uplift by State",
+    "adoptionRateByState": "Adoption Rate by State",
+    "waterSavingsByState": "Water Savings by State",
+    "trend": "Trend",
+    "improving": "Improving",
+    "declining": "Declining"
+  },
+  "systemHealth": {
+    "title": "System Health",
+    "agentLatency": "Agent Latency",
+    "errorRate": "Error Rate",
+    "bedrockCallVolume": "Bedrock API Call Volume",
+    "eventBridgeStatus": "EventBridge Status",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "Healthy",
+    "degraded": "Degraded",
+    "critical": "Critical"
+  },
+  "aiInsights": {
+    "title": "AI Insights",
+    "cropProtection": "Crop Protection",
+    "weatherAwareHarvesting": "Weather-Aware Harvesting",
+    "storageRisk": "Storage Risk",
+    "supplyDemandMatching": "Supply/Demand Matching",
+    "waterOptimization": "Water Optimization",
+    "qualityPremiums": "Quality Premiums",
+    "confidence": "Confidence",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "wowFeatures": {
+    "title": "WOW Features",
+    "wasteReduction": "Waste Reduction",
+    "incomeUplift": "Income Uplift",
+    "waterSaved": "Water Saved",
+    "processorMatches": "Processor Matches"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "demoData": "Demo data",
+    "liveData": "Live data",
+    "lastUpdated": "Last updated",
+    "noData": "No data available",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}

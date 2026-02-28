@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "સારાંશ",
+    "farmers": "ખેડૂતો",
+    "processors": "પ્રોસેસર્સ",
+    "agents": "એજન્ટો",
+    "governmentView": "સરકારી દૃશ્ય",
+    "systemHealth": "સિસ્ટમ આરોગ્ય"
+  },
+  "overview": {
+    "title": "સારાંશ",
+    "farmersOnboarded": "ખેડૂતો ઓનબોર્ડ કર્યા",
+    "processorsConnected": "પ્રોસેસર્સ જોડાયા",
+    "wasteReduction": "કચરો ઘટાડો",
+    "incomeUplift": "આવક વૃદ્ધિ",
+    "waterSaved": "પાણી બચાયું",
+    "stateBreakdown": "રાજ્ય/પ્રદેશ વિભાજન",
+    "todayActivity": "આજની એજન્ટ પ્રવૃત્તિ",
+    "state": "રાજ્ય",
+    "farmers": "ખેડૂતો",
+    "processors": "પ્રોસેસર્સ",
+    "waste": "કચરો ઘટાડો",
+    "income": "આવક વૃદ્ધિ"
+  },
+  "farmers": {
+    "title": "ખેડૂતો",
+    "search": "નામ અથવા સ્થાન દ્વારા શોધો",
+    "name": "નામ",
+    "location": "સ્થાન",
+    "crops": "પાક",
+    "lastDecision": "છેલ્લો નિર્ણય",
+    "status": "સ્થિતિ",
+    "active": "સક્રિય",
+    "inactive": "નિષ્ક્રિય",
+    "profile": "ખેડૂત પ્રોફાઇલ",
+    "pastDecisions": "ભૂતકાળના નિર્ણયો",
+    "aiInsights": "AI અંતર્દૃષ્ટિ",
+    "date": "તારીખ",
+    "recommendation": "ભલામણ",
+    "outcome": "પરિણામ"
+  },
+  "governmentView": {
+    "title": "સરકારી દૃશ્ય",
+    "wasteReductionByState": "રાજ્ય દ્વારા કચરો ઘટાડો",
+    "incomeUpliftByState": "રાજ્ય દ્વારા આવક વૃદ્ધિ",
+    "adoptionRateByState": "રાજ્ય દ્વારા અપનાવવાનો દર",
+    "waterSavingsByState": "રાજ્ય દ્વારા પાણી બચત",
+    "trend": "વલણ",
+    "improving": "સુધરી રહ્યું છે",
+    "declining": "ઘટી રહ્યું છે"
+  },
+  "systemHealth": {
+    "title": "સિસ્ટમ આરોગ્ય",
+    "agentLatency": "એજન્ટ વિલંબ",
+    "errorRate": "ભૂલ દર",
+    "bedrockCallVolume": "Bedrock API કોલ વોલ્યુમ",
+    "eventBridgeStatus": "EventBridge સ્થિતિ",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "સ્વસ્થ",
+    "degraded": "હ્રાસ પામેલ",
+    "critical": "જટિલ"
+  },
+  "aiInsights": {
+    "title": "AI અંતર્દૃષ્ટિ",
+    "cropProtection": "પાક સુરક્ષા",
+    "weatherAwareHarvesting": "હવામાન-સચેત લણણી",
+    "storageRisk": "સંગ્રહ જોખમ",
+    "supplyDemandMatching": "પુરવઠો/માંગ મેળ",
+    "waterOptimization": "પાણી ઑપ્ટિમાઇઝેશન",
+    "qualityPremiums": "ગુણવત્તા પ્રીમિયમ",
+    "confidence": "આત્મવિશ્વાસ",
+    "high": "ઉચ્ચ",
+    "medium": "મધ્યમ",
+    "low": "નીચું"
+  },
+  "wowFeatures": {
+    "title": "WOW વૈશિષ્ટ્યો",
+    "wasteReduction": "કચરો ઘટાડો",
+    "incomeUplift": "આવક વૃદ્ધિ",
+    "waterSaved": "પાણી બચાયું",
+    "processorMatches": "પ્રોસેસર મેળ"
+  },
+  "common": {
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "error": "ભૂલ",
+    "retry": "ફરીથી પ્રયાસ કરો",
+    "demoData": "ડેમો ડેટા",
+    "liveData": "લાઇવ ડેટા",
+    "lastUpdated": "છેલ્લે અપડેટ કર્યું",
+    "noData": "ડેટા ઉપલબ્ધ નથી",
+    "language": "ભાષા",
+    "theme": "થીમ",
+    "light": "પ્રકાશ",
+    "dark": "અંધકાર"
+  }
+}

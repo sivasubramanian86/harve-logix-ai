@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts'
 import { Truck, Package, AlertCircle } from 'lucide-react'
-import axios from 'axios'
+import axios from '../config/axios'
 
 export default function SupplyChain() {
   const [data, setData] = useState(null)
@@ -45,7 +45,7 @@ export default function SupplyChain() {
     wasteInTransit: '3.2%'
   })
 
-  if (loading) return <div className="p-8">Loading...</div>
+  if (loading || !data) return <div className="p-8">Loading...</div>
 
   return (
     <div className="p-8 space-y-8">
@@ -137,7 +137,7 @@ export default function SupplyChain() {
                     <div className="flex items-center gap-2">
                       <div className="w-24 bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-primary h-2 rounded-full"
+                          className="bg-primary-500 h-2 rounded-full"
                           style={{ width: `${proc.utilization}%` }}
                         ></div>
                       </div>

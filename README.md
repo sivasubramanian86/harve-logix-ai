@@ -53,7 +53,6 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
 - AWS Account with appropriate permissions
 - Python 3.11+
 - Node.js 18+
-- Docker (optional)
 - Terraform or AWS CloudFormation
 
 ### Installation
@@ -64,38 +63,32 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
    cd harvelogix-ai
    ```
 
-2. **Set up AWS credentials**
+2. **Quick Start (30 seconds)**
    ```bash
-   aws configure
+   # Windows
+   start.bat
+   
+   # macOS/Linux
+   chmod +x start.sh
+   ./start.sh
    ```
 
-3. **Install dependencies**
+3. **Manual Setup**
    ```bash
    # Backend
-   pip install -r requirements.txt
-   
-   # Frontend
-   cd mobile-app
+   cd backend
    npm install
+   npm start
+   
+   # Frontend (new terminal)
+   cd web-dashboard
+   npm install
+   npm run dev
    ```
 
-4. **Deploy infrastructure**
-   ```bash
-   cd infrastructure
-   terraform init
-   terraform plan
-   terraform apply
+4. **Open Dashboard**
    ```
-
-5. **Deploy Lambda functions**
-   ```bash
-   ./scripts/deploy-agents.sh
-   ```
-
-6. **Start mobile app**
-   ```bash
-   cd mobile-app
-   npm run start
+   http://localhost:3000
    ```
 
 ## Project Structure

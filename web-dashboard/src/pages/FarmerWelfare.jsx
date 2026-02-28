@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'
-import axios from 'axios'
+import axios from '../config/axios'
 
 export default function FarmerWelfare() {
   const [data, setData] = useState(null)
@@ -43,7 +43,7 @@ export default function FarmerWelfare() {
     ]
   })
 
-  if (loading) return <div className="p-8">Loading...</div>
+  if (loading || !data) return <div className="p-8">Loading...</div>
 
   return (
     <div className="p-8 space-y-8">
@@ -97,7 +97,7 @@ export default function FarmerWelfare() {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-primary h-2 rounded-full transition-all"
+                    className="bg-primary-500 h-2 rounded-full transition-all"
                     style={{ width: `${enrollmentRate}%` }}
                   ></div>
                 </div>

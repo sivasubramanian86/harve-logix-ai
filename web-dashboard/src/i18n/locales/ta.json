@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "கண்ணோட்டம்",
+    "farmers": "விவசாயிகள்",
+    "processors": "செயலாக்கிகள்",
+    "agents": "முகவர்கள்",
+    "governmentView": "அரசு பார்வை",
+    "systemHealth": "கணினி ஆரோக்கியம்"
+  },
+  "overview": {
+    "title": "கண்ணோட்டம்",
+    "farmersOnboarded": "விவசாயிகள் சேர்க்கப்பட்டனர்",
+    "processorsConnected": "செயலாக்கிகள் இணைக்கப்பட்டுள்ளன",
+    "wasteReduction": "கழிவு குறைப்பு",
+    "incomeUplift": "வருமான உயர்வு",
+    "waterSaved": "நீர் சேமிக்கப்பட்டது",
+    "stateBreakdown": "மாநிலம்/பிராந்திய பிரிவு",
+    "todayActivity": "இன்றைய முகவர் செயல்பாடு",
+    "state": "மாநிலம்",
+    "farmers": "விவசாயிகள்",
+    "processors": "செயலாக்கிகள்",
+    "waste": "கழிவு குறைப்பு",
+    "income": "வருமான உயர்வு"
+  },
+  "farmers": {
+    "title": "விவசாயிகள்",
+    "search": "பெயர் அல்லது இடத்தால் தேடுக",
+    "name": "பெயர்",
+    "location": "இடம்",
+    "crops": "பயிர்கள்",
+    "lastDecision": "கடைசி முடிவு",
+    "status": "நிலை",
+    "active": "செயல்பாட்டில்",
+    "inactive": "செயல்பாடற்ற",
+    "profile": "விவசாயி சுயவிவரம்",
+    "pastDecisions": "கடந்த முடிவுகள்",
+    "aiInsights": "AI நுண்ணறிவு",
+    "date": "தேதி",
+    "recommendation": "பரிந்துரை",
+    "outcome": "விளைவு"
+  },
+  "governmentView": {
+    "title": "அரசு பார்வை",
+    "wasteReductionByState": "மாநிலத்தால் கழிவு குறைப்பு",
+    "incomeUpliftByState": "மாநிலத்தால் வருமான உயர்வு",
+    "adoptionRateByState": "மாநிலத்தால் ஏற்றுக்கொள்ளும் விகிதம்",
+    "waterSavingsByState": "மாநிலத்தால் நீர் சேமிப்பு",
+    "trend": "போக்கு",
+    "improving": "மேம்பட்டு வருகிறது",
+    "declining": "குறைந்து வருகிறது"
+  },
+  "systemHealth": {
+    "title": "கணினி ஆரோக்கியம்",
+    "agentLatency": "முகவர் தாமதம்",
+    "errorRate": "பிழை விகிதம்",
+    "bedrockCallVolume": "Bedrock API அழைப்பு அளவு",
+    "eventBridgeStatus": "EventBridge நிலை",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "ஆரோக்கியமான",
+    "degraded": "சிதைந்த",
+    "critical": "முக்கியமான"
+  },
+  "aiInsights": {
+    "title": "AI நுண்ணறிவு",
+    "cropProtection": "பயிர் பாதுகாப்பு",
+    "weatherAwareHarvesting": "வானிலை-விழிப்புணர்வு அறுவடை",
+    "storageRisk": "சேமிப்பு ஆபத்து",
+    "supplyDemandMatching": "வழங்கல்/চাহिதை பொருத்தம்",
+    "waterOptimization": "நீர் உகந்தமாக்கல்",
+    "qualityPremiums": "தரம் பிரீமியம்",
+    "confidence": "நம்பிக்கை",
+    "high": "உচ்சம்",
+    "medium": "நடுத்தர",
+    "low": "குறைந்த"
+  },
+  "wowFeatures": {
+    "title": "WOW அம்சங்கள்",
+    "wasteReduction": "கழிவு குறைப்பு",
+    "incomeUplift": "வருமான உயர்வு",
+    "waterSaved": "நீர் சேமிக்கப்பட்டது",
+    "processorMatches": "செயலாக்கி பொருத்தங்கள்"
+  },
+  "common": {
+    "loading": "ஏற்றுகிறது...",
+    "error": "பிழை",
+    "retry": "மீண்டும் முயற்சி செய்க",
+    "demoData": "டெமோ தரவு",
+    "liveData": "நேரடி தரவு",
+    "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது",
+    "noData": "தரவு கிடைக்கவில்லை",
+    "language": "மொழி",
+    "theme": "தீம்",
+    "light": "ஒளி",
+    "dark": "இருள்"
+  }
+}

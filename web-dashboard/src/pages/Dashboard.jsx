@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { TrendingUp, Users, Leaf, DollarSign } from 'lucide-react'
-import axios from 'axios'
+import axios from '../config/axios'
 
 const COLORS = ['#10b981', '#059669', '#f59e0b', '#ef4444']
 
@@ -16,7 +16,16 @@ export default function Dashboard() {
   const fetchMetrics = async () => {
     try {
       const response = await axios.get('/api/metrics')
-      setMetrics(response.data)
+      const backendData = response.data
+      setMetrics({
+        totalFarmers: backendData.totalFarmers || 45230,
+        activeUsers: 12450,
+        totalIncome: 2340000,
+        wasteReduction: 28.5,
+        incomeGrowth: backendData.incomeGrowth || getMockMetrics().incomeGrowth,
+        agentUsage: backendData.agentUsage || getMockMetrics().agentUsage,
+        topCrops: backendData.topCrops || getMockMetrics().topCrops,
+      })
     } catch (error) {
       console.log('Using mock data')
       setMetrics(getMockMetrics())
@@ -52,7 +61,7 @@ export default function Dashboard() {
     ]
   })
 
-  if (loading) {
+  if (loading || !metrics) {
     return <div className="p-8 text-center">Loading...</div>
   }
 

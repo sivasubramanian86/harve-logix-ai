@@ -104,7 +104,7 @@ The backend provides mock endpoints for all 6 agents. Test them with curl:
 
 ```bash
 # Test HarvestReady Agent
-curl -X POST http://localhost:5000/agents/harvest-ready \
+curl -X POST http://localhost:5000/api/agents/harvest-ready \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato",
@@ -113,7 +113,7 @@ curl -X POST http://localhost:5000/agents/harvest-ready \
   }'
 
 # Test SupplyMatch Agent
-curl -X POST http://localhost:5000/agents/supply-match \
+curl -X POST http://localhost:5000/api/agents/supply-match \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato",
@@ -122,7 +122,7 @@ curl -X POST http://localhost:5000/agents/supply-match \
   }'
 
 # Test QualityHub Agent
-curl -X POST http://localhost:5000/agents/quality-hub \
+curl -X POST http://localhost:5000/api/agents/quality-hub \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato",
@@ -130,7 +130,7 @@ curl -X POST http://localhost:5000/agents/quality-hub \
   }'
 
 # Test StorageScout Agent
-curl -X POST http://localhost:5000/agents/storage-scout \
+curl -X POST http://localhost:5000/api/agents/storage-scout \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato",
@@ -138,14 +138,14 @@ curl -X POST http://localhost:5000/agents/storage-scout \
   }'
 
 # Test WaterWise Agent
-curl -X POST http://localhost:5000/agents/water-wise \
+curl -X POST http://localhost:5000/api/agents/water-wise \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato"
   }'
 
 # Test CollectiveVoice Agent
-curl -X POST http://localhost:5000/agents/collective-voice \
+curl -X POST http://localhost:5000/api/agents/collective-voice \
   -H "Content-Type: application/json" \
   -d '{
     "crop_type": "tomato",
@@ -190,28 +190,32 @@ npm run test:coverage
 
 ---
 
-## 📊 Dashboard Navigation
+## 📁 Project Structure
 
-### Home Page (Dashboard)
-- **Metrics Cards**: Key performance indicators
-- **Income Growth Chart**: 6-month trend
-- **Agent Usage Pie Chart**: Distribution of agent usage
-- **Top Crops Table**: Income by crop type
-
-### Farmer Welfare Page
-- **Income Distribution**: Histogram of farmer income ranges
-- **Regional Growth**: Income growth by state
-- **Scheme Enrollment**: Government scheme participation rates
-
-### Supply Chain Page
-- **Processor Utilization**: Capacity usage by processor
-- **Weekly Matches**: Supply match success rates
-- **Processor Performance**: Detailed processor metrics
-
-### Analytics Page
-- **Growth Trends**: Farmer and income growth over time
-- **Agent Accuracy**: Improvement in agent predictions
-- **Agent Performance**: Individual agent metrics
+```
+harvelogix-ai/
+├── backend/
+│   ├── server.js                 # Node.js Express server
+│   ├── package.json              # Node dependencies
+│   ├── agents/                   # Python agents (6 autonomous agents)
+│   ├── core/                     # Bedrock orchestrator
+│   ├── tests/                    # Unit & property-based tests
+│   ├── requirements.txt          # Python dependencies
+│   └── README.md                 # Backend documentation
+├── web-dashboard/
+│   ├── src/
+│   │   ├── App.jsx              # Main app component
+│   │   ├── pages/               # Dashboard pages
+│   │   ├── components/          # Reusable components
+│   │   └── index.css            # Tailwind styles
+│   ├── package.json             # React dependencies
+│   ├── vite.config.js           # Vite configuration
+│   ├── index.html               # HTML entry point
+│   └── README.md                # Frontend documentation
+├── infrastructure/              # Terraform & CloudFormation
+├── docs/                        # Documentation
+└── README.md                    # Project overview
+```
 
 ---
 
@@ -252,32 +256,23 @@ curl http://localhost:5000/health
 # Should return: {"status":"ok","timestamp":"..."}
 ```
 
+### Dashboard Shows "Loading..." Forever
+
+1. Check browser console for errors (F12)
+2. Check backend is running on port 5000
+3. Check network tab to see if API calls are failing
+4. Restart both frontend and backend
+
 ---
 
-## 📁 Project Structure
+## 💡 Tips
 
-```
-harvelogix-ai/
-├── backend/
-│   ├── server.js                 # Node.js Express server
-│   ├── package.json              # Node dependencies
-│   ├── agents/                   # Python agents (6 autonomous agents)
-│   ├── core/                     # Bedrock orchestrator
-│   ├── tests/                    # Unit & property-based tests
-│   └── requirements.txt          # Python dependencies
-├── web-dashboard/
-│   ├── src/
-│   │   ├── App.jsx              # Main app component
-│   │   ├── pages/               # Dashboard pages
-│   │   ├── components/          # Reusable components
-│   │   └── index.css            # Tailwind styles
-│   ├── package.json             # React dependencies
-│   ├── vite.config.js           # Vite configuration
-│   └── index.html               # HTML entry point
-├── infrastructure/              # Terraform & CloudFormation
-├── docs/                        # Documentation
-└── README.md                    # Project overview
-```
+1. **Keep Both Terminals Open** - One for backend, one for frontend
+2. **Use Browser DevTools** - Press F12 to inspect network requests
+3. **Check Terminal Output** - Backend logs appear in the backend terminal
+4. **Modify Mock Data** - Edit `backend/server.js` to change data
+5. **Hot Reload** - Frontend automatically reloads on code changes
+6. **Test Agents** - Use curl commands to test individual agents
 
 ---
 
@@ -285,7 +280,7 @@ harvelogix-ai/
 
 ### 1. Explore the Dashboard
 - Navigate through all tabs
-- Check out the different metrics and charts
+- Check out different metrics and charts
 - Understand the data flow
 
 ### 2. Test the Agents
@@ -341,16 +336,6 @@ harvelogix-ai/
 - Property-based tests with Hypothesis
 - Integration tests
 - Test fixtures and mocks
-
----
-
-## 💡 Tips
-
-1. **Keep both terminals open** - One for backend, one for frontend
-2. **Check the browser console** - For any frontend errors
-3. **Check the terminal output** - For backend logs
-4. **Use browser DevTools** - To inspect network requests
-5. **Modify mock data** - In `backend/server.js` to test different scenarios
 
 ---
 

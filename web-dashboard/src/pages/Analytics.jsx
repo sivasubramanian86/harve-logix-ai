@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import axios from 'axios'
+import axios from '../config/axios'
 
 export default function Analytics() {
   const [data, setData] = useState(null)
@@ -48,7 +48,7 @@ export default function Analytics() {
     ]
   })
 
-  if (loading) return <div className="p-8">Loading...</div>
+  if (loading || !data) return <div className="p-8">Loading...</div>
 
   return (
     <div className="p-8 space-y-8">
@@ -133,7 +133,7 @@ export default function Analytics() {
                     <div className="flex items-center gap-2">
                       <div className="w-24 bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-primary h-2 rounded-full"
+                          className="bg-primary-500 h-2 rounded-full"
                           style={{ width: `${agent.accuracy}%` }}
                         ></div>
                       </div>

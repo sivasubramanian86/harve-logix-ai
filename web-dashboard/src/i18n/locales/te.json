@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "overview": "అవలోకనం",
+    "farmers": "రైతులు",
+    "processors": "ప్రాసెసర్‌లు",
+    "agents": "ఏజెంట్‌లు",
+    "governmentView": "ప్రభుత్వ దృష్టి",
+    "systemHealth": "సిస్టమ్ ఆరోగ్యం"
+  },
+  "overview": {
+    "title": "అవలోకనం",
+    "farmersOnboarded": "రైతులు చేర్చబడ్డారు",
+    "processorsConnected": "ప్రాసెసర్‌లు కనెక్ట్ చేయబడ్డాయి",
+    "wasteReduction": "వ్యర్థ తగ్గింపు",
+    "incomeUplift": "ఆదాయ పెరుగుదల",
+    "waterSaved": "నీరు సేవ్ చేయబడింది",
+    "stateBreakdown": "రాష్ట్ర/ప్రాంత విభజన",
+    "todayActivity": "ఈ రోజు ఏజెంట్ కార్యకలాపం",
+    "state": "రాష్ట్రం",
+    "farmers": "రైతులు",
+    "processors": "ప్రాసెసర్‌లు",
+    "waste": "వ్యర్థ తగ్గింపు",
+    "income": "ఆదాయ పెరుగుదల"
+  },
+  "farmers": {
+    "title": "రైతులు",
+    "search": "పేరు లేదా ప్రదేశం ద్వారా శోధించండి",
+    "name": "పేరు",
+    "location": "ప్రదేశం",
+    "crops": "పంటలు",
+    "lastDecision": "చివరి నిర్ణయం",
+    "status": "స్థితి",
+    "active": "క్రియాశీల",
+    "inactive": "నిష్క్రియ",
+    "profile": "రైతు ప్రొఫైల్",
+    "pastDecisions": "గత నిర్ణయాలు",
+    "aiInsights": "AI అంతర్దృష్టి",
+    "date": "తేదీ",
+    "recommendation": "సిఫారిష్",
+    "outcome": "ఫలితం"
+  },
+  "governmentView": {
+    "title": "ప్రభుత్వ దృష్టి",
+    "wasteReductionByState": "రాష్ట్రం ద్వారా వ్యర్థ తగ్గింపు",
+    "incomeUpliftByState": "రాష్ట్రం ద్వారా ఆదాయ పెరుగుదల",
+    "adoptionRateByState": "రాష్ట్రం ద్వారా ఆమోదన రేటు",
+    "waterSavingsByState": "రాష్ట్రం ద్వారా నీటి సేవ",
+    "trend": "ట్రెండ్",
+    "improving": "మెరుగుపడుతోంది",
+    "declining": "క్షీణించుతోంది"
+  },
+  "systemHealth": {
+    "title": "సిస్టమ్ ఆరోగ్యం",
+    "agentLatency": "ఏజెంట్ లేటెన్సీ",
+    "errorRate": "లోపం రేటు",
+    "bedrockCallVolume": "Bedrock API కాల్ వాల్యూమ్",
+    "eventBridgeStatus": "EventBridge స్థితి",
+    "ms": "ms",
+    "percent": "%",
+    "healthy": "ఆరోగ్యకరమైన",
+    "degraded": "క్షీణించిన",
+    "critical": "క్రిటికల్"
+  },
+  "aiInsights": {
+    "title": "AI అంతర్దృష్టి",
+    "cropProtection": "పంట సంరక్షణ",
+    "weatherAwareHarvesting": "వాతావరణ-సচేతన కోత",
+    "storageRisk": "నిల్వ ప్రమాదం",
+    "supplyDemandMatching": "సరఫరా/డిమాండ్ సరిపోలిక",
+    "waterOptimization": "నీటి ఆప్టిమైజేషన్",
+    "qualityPremiums": "నాణ్యత ప్రీమియమ్‌లు",
+    "confidence": "విశ్వాసం",
+    "high": "ఎత్తైన",
+    "medium": "మధ్యస్థ",
+    "low": "తక్కువ"
+  },
+  "wowFeatures": {
+    "title": "WOW లక్షణాలు",
+    "wasteReduction": "వ్యర్థ తగ్గింపు",
+    "incomeUplift": "ఆదాయ పెరుగుదల",
+    "waterSaved": "నీరు సేవ్ చేయబడింది",
+    "processorMatches": "ప్రాసెసర్ సరిపోలికలు"
+  },
+  "common": {
+    "loading": "లోడ్ చేస్తోంది...",
+    "error": "లోపం",
+    "retry": "మళ్లీ ప్రయత్నించండి",
+    "demoData": "డెమో డేటా",
+    "liveData": "లైవ్ డేటా",
+    "lastUpdated": "చివరిసారి నవీకరించబడింది",
+    "noData": "డేటా అందుబాటులో లేదు",
+    "language": "భాష",
+    "theme": "థీమ్",
+    "light": "కాంతి",
+    "dark": "చీకటి"
+  }
+}

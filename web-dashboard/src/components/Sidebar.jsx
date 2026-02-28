@@ -11,6 +11,7 @@ import {
   Globe,
   ChevronRight,
 } from 'lucide-react'
+import { useI18n } from '../context/I18nProvider'
 
 /**
  * Sidebar Navigation Component
@@ -19,30 +20,32 @@ import {
  * - Active state indicators
  * - Organized sections
  * - Responsive design
+ * - i18n support for labels
  */
 export default function Sidebar({ open }) {
   const location = useLocation()
+  const { t } = useI18n()
 
   const menuSections = [
     {
       title: 'Main',
       items: [
-        { icon: BarChart3, label: 'Overview', path: '/', badge: null },
-        { icon: Zap, label: 'Agents', path: '/agents', badge: '6' },
+        { icon: BarChart3, label: t('nav.overview'), path: '/', badge: null },
+        { icon: Zap, label: t('nav.agents'), path: '/agents', badge: '6' },
       ],
     },
     {
       title: 'Operations',
       items: [
-        { icon: Users, label: 'Farmers', path: '/farmers', badge: null },
-        { icon: Truck, label: 'Processors', path: '/processors', badge: null },
+        { icon: Users, label: t('nav.farmers'), path: '/farmers', badge: null },
+        { icon: Truck, label: t('nav.processors'), path: '/processors', badge: null },
       ],
     },
     {
       title: 'Analytics',
       items: [
-        { icon: Globe, label: 'Government View', path: '/government', badge: null },
-        { icon: Activity, label: 'System Health', path: '/health', badge: null },
+        { icon: Globe, label: t('nav.governmentView'), path: '/government', badge: null },
+        { icon: Activity, label: t('nav.systemHealth'), path: '/health', badge: null },
       ],
     },
   ]

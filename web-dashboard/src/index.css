@@ -83,15 +83,15 @@ body {
 }
 
 .btn-primary {
-  @apply bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
 
 .btn-secondary {
-  @apply bg-secondary hover:bg-secondary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  @apply bg-secondary-500 hover:bg-secondary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
 
 .btn-accent {
-  @apply bg-accent hover:bg-accent-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  @apply bg-accent-500 hover:bg-accent-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
 }
 
 .btn-outline {
@@ -103,7 +103,7 @@ body {
 }
 
 .badge-primary {
-  @apply badge bg-primary-50 text-primary border border-primary-200;
+  @apply badge bg-primary-50 text-primary-500 border border-primary-200;
 }
 
 .badge-success {
