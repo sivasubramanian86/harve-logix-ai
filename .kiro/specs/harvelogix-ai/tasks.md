@@ -2,11 +2,11 @@
 
 ## Phase 1: Core Agent Logic & Bedrock Integration
 
-- [ ] 1.1 Set up AWS Lambda environment and Bedrock integration
-  - [ ] 1.1.1 Create Lambda execution role with Bedrock permissions
-  - [ ] 1.1.2 Initialize Bedrock client (Claude 3.5 Sonnet)
-  - [ ] 1.1.3 Create Lambda layer for shared dependencies
-  - [ ] 1.1.4 Set up CloudWatch logging for all Lambda functions
+- [x] 1.1 Set up AWS Lambda environment and Bedrock integration
+  - [x] 1.1.1 Create Lambda execution role with Bedrock permissions
+  - [x] 1.1.2 Initialize Bedrock client (Claude 3.5 Sonnet)
+  - [x] 1.1.3 Create Lambda layer for shared dependencies
+  - [x] 1.1.4 Set up CloudWatch logging for all Lambda functions
 
 - [ ] 1.2 Implement HarvestReady Agent
   - [ ] 1.2.1 Create RDS connection pool for crop_phenology queries
