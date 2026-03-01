@@ -444,6 +444,10 @@ app.post('/api/agents/collective-voice', (req, res) => {
   }
 })
 
+// Multimodal routes
+import multimodalRoutes from './routes/multimodal.js'
+app.use('/api/multimodal', multimodalRoutes)
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })

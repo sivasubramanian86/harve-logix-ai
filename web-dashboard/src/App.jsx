@@ -13,6 +13,7 @@ import SupplyChain from './pages/SupplyChain'
 import Analytics from './pages/Analytics'
 import GovernmentViewUpgraded from './pages/GovernmentViewUpgraded'
 import SystemHealthUpgraded from './pages/SystemHealthUpgraded'
+import AiScannerUpgraded from './pages/AiScannerUpgraded'
 import './theme/variables.css'
 import i18n from './i18n/config'
 
@@ -26,6 +27,7 @@ import i18n from './i18n/config'
  * - /processors → Processor management
  * - /government → Government view
  * - /health → System health
+ * - /ai-scanner → Multimodal AI scanner
  * - /supply-chain → Supply chain (legacy)
  * - /analytics → Analytics (legacy)
  */
@@ -43,6 +45,7 @@ function App() {
                 <Route path="/processors" element={<SupplyChain />} />
                 <Route path="/government" element={<GovernmentViewUpgraded />} />
                 <Route path="/health" element={<SystemHealthUpgraded />} />
+                <Route path="/ai-scanner" element={<AiScannerUpgraded />} />
                 {/* Legacy routes */}
                 <Route path="/welfare" element={<FarmerWelfare />} />
                 <Route path="/supply-chain" element={<SupplyChain />} />

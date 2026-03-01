@@ -10,6 +10,7 @@ import {
   Activity,
   Globe,
   ChevronRight,
+  Wand2,
 } from 'lucide-react'
 import { useI18n } from '../context/I18nProvider'
 
@@ -39,6 +40,12 @@ export default function Sidebar({ open }) {
       items: [
         { icon: Users, label: t('nav.farmers'), path: '/farmers', badge: null },
         { icon: Truck, label: t('nav.processors'), path: '/processors', badge: null },
+      ],
+    },
+    {
+      title: 'AI Tools',
+      items: [
+        { icon: Wand2, label: t('multimodal.aiScanner'), path: '/ai-scanner', badge: null },
       ],
     },
     {
