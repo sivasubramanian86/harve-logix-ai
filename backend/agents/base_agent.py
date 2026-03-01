@@ -8,7 +8,7 @@ error handling, and logging.
 import json
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 from datetime import datetime
 
 import boto3
@@ -22,6 +22,15 @@ from config import (
 )
 from utils.errors import BedrockException, DataAccessException
 from utils.retry import retry_with_backoff
+
+# RAG imports (optional, with fallback)
+try:
+    from services.retrieverService import retrieve_context, build_rag_prompt
+    RAG_AVAILABLE = True
+except ImportError:
+    RAG_AVAILABLE = False
+    retrieve_context = None
+    build_rag_prompt = None
 
 logger = logging.getLogger(__name__)
 
@@ -203,3 +212,71 @@ class BaseAgent(ABC):
                 'timestamp': response.get('timestamp')
             }
         )
+
+    def invoke_bedrock_with_rag(
+        self,
+        query: str,
+        system_prompt: Optional[str] = None,
+        k: int = 3,
+        use_rag: bool = True
+    ) -> str:
+        """
+        Invoke Bedrock with RAG (Retrieval-Augmented Generation) support.
+
+        Args:
+            query: User query
+            system_prompt: Optional system prompt
+            k: Number of documents to retrieve
+            use_rag: Whether to use RAG (default True)
+
+        Returns:
+            Model response text
+        """
+        try:
+            if not use_rag or not RAG_AVAILABLE or retrieve_context is None or build_rag_prompt is None:
+                self.logger.info("RAG not enabled or available, using standard invoke")
+                return self.invoke_bedrock(query, system_prompt)
+
+            # Retrieve relevant documents
+            documents = retrieve_context(query=query, k=k)
+            self.logger.info(f"Retrieved {len(documents)} documents for RAG")
+
+            # Build augmented prompt
+            rag_prompts = build_rag_prompt(query, documents, system_prompt)
+
+            # Invoke Bedrock with augmented prompt
+            return self.invoke_bedrock(
+                prompt=rag_prompts['user_prompt'],
+                system_prompt=rag_prompts['system_prompt']
+            )
+
+        except Exception as e:
+            self.logger.warning(f"RAG invocation error: {e}, falling back to standard invoke")
+            return self.invoke_bedrock(query, system_prompt)
+
+    def retrieve_context_for_query(
+        self,
+        query: str,
+        k: int = 3
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve context documents for a query (without invoking Bedrock).
+
+        Args:
+            query: Query text
+            k: Number of documents to retrieve
+
+        Returns:
+            List of retrieved documents
+        """
+        try:
+            if not RAG_AVAILABLE or retrieve_context is None:
+                self.logger.warning("RAG not available")
+                return []
+
+            documents = retrieve_context(query=query, k=k)
+            return documents
+
+        except Exception as e:
+            self.logger.error(f"Context retrieval error: {e}")
+            return []

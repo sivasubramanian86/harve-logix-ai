@@ -12,6 +12,7 @@ import { useI18n } from '../context/I18nProvider';
 import MetricCard from '../components/MetricCard';
 import DataBadge from '../components/DataBadge';
 import WowFeatures from '../components/WowFeatures';
+import RagStatus from '../components/RagStatus';
 import dataService from '../services/dataService';
 
 export default function OverviewUpgraded() {
@@ -123,6 +124,9 @@ export default function OverviewUpgraded() {
         </div>
         {metrics && <DataBadge mode={metrics.source} timestamp={metrics.timestamp} />}
       </div>
+
+      {/* RAG/MCP status summary */}
+      {metrics && <RagStatus rag={metrics.ragStatus} mcp={metrics.mcpStatus} />}
 
       {/* Hero KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">

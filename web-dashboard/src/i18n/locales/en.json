@@ -75,11 +75,22 @@
     "low": "Low"
   },
   "wowFeatures": {
-    "title": "WOW Features",
-    "wasteReduction": "Waste Reduction",
-    "incomeUplift": "Income Uplift",
-    "waterSaved": "Water Saved",
-    "processorMatches": "Processor Matches"
+    "title": "Farming Impact Metrics",
+    "wasteReduction": "Harvest Loss Prevention",
+    "incomeUplift": "Farmer Income Increase",
+    "waterSaved": "Water Conservation",
+    "processorMatches": "Direct Buyer Connections"
+  },
+  "ragStatus": {
+    "title": "RAG & Workflow Status",
+    "docsIndexed": "Documents indexed",
+    "lastLatency": "Last query latency",
+    "lastSources": "Last sources used"
+  },
+  "mcpStatus": {
+    "activeWorkflows": "Active workflows",
+    "pendingTasks": "Pending tasks",
+    "lastEvent": "Last event"
   },
   "common": {
     "loading": "Loading...",

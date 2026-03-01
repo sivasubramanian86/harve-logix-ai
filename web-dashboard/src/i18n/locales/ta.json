@@ -75,11 +75,11 @@
     "low": "குறைந்த"
   },
   "wowFeatures": {
-    "title": "WOW அம்சங்கள்",
-    "wasteReduction": "கழிவு குறைப்பு",
-    "incomeUplift": "வருமான உயர்வு",
-    "waterSaved": "நீர் சேமிக்கப்பட்டது",
-    "processorMatches": "செயலாக்கி பொருத்தங்கள்"
+    "title": "விவசாய தாக்க அளவீடுகள்",
+    "wasteReduction": "ப பயிர் நஷ்ट தடுப்பு",
+    "incomeUplift": "விவசாயி வருமான அதிகரிப்பு",
+    "waterSaved": "நீர் பாதுகாப்பு",
+    "processorMatches": "நேரடி வாங்குபவர் இணைப்புகள்"
   },
   "common": {
     "loading": "ஏற்றுகிறது...",

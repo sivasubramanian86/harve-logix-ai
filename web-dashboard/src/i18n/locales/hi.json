@@ -75,11 +75,11 @@
     "low": "कम"
   },
   "wowFeatures": {
-    "title": "WOW विशेषताएं",
-    "wasteReduction": "अपशिष्ट में कमी",
-    "incomeUplift": "आय में वृद्धि",
-    "waterSaved": "पानी बचाया",
-    "processorMatches": "प्रोसेसर मिलान"
+    "title": "कृषि प्रभाव मेट्रिक्स",
+    "wasteReduction": "फसल हानि रोकथाम",
+    "incomeUplift": "किसान आय वृद्धि",
+    "waterSaved": "जल संरक्षण",
+    "processorMatches": "सीधे खरीदार कनेक्शन"
   },
   "common": {
     "loading": "लोड हो रहा है...",

@@ -75,11 +75,11 @@
     "low": "ಕಡಿಮೆ"
   },
   "wowFeatures": {
-    "title": "WOW ವೈಶಿಷ್ಟ್ಯಗಳು",
-    "wasteReduction": "ತ್ಯಾಜ್ಯ ಕಡಿತ",
-    "incomeUplift": "ಆದಾಯ ಹೆಚ್ಚಳ",
-    "waterSaved": "ನೀರು ಉಳಿತಾಯ",
-    "processorMatches": "ಪ್ರೊಸೆಸರ್ ಹೊಂದಾಣಿಕೆಗಳು"
+    "title": "ಕೃಷಿ ಪ್ರಭಾವ ಮೆಟ್ರಿಕ್‌ಗಳು",
+    "wasteReduction": "ಸುಗ್ಗಿ ನಷ್ಟ ನಿರೋಧ",
+    "incomeUplift": "ರೈತ ಆದಾಯ ಹೆಚ್ಚಳ",
+    "waterSaved": "ನೀರು ಸಂರಕ್ಷಣೆ",
+    "processorMatches": "ನೇರ ಕೆಣೆ ಸಂಪರ್ಕಗಳು"
   },
   "common": {
     "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",

@@ -32,6 +32,9 @@ export default function WowFeatures({ features = [] }) {
       <div className="flex items-center gap-2 mb-6">
         <Zap size={24} style={{ color: 'var(--color-warning)' }} />
         <h2 className="text-2xl font-bold">{t('wowFeatures.title')}</h2>
+        <span className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full ml-auto" style={{ fontSize: '11px' }}>
+          Powered by RAG + AI
+        </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

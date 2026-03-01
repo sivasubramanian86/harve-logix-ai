@@ -6,6 +6,18 @@ export interface MetricTrend {
   direction: 'up' | 'down' | 'neutral';
 }
 
+export interface RagStatus {
+  docsIndexed: number;
+  lastQueryLatencyMs: number;
+  lastSources: string[];
+}
+
+export interface McpStatus {
+  activeWorkflows: number;
+  pendingTasks: number;
+  lastEvent: string;
+}
+
 export interface OverviewMetrics {
   farmersOnboarded: number;
   processorsConnected: number;
@@ -15,6 +27,8 @@ export interface OverviewMetrics {
   trends: MetricTrend[];
   timestamp: Date;
   source: 'live' | 'demo';
+  ragStatus?: RagStatus;
+  mcpStatus?: McpStatus;
 }
 
 export interface Farmer {
@@ -159,6 +173,16 @@ class DataService {
       ],
       timestamp: new Date(),
       source: this.useDemo ? 'demo' : 'live',
+      ragStatus: {
+        docsIndexed: 7,
+        lastQueryLatencyMs: 60,
+        lastSources: ['demo-knowledge'],
+      },
+      mcpStatus: {
+        activeWorkflows: 0,
+        pendingTasks: 0,
+        lastEvent: 'none',
+      },
     };
 
     return this.fetchWithFallback('getOverviewMetrics', '/metrics/overview', undefined, demoData);

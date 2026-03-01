@@ -98,6 +98,17 @@ const generateMetrics = () => ({
     { month: 'May', income: 2150000 },
     { month: 'Jun', income: 2340000 },
   ],
+  // RAG / MCP demo fields
+  ragStatus: {
+    docsIndexed: 7,
+    lastQueryLatencyMs: 48,
+    lastSources: ['agricultural_knowledge_base'],
+  },
+  mcpStatus: {
+    activeWorkflows: 3,
+    pendingTasks: 4,
+    lastEvent: 'Water check pending',
+  },
   agentUsage: [
     { name: 'HarvestReady', value: 8500 },
     { name: 'SupplyMatch', value: 6200 },
@@ -203,6 +214,8 @@ app.get('/api/analytics', (req, res) => {
 
 // Get all agents data
 app.get('/api/agents', (req, res) => {
+  // In demo mode, return static metrics; in production this endpoint would
+  // query real analytics, RAG index stats, and MCP workflow state.
   res.json({
     agents: [
       {
@@ -272,6 +285,16 @@ app.get('/api/agents', (req, res) => {
         color: 'warning',
       },
     ],
+    ragStatus: {
+      docsIndexed: 7,
+      lastQueryLatencyMs: 52,
+      lastSources: ['agricultural_knowledge_base'],
+    },
+    mcpStatus: {
+      activeWorkflows: 2,
+      pendingTasks: 5,
+      lastEvent: 'Harvest analysis completed',
+    },
   })
 })
 

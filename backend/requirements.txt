@@ -6,3 +6,5 @@ pytest-cov==4.1.0
 pytest-mock==3.12.0
 hypothesis==6.88.0
 python-dateutil==2.8.2
+faiss-cpu==1.7.4
+numpy==1.24.3

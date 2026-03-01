@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import axios from '../config/axios'
 import { Card, CardHeader, CardBody, StatusBadge } from '../components/Card'
+import RagStatus from '../components/RagStatus'
 
 /**
  * Agents Page
@@ -43,7 +44,11 @@ export default function Agents() {
         icon: iconMap[agent.id] || Leaf,
       }))
       
-      setAgentData({ agents: agentsWithIcons })
+      setAgentData({
+        agents: agentsWithIcons,
+        ragStatus: response.data.ragStatus || {},
+        mcpStatus: response.data.mcpStatus || {},
+      })
     } catch (error) {
       setAgentData(getMockAgentData())
     } finally {

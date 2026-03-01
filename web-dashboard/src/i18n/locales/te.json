@@ -75,11 +75,11 @@
     "low": "తక్కువ"
   },
   "wowFeatures": {
-    "title": "WOW లక్షణాలు",
-    "wasteReduction": "వ్యర్థ తగ్గింపు",
-    "incomeUplift": "ఆదాయ పెరుగుదల",
-    "waterSaved": "నీరు సేవ్ చేయబడింది",
-    "processorMatches": "ప్రాసెసర్ సరిపోలికలు"
+    "title": "వ్యవసాయ ప్రభావ మెట్రిక్‌లు",
+    "wasteReduction": "ఫసల్ నష్టపు నిరోధం",
+    "incomeUplift": "రైతు ఆదాయ పెరుగుదల",
+    "waterSaved": "నీరు సంరక్షణ",
+    "processorMatches": "నేరుగా కొనుగోలుదారు సంధానాలు"
   },
   "common": {
     "loading": "లోడ్ చేస్తోంది...",
