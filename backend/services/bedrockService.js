@@ -3,7 +3,7 @@
  * Handles multimodal analysis using AWS Bedrock Claude Sonnet 4.6
  */
 
-const AWS = require('aws-sdk')
+import AWS from 'aws-sdk'
 
 const bedrock = new AWS.BedrockRuntime({
   region: process.env.AWS_REGION || 'us-east-1',
@@ -128,7 +128,7 @@ async function invokeBedrockModel(systemPrompt, userPrompt) {
   }
 }
 
-module.exports = {
+export default {
   analyzeCropHealth,
   analyzeIrrigation,
   analyzeSkyWeather,

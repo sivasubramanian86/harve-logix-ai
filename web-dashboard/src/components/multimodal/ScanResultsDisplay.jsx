@@ -2,61 +2,9 @@ import React, { useState } from 'react'
 import { ChevronDown, AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react'
 import { useI18n } from '../../context/I18nProvider'
 
-export default function ScanResultsDisplay({ results, isLoading, error, onRetry }) {
+export default function ScanResultsDisplay({ results, scanType }) {
   const { t } = useI18n()
   const [expandedIssue, setExpandedIssue] = useState(null)
-
-  if (isLoading) {
-    return (
-      <div className="p-6 rounded-lg text-center" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-        <div className="inline-block">
-          <div
-            className="w-8 h-8 border-4 border-transparent rounded-full animate-spin"
-            style={{ borderTopColor: 'var(--color-info)' }}
-          />
-        </div>
-        <p className="mt-3" style={{ color: 'var(--text-secondary)' }}>
-          {t('multimodal.analyzing')}
-        </p>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div
-        className="p-6 rounded-lg border-l-4"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--color-error)',
-        }}
-      >
-        <div className="flex items-start gap-3">
-          <AlertCircle size={20} style={{ color: 'var(--color-error)' }} />
-          <div className="flex-1">
-            <p className="font-semibold" style={{ color: 'var(--color-error)' }}>
-              {t('multimodal.analysisError')}
-            </p>
-            <p style={{ color: 'var(--text-secondary)' }} className="text-sm mt-1">
-              {error}
-            </p>
-            {onRetry && (
-              <button
-                onClick={onRetry}
-                className="mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90"
-                style={{
-                  backgroundColor: 'var(--color-info)',
-                  color: 'white',
-                }}
-              >
-                {t('multimodal.retry')}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   if (!results) {
     return null
@@ -103,31 +51,66 @@ export default function ScanResultsDisplay({ results, isLoading, error, onRetry 
 
   return (
     <div className="space-y-4">
-      {/* Status Header */}
-      <div
-        className="p-6 rounded-lg border-l-4"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: getStatusColor(results.health_status || results.irrigation_status || results.sky_description),
-        }}
-      >
-        <div className="flex items-start gap-4">
-          <div>{getStatusIcon(results.health_status || results.irrigation_status)}</div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold mb-2">
-              {results.health_status || results.irrigation_status || t('multimodal.analysisComplete')}
-            </h3>
-            <p style={{ color: 'var(--text-secondary)' }} className="text-sm">
-              {results.explanation || results.sky_description || results.harvest_window_advice}
+      {/* Voice Query Response */}
+      {scanType === 'voice-query' && results.transcript && (
+        <>
+          <div
+            className="p-6 rounded-lg border"
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--border-primary)',
+            }}
+          >
+            <h4 className="font-semibold mb-3">🎤 {t('multimodal.transcript')}</h4>
+            <p className="text-sm italic" style={{ color: 'var(--text-secondary)' }}>
+              "{results.transcript}"
             </p>
-            {results.processing_time_ms && (
-              <p style={{ color: 'var(--text-secondary)' }} className="text-xs mt-2">
-                ⏱️ {t('multimodal.processingTime')}: {(results.processing_time_ms / 1000).toFixed(2)}s
+            {results.confidence_score && (
+              <p className="text-xs mt-2" style={{ color: 'var(--text-secondary)' }}>
+                Confidence: {Math.round(results.confidence_score * 100)}%
               </p>
             )}
           </div>
+          <div
+            className="p-6 rounded-lg border-l-4"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              borderColor: 'var(--color-success)',
+            }}
+          >
+            <h4 className="font-semibold mb-3">💬 {t('multimodal.response')}</h4>
+            <p style={{ color: 'var(--text-primary)' }}>{results.response}</p>
+          </div>
+        </>
+      )}
+
+      {/* Status Header */}
+      {scanType !== 'voice-query' && (
+        <div
+          className="p-6 rounded-lg border-l-4"
+          style={{
+            backgroundColor: 'var(--bg-secondary)',
+            borderColor: getStatusColor(results.health_status || results.irrigation_status || results.sky_description),
+          }}
+        >
+          <div className="flex items-start gap-4">
+            <div>{getStatusIcon(results.health_status || results.irrigation_status)}</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-bold mb-2">
+                {results.health_status || results.irrigation_status || t('multimodal.analysisComplete')}
+              </h3>
+              <p style={{ color: 'var(--text-secondary)' }} className="text-sm">
+                {results.explanation || results.sky_description || results.harvest_window_advice}
+              </p>
+              {results.processing_time_ms && (
+                <p style={{ color: 'var(--text-secondary)' }} className="text-xs mt-2">
+                  ⏱️ {t('multimodal.processingTime')}: {(results.processing_time_ms / 1000).toFixed(2)}s
+                </p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Detected Issues */}
       {results.detected_issues && results.detected_issues.length > 0 && (

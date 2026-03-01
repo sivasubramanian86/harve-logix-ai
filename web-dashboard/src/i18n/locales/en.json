@@ -146,6 +146,8 @@
     "analyzedAt": "Analyzed at",
     "recentScans": "Recent Scans",
     "scanDetails": "Scan Details",
-    "noScans": "No scans yet"
+    "noScans": "No scans yet",
+    "transcript": "Transcript",
+    "response": "Response"
   }
 }

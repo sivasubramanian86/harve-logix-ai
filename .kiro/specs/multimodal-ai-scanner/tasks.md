@@ -157,7 +157,7 @@ This implementation plan extends HarveLogixAI with multimodal AI capabilities (i
     - Add error handling and caching
     - _Requirements: 4.1_
   
-  - [ ] 4.6 Create demo data stub
+  - [x] 4.6 Create demo data stub
     - Load fixture data from JSON files
     - Return realistic responses without AWS calls
     - Support all 5 scan types

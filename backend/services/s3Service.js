@@ -3,8 +3,8 @@
  * Handles file uploads to AWS S3 with proper path structure
  */
 
-const AWS = require('aws-sdk')
-const { v4: uuidv4 } = require('uuid')
+import AWS from 'aws-sdk'
+import { v4 as uuidv4 } from 'uuid'
 
 const s3 = new AWS.S3({
   region: process.env.AWS_REGION || 'us-east-1',
@@ -80,7 +80,7 @@ async function deleteFile(s3Uri) {
   }
 }
 
-module.exports = {
+export default {
   uploadFile,
   deleteFile,
 }

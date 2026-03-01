@@ -3,8 +3,8 @@
  * Handles audio transcription using AWS Transcribe
  */
 
-const AWS = require('aws-sdk')
-const { v4: uuidv4 } = require('uuid')
+import AWS from 'aws-sdk'
+import { v4 as uuidv4 } from 'uuid'
 
 const transcribe = new AWS.TranscribeService({
   region: process.env.AWS_REGION || 'us-east-1',
@@ -115,6 +115,6 @@ function getMediaFormat(s3Uri) {
   return 'wav'
 }
 
-module.exports = {
+export default {
   transcribeAudio,
 }
