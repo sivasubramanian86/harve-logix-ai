@@ -234,6 +234,24 @@ Resources:
         - Key: Environment
           Value: !Ref EnvironmentName
 
+  AgentMemoryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'harvelogix-agent-memory-${EnvironmentName}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: memory_key
+          AttributeType: S
+      KeySchema:
+        - AttributeName: memory_key
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
 Outputs:
   OpenSearchDomainEndpoint:
     Description: OpenSearch Domain Endpoint
@@ -264,3 +282,9 @@ Outputs:
     Value: !Ref AgentStateTable
     Export:
       Name: !Sub '${AWS::StackName}-AgentStateTable'
+
+  AgentMemoryTableName:
+    Description: DynamoDB table for agent memory
+    Value: !Ref AgentMemoryTable
+    Export:
+      Name: !Sub '${AWS::StackName}-AgentMemoryTable'

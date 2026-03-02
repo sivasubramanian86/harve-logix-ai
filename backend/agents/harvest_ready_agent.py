@@ -400,6 +400,18 @@ def lambda_handler(event, context):
         # Log execution
         agent.log_execution(farmer_id, request_data, result)
 
+        # If this invocation was part of an MCP workflow, send completion
+        # back to the orchestrator so the next step can be scheduled.
+        if 'workflow_id' in event and 'task_id' in event:
+            from core.mcp_orchestrator import lambda_handler as orchestrator_handler
+            # asynchronously notify orchestrator (fire and forget)
+            orchestrator_handler({
+                'workflow_id': event['workflow_id'],
+                'task_id': event['task_id'],
+                'status': result.get('status', 'success'),
+                'output': result.get('output'),
+            }, None)
+
         return {
             'statusCode': 200 if result['status'] == 'success' else 400,
             'body': json.dumps(result)

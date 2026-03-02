@@ -258,6 +258,35 @@ print(f"Status: {workflow.status}")
    # Workflow executes through EventBridge/SQS/Lambda orchestration
    ```
 
+   The orchestrator persists every change to a DynamoDB table (`AgentStateTable`) so
+   workflows can be resumed if a Lambda is retried or if you need to inspect
+   the state later.  During stack deployment an additional table
+   (`AgentMemoryTable`) is created; agents and workflows may use it as a
+   simple key/value store for "persistent memory" (e.g. remembering a
+   farmer's last harvest date or a previously suggested buyer).  The
+   `MCPOrchestrator` class exposes convenience methods:
+
+   ```python
+   orc.remember('farmer123:last_harvest', '2026-02-15', ttl_seconds=30*24*3600)
+   last = orc.recall('farmer123:last_harvest')
+   ```
+
+   Passing the `memory_table_name` parameter during construction enables
+   these helpers; you can look at `backend/core/mcp_orchestrator.py` for
+   implementation details.
+
+   **Workflow completion events.** Agents are deployed as Lambda functions
+   and when invoked by the orchestrator they receive `workflow_id` and
+   `task_id` values in the event payload.  After an agent finishes
+   processing it automatically notifies the orchestrator by calling
+   `MCPOrchestrator.lambda_handler` with the same identifiers along with
+   `status` ("success"/"error") and any output.  The orchestrator uses
+   these callbacks to update the state table and then immediately
+   dispatch the next ready tasks.  This simple pattern keeps the
+   invocation flow entirely serverless and decoupled while allowing
+   workflows to resume from any point.
+
+
 ## Testing
 
 ### Unit Tests for RAG Components

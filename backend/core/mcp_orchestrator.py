@@ -153,14 +153,55 @@ class MCPWorkflow:
         }
 
 
+class MemoryStore:
+    """Simple persistent key/value store using DynamoDB for agent memory."""
+
+    def __init__(self, table_name: str):
+        self.table = dynamodb.Table(table_name)
+
+    def put(self, key: str, data: Any, ttl_seconds: Optional[int] = None) -> None:
+        item = {'memory_key': key, 'data': data}
+        if ttl_seconds:
+            item['ttl'] = int(datetime.utcnow().timestamp()) + ttl_seconds
+        try:
+            self.table.put_item(Item=item)
+            logger.info(f"Stored memory for key {key}")
+        except Exception as e:
+            logger.error(f"Error writing memory: {e}")
+
+    def get(self, key: str) -> Optional[Any]:
+        try:
+            resp = self.table.get_item(Key={'memory_key': key})
+            item = resp.get('Item')
+            if item:
+                return item.get('data')
+            return None
+        except Exception as e:
+            logger.error(f"Error reading memory: {e}")
+            return None
+
+
 class MCPOrchestrator:
     """Orchestrates multi-agent workflows"""
 
-    def __init__(self, state_table_name: str, event_bus_name: str = 'default'):
+    def __init__(self, state_table_name: str, memory_table_name: Optional[str] = None, event_bus_name: str = 'default'):
         """Initialize orchestrator"""
         self.state_table = dynamodb.Table(state_table_name)
+        self.memory_store = MemoryStore(memory_table_name) if memory_table_name else None
         self.event_bus_name = event_bus_name
         self.workflows: Dict[str, MCPWorkflow] = {}
+
+    # convenience wrappers for persistent memory
+    def remember(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> None:
+        """Store a piece of memory (short or long term)"""
+        if self.memory_store:
+            self.memory_store.put(key, value, ttl_seconds)
+    
+    def recall(self, key: str) -> Optional[Any]:
+        """Retrieve previously stored memory"""
+        if self.memory_store:
+            return self.memory_store.get(key)
+        return None
 
     def create_workflow(self, name: str) -> MCPWorkflow:
         """Create a new workflow"""
@@ -205,23 +246,96 @@ class MCPOrchestrator:
         except Exception as e:
             logger.error(f"Error saving workflow state: {e}")
 
+    def update_task_result(
+        self,
+        workflow_id: str,
+        task_id: str,
+        status: TaskStatus,
+        output: Optional[Any] = None,
+        error: Optional[str] = None,
+    ) -> Optional[MCPWorkflow]:
+        """Update a single task's result and optionally resume workflow.
+
+        This helper loads the workflow state, updates the specified task
+        status/output/error, saves the state, and returns the updated
+        workflow object.  Callers may then invoke `execute_workflow_step`
+        to continue orchestration.
+        """
+        wf = self.load_workflow_state(workflow_id)
+        if not wf:
+            logger.warning(f"Cannot update task; workflow {workflow_id} not found")
+            return None
+
+        task = wf.tasks.get(task_id)
+        if not task:
+            logger.warning(f"Task {task_id} not found in workflow {workflow_id}")
+            return wf
+
+        task.status = status
+        if output is not None:
+            task.output = output
+        if error is not None:
+            task.error = error
+
+        # save new state
+        self.save_workflow_state(wf)
+        return wf
+
     def load_workflow_state(self, workflow_id: str) -> Optional[MCPWorkflow]:
-        """Load workflow state from DynamoDB"""
+        """Load workflow state from DynamoDB and reconstruct objects."""
         try:
-            # Note: This is simplified; in production, query by workflow_id properly
             logger.info(f"Loading workflow state: {workflow_id}")
-            return self.workflows.get(workflow_id)
+            resp = self.state_table.get_item(Key={'agent_id': workflow_id})
+            item = resp.get('Item')
+            if not item:
+                logger.warning(f"No state found for workflow {workflow_id}")
+                return None
+
+            data = item.get('workflow_data', {})
+            if not data:
+                logger.warning(f"Empty workflow_data for {workflow_id}")
+                return None
+
+            # Reconstruct workflow
+            wf = MCPWorkflow(data['workflow_id'], data.get('name', ''))
+            wf.status = TaskStatus(data.get('status', TaskStatus.PENDING.value))
+            wf.created_at = data.get('created_at')
+
+            tasks_dict = data.get('tasks', {})
+            for tid, tinfo in tasks_dict.items():
+                task = MCPTask(
+                    task_id=tinfo['task_id'],
+                    agent=Agent(tinfo['agent']),
+                    input_data=tinfo.get('input_data', {}),
+                    depends_on=tinfo.get('depends_on', []),
+                    timeout_seconds=tinfo.get('timeout_seconds', 300),
+                )
+                task.status = TaskStatus(tinfo.get('status', TaskStatus.PENDING.value))
+                task.output = tinfo.get('output')
+                task.error = tinfo.get('error')
+                task.created_at = tinfo.get('created_at')
+                task.started_at = tinfo.get('started_at')
+                task.completed_at = tinfo.get('completed_at')
+                wf.add_task(task)
+
+            # Cache in memory for quick access
+            self.workflows[workflow_id] = wf
+            return wf
         except Exception as e:
             logger.error(f"Error loading workflow state: {e}")
             return None
 
 
-def create_harvest_workflow(farmer_id: str, crop_type: str, growth_stage: int, location: Dict) -> MCPWorkflow:
+def create_harvest_workflow(farmer_id: str, crop_type: str, growth_stage: int, location: Dict, memory_table: Optional[str] = None) -> MCPWorkflow:
     """Create a harvest optimization workflow"""
     orchestrator = MCPOrchestrator(
         state_table_name='harvelogix-agent-state-dev',
+        memory_table_name=memory_table,
         event_bus_name='default'
     )
+    # example: store last-harvest-date memory for this farmer
+    if orchestrator.memory_store:
+        orchestrator.remember(f"{farmer_id}:last_harvest", datetime.utcnow().isoformat(), ttl_seconds=30*24*3600)
 
     workflow = orchestrator.create_workflow(f"harvest-{farmer_id}-{crop_type}")
 
@@ -303,6 +417,44 @@ def lambda_handler(event, context):
             state_table_name='harvelogix-agent-state-dev'
         )
 
+        # If a task completion event is received, update the workflow
+        # before attempting to resume.  Agents should send
+        # {workflow_id, task_id, status, output?, error?} once they finish.
+        workflow = None
+        if 'workflow_id' in event and 'task_id' in event:
+            logger.info(f"Received task update for {event['task_id']} in {event['workflow_id']}")
+            workflow = orchestrator.update_task_result(
+                event['workflow_id'],
+                event['task_id'],
+                TaskStatus(event.get('status', TaskStatus.COMPLETED.value)),
+                output=event.get('output'),
+                error=event.get('error'),
+            )
+            if workflow:
+                logger.info(f"Resuming workflow {workflow.workflow_id} after task update")
+                execute_workflow_step(workflow, orchestrator)
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({
+                        'workflow_id': workflow.workflow_id,
+                        'status': workflow.status.value,
+                    }),
+                }
+
+        # If workflow_id is provided without task_id, just resume state
+        if 'workflow_id' in event:
+            workflow = orchestrator.load_workflow_state(event['workflow_id'])
+            if workflow:
+                logger.info(f"Resuming workflow {workflow.workflow_id}")
+                execute_workflow_step(workflow, orchestrator)
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({
+                        'workflow_id': workflow.workflow_id,
+                        'status': workflow.status.value,
+                    }),
+                }
+
         # Parse workflow creation request
         if 'workflow_type' in event:
             if event['workflow_type'] == 'harvest':
@@ -326,7 +478,7 @@ def lambda_handler(event, context):
 
         return {
             'statusCode': 400,
-            'body': json.dumps({'error': 'Unknown workflow type'}),
+            'body': json.dumps({'error': 'Unknown workflow type or ID'}),
         }
 
     except Exception as e:

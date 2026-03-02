@@ -43,12 +43,12 @@ See `backend/README.md` for:
 - Testing guidelines
 
 ### Frontend (Web Dashboard)
-See `web-dashboard/README.md` for:
+See `web-dashboard/docs/DESIGN_SYSTEM.md` for:
 - Frontend setup and development
 - Component documentation
 - Design system guidelines
 
-See `web-dashboard/DESIGN_SYSTEM.md` for:
+See `web-dashboard/docs/DESIGN_SYSTEM.md` for:
 - Color palette
 - Typography system
 - Component patterns

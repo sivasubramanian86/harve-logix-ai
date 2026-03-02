@@ -16,10 +16,11 @@ import hashlib
 from pathlib import Path
 from typing import Any, Dict, List
 
-# Add backend to path
+# Add backend to path so Python can locate modules under the backend directory
 sys.path.insert(0, str(Path(__file__).parent.parent / "backend"))
 
-from services.vectorStoreFaiss import get_vector_store
+# import via explicit package path now that `backend/services` is a proper package
+from backend.services.vectorStoreFaiss import get_vector_store
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

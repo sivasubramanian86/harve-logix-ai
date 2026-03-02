@@ -203,6 +203,15 @@ def lambda_handler(event, context):
         result = agent.process(request_data)
         agent.log_execution(farmer_id, request_data, result)
 
+        if 'workflow_id' in event and 'task_id' in event:
+            from core.mcp_orchestrator import lambda_handler as orchestrator_handler
+            orchestrator_handler({
+                'workflow_id': event['workflow_id'],
+                'task_id': event['task_id'],
+                'status': result.get('status', 'success'),
+                'output': result.get('output'),
+            }, None)
+
         return {
             'statusCode': 200 if result['status'] == 'success' else 400,
             'body': json.dumps(result)

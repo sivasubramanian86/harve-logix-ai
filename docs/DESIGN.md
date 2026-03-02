@@ -4,7 +4,7 @@
 
 The HarveLogix AI dashboard has been designed with India's **Digital India** and **AI for Bharat** initiatives in mind. This document covers the design system, UI guidelines, and component patterns.
 
-For detailed design system documentation, see [web-dashboard/DESIGN_SYSTEM.md](../web-dashboard/DESIGN_SYSTEM.md).
+For detailed design system documentation, see [web-dashboard/docs/DESIGN_SYSTEM.md](../web-dashboard/docs/DESIGN_SYSTEM.md).
 
 ---
 

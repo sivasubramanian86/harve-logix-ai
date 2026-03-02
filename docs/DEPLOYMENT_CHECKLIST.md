@@ -43,7 +43,7 @@ npm run dev
 - [ ] Clone repository
 - [ ] Install backend dependencies
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 1
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 1
 
 ### 2.2 Amazon Bedrock Setup
 - [ ] Go to AWS Console → Bedrock
@@ -53,7 +53,7 @@ npm run dev
 - [ ] Verify model is accessible from EC2 instance
 - [ ] Set AWS_REGION environment variable
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 2
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 2
 
 ### 2.3 S3 Bucket Setup
 - [ ] Create S3 bucket: `harvelogix-multimodal`
@@ -63,7 +63,7 @@ npm run dev
 - [ ] Create IAM policy for bucket access
 - [ ] Test upload from backend
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 5
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 5
 
 ### 2.4 Aurora/RDS Database Setup
 - [ ] Create Aurora PostgreSQL cluster
@@ -75,7 +75,7 @@ npm run dev
 - [ ] Test connection from EC2 instance
 - [ ] Set up automated backups
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 4
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 4
 
 ### 2.5 Lambda Functions Setup
 - [ ] Create IAM role for Lambda
@@ -86,7 +86,7 @@ npm run dev
 - [ ] Create API Gateway integration
 - [ ] Test API endpoint
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 3
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 3
 
 ### 2.6 CloudWatch Setup
 - [ ] Create log group: `/aws/harvelogix/multimodal`
@@ -95,7 +95,7 @@ npm run dev
 - [ ] Configure log retention (30 days)
 - [ ] Test logging from backend
 
-**Reference**: `infrastructure/AWS_SETUP_GUIDE.md` - Section 8
+**Reference**: `infrastructure/docs/AWS_SETUP_GUIDE.md` - Section 8
 
 ---
 
