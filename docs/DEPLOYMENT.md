@@ -198,6 +198,77 @@ aws dynamodb create-table \
   --region ap-south-1
 
 # Create agent_decisions table
+```
+
+## AWS Amplify Frontend Deployment
+
+AWS Amplify can host the web dashboard with minimal configuration, and the free tier usually covers the initial development phase. The costs are primarily for build & hosting bandwidth and should be negligible for small projects.
+
+### 1. Create Amplify App
+
+```bash
+# Install/amplify CLI if you haven't already
+npm install -g @aws-amplify/cli
+
+# Configure amplify with your AWS profile
+amplify configure
+
+# In your project root
+amplify init \
+  --frontend "javascript" \
+  --framework "react" \
+  --app "harvelogix-dashboard" \
+  --envName "dev"
+```
+
+Follow the prompts (accept defaults or supply your own values). This will create an `amplify/` directory and connect the project to your AWS account.
+
+### 2. Add Hosting
+
+```bash
+amplify add hosting
+# Choose: Hosting with Amplify Console (Managed hosting)
+# Select environment: dev
+# Specify the build command: npm run build
+# Specify the start command: npm run start
+
+amplify publish
+```
+
+Amplify will build the React app, upload files to an S3 bucket, and deploy a CloudFront distribution. It outputs a public URL you can visit.
+
+### 3. Configure Environment Variables and API
+
+If the dashboard needs to call the backend, make sure the API endpoint is available and exposed via a custom domain or Amplify environment variable.
+
+```bash
+amplify env add
+# Add variables such as REACT_APP_API_URL
+
+echo "REACT_APP_API_URL=https://api.example.com" >> .env
+
+# Pull the latest amplify environment
+amplify pull --envName dev
+```
+
+### 4. Connect GitHub (Optional)
+
+You can link the Amplify App to your GitHub repository for continuous deployment:
+
+1. In the Amplify Console (AWS web UI), go to **All apps → your app → Connect repository**.
+2. Choose the `main` branch and set build settings (Amplify auto-detects `npm run build`).
+3. Every push to `main` will trigger a new build/deploy.
+
+### 5. Billing Notes
+
+Amplify free tier includes 1,000 build minutes per month and 5 GB stored. Be mindful of bandwidth; close the Amplify app when not in active use to avoid unnecessary costs.
+
+---
+
+## Next Steps
+
+Continue with the database setup above once your frontend is live. Amplify can also host backend functions via the CLI if you migrate the Node server into the Amplify environment, but using API Gateway/Lambda or ECS as described earlier is more flexible.
+
 aws dynamodb create-table \
   --table-name agent_decisions-dev \
   --attribute-definitions \
