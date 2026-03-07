@@ -1,0 +1,18 @@
+{
+  "whyContinueWithGen1": "I am a current Gen 1 user",
+  "projectName": "harvelogixai",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "web-dashboard",
+      "DistributionDir": "web-dashboard/dist",
+      "BuildCommand": "npm run build",
+      "StartCommand": "npm run preview"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}
