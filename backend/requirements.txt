@@ -8,3 +8,9 @@ hypothesis==6.88.0
 python-dateutil==2.8.2
 faiss-cpu==1.7.4
 numpy==1.24.3
+
+# Strands Agents + MCP Integration (Phase 3)
+anthropic==0.30.1
+# strands-agents==0.1.0  # Uncomment when available from Strands distribution channel
+# mcp==0.1.0  # Model Context Protocol, may come with strands-agents
+

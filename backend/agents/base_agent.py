@@ -22,6 +22,7 @@ from config import (
 )
 from utils.errors import BedrockException, DataAccessException
 from utils.retry import retry_with_backoff
+from core.bedrock_client import BedrockClient, get_bedrock_client
 
 # RAG imports (optional, with fallback)
 try:
@@ -38,16 +39,23 @@ logger = logging.getLogger(__name__)
 class BaseAgent(ABC):
     """Base class for all HarveLogix AI agents."""
 
-    def __init__(self, agent_name: str):
+    def __init__(self, agent_name: str, model_id: Optional[str] = None):
         """
         Initialize base agent.
 
         Args:
             agent_name: Name of the agent
+            model_id: Optional override for Bedrock model ID
         """
         self.agent_name = agent_name
-        self.model_id = BEDROCK_MODEL_ID
-        self.bedrock_client = boto3.client('bedrock-runtime', region_name=AWS_REGION)
+        self.model_id = model_id or BEDROCK_MODEL_ID
+        
+        # Use centralized Bedrock client
+        self.bedrock_client = get_bedrock_client(
+            model_id=self.model_id,
+            region=AWS_REGION
+        )
+        
         self.dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
         self.logger = logging.getLogger(f"{__name__}.{agent_name}")
 
@@ -75,46 +83,25 @@ class BaseAgent(ABC):
 
         Returns:
             Model response text
+            
+        Raises:
+            BedrockException: If invocation fails
         """
         try:
-            messages = [
-                {
-                    'role': 'user',
-                    'content': prompt
-                }
-            ]
-
-            kwargs = {
-                'modelId': self.model_id,
-                'contentType': 'application/json',
-                'accept': 'application/json',
-                'body': json.dumps({
-                    'anthropic_version': 'bedrock-2023-06-01',
-                    'max_tokens': BEDROCK_MAX_TOKENS,
-                    'temperature': BEDROCK_TEMPERATURE,
-                    'messages': messages
-                })
-            }
-
-            if system_prompt:
-                kwargs['body'] = json.dumps({
-                    'anthropic_version': 'bedrock-2023-06-01',
-                    'max_tokens': BEDROCK_MAX_TOKENS,
-                    'temperature': BEDROCK_TEMPERATURE,
-                    'system': system_prompt,
-                    'messages': messages
-                })
-
-            response = self.bedrock_client.invoke_model(**kwargs)
-            response_body = json.loads(response['body'].read())
-            content = response_body['content'][0]['text']
-
-            self.logger.info(f"Bedrock invocation successful for {self.agent_name}")
-            return content
-
-        except ClientError as e:
+            return self.bedrock_client.invoke_model(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                model_id=self.model_id,
+            )
+        except BedrockException:
+            # Re-raise Bedrock exceptions as-is
+            raise
+        except Exception as e:
             self.logger.error(f"Bedrock invocation failed: {str(e)}")
-            raise BedrockException(f"Bedrock invocation failed: {str(e)}", {'agent': self.agent_name})
+            raise BedrockException(
+                f"Bedrock invocation failed: {str(e)}",
+                {'agent': self.agent_name}
+            )
 
     def extract_json_from_response(self, response_text: str) -> Dict[str, Any]:
         """
@@ -212,6 +199,45 @@ class BaseAgent(ABC):
                 'timestamp': response.get('timestamp')
             }
         )
+
+    def health_check(self) -> Dict[str, Any]:
+        """
+        Perform agent health check including Bedrock availability.
+
+        Returns:
+            Health status dictionary with keys:
+            - agent: Agent name
+            - healthy: Boolean indicating health
+            - bedrock_healthy: Bedrock service availability
+            - timestamp: Check timestamp
+            - error: Error message if not healthy
+        """
+        try:
+            # Check Bedrock health
+            bedrock_health = self.bedrock_client.health_check()
+            
+            status = {
+                'agent': self.agent_name,
+                'healthy': bedrock_health['healthy'],
+                'bedrock_healthy': bedrock_health['healthy'],
+                'timestamp': datetime.utcnow().isoformat(),
+            }
+            
+            if not bedrock_health['healthy']:
+                status['error'] = bedrock_health.get('error', 'Bedrock service unavailable')
+            
+            self.logger.info(f"Health check for {self.agent_name}: {status['healthy']}")
+            return status
+            
+        except Exception as e:
+            self.logger.error(f"Health check failed for {self.agent_name}: {str(e)}")
+            return {
+                'agent': self.agent_name,
+                'healthy': False,
+                'bedrock_healthy': False,
+                'timestamp': datetime.utcnow().isoformat(),
+                'error': str(e),
+            }
 
     def invoke_bedrock_with_rag(
         self,
