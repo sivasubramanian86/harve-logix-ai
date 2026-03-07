@@ -9,6 +9,7 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
+  Zap,
 } from 'lucide-react'
 import axios from '../config/axios'
 import { useI18n } from '../context/I18nProvider'
@@ -17,6 +18,7 @@ import ImageCapture from '../components/multimodal/ImageCapture'
 import AudioCapture from '../components/multimodal/AudioCapture'
 import VideoCapture from '../components/multimodal/VideoCapture'
 import ScanResultsDisplay from '../components/multimodal/ScanResultsDisplay'
+import AiLoadingOverlay from '../components/AiLoadingOverlay'
 
 /**
  * AI Scanner Page - Multimodal Analysis
@@ -86,7 +88,7 @@ export default function AiScannerUpgraded() {
       const formData = new FormData()
       formData.append('media', media)
 
-      const endpoint = `/api/multimodal/${activeTab}`
+      const endpoint = `/multimodal/${activeTab}`
       const response = await axios.post(endpoint, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
@@ -130,30 +132,38 @@ export default function AiScannerUpgraded() {
         </label>
       </div>
 
-      {/* Scan Type Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      {/* Modern Glass Tabs */}
+      <div className="flex flex-wrap gap-2 mb-8 p-1.5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner">
         {scanTypes.map((scan) => {
           const Icon = scan.icon
           const isActive = activeTab === scan.id
           return (
             <button
               key={scan.id}
-              onClick={() => {
-                setActiveTab(scan.id)
-                handleClear()
-              }}
+              onClick={() => setActiveTab(scan.id)}
               className={`
-                flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap
-                transition-all duration-200
+                flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 relative overflow-hidden group
                 ${
                   isActive
-                    ? `bg-${scan.color}-500 text-white shadow-lg`
-                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                    ? 'text-white'
+                    : 'text-white/40 hover:text-white/70 hover:bg-white/5'
                 }
               `}
             >
-              <Icon size={18} />
-              {scan.name}
+              {isActive && (
+                <div 
+                  className="absolute inset-0 bg-gradient-to-r transition-all duration-500 blur-xl opacity-30 animate-pulse"
+                  style={{ 
+                    backgroundImage: `linear-gradient(to right, var(--color-${scan.color}), var(--color-info))` 
+                  }}
+                />
+              )}
+              <div 
+                className={`absolute inset-0 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                style={{ backgroundColor: `var(--color-${scan.color})` }}
+              />
+              <Icon size={16} className={`relative z-10 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+              <span className="relative z-10">{scan.name}</span>
             </button>
           )
         })}
@@ -161,6 +171,8 @@ export default function AiScannerUpgraded() {
 
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <AiLoadingOverlay isVisible={loading} />
+        
         {/* Capture Section */}
         <div className="lg:col-span-2">
           <Card>
@@ -180,16 +192,6 @@ export default function AiScannerUpgraded() {
                   disabled={loading}
                   scanType={activeTab}
                 />
-              )}
-
-              {/* Loading State */}
-              {loading && (
-                <div className="flex items-center justify-center py-8">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
-                    <p className="text-neutral-600">{t('multimodal.analyzing')}</p>
-                  </div>
-                </div>
               )}
 
               {/* Error State */}
@@ -219,6 +221,59 @@ export default function AiScannerUpgraded() {
 
         {/* Info Sidebar */}
         <div className="space-y-6">
+          {/* Test Assets Card - MOVED TO TOP */}
+          <Card className="border-2 border-primary-100 shadow-xl overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-2">
+              <span className="bg-primary-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Quick Start</span>
+            </div>
+            <CardHeader className="bg-primary-50">
+              <h3 className="font-bold text-primary-900 flex items-center gap-2">
+                <Zap size={18} className="text-primary-600 animate-pulse" />
+                Test Your AI Scanner
+              </h3>
+            </CardHeader>
+            <CardBody className="space-y-4 pt-4">
+              <p className="text-sm text-neutral-700 font-medium">
+                Try these pre-prepared agricultural assets to see the AI Scanner in action:
+              </p>
+              
+              <div className="grid grid-cols-1 gap-3">
+                {[
+                  { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', color: 'bg-red-50 border-red-100 hover:border-red-500' },
+                  { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', color: 'bg-orange-50 border-orange-100 hover:border-orange-500' },
+                  { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', color: 'bg-blue-50 border-blue-100 hover:border-blue-500' }
+                ].map((asset) => (
+                  <button
+                    key={asset.file}
+                    onClick={async () => {
+                      setActiveTab(asset.id);
+                      try {
+                        const response = await fetch(`/test-assets/${asset.file}`);
+                        const blob = await response.blob();
+                        const file = new File([blob], asset.file, { type: 'image/png' });
+                        handleAnalyze(file);
+                      } catch (err) {
+                        console.error('Failed to load test asset:', err);
+                      }
+                    }}
+                    className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left group ${asset.color}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm flex-shrink-0 border border-neutral-100">
+                        <img src={`/test-assets/${asset.file}`} alt={asset.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                      </div>
+                      <div>
+                        <span className="text-sm font-bold text-neutral-800 block">{asset.name}</span>
+                        <span className="text-[10px] text-neutral-500 uppercase font-semibold">Ready to scan</span>
+                      </div>
+                    </div>
+                    <ChevronDown size={16} className="-rotate-90 text-neutral-400 group-hover:translate-x-1 transition-all" />
+                  </button>
+                ))}
+              </div>
+            </CardBody>
+          </Card>
+
           {/* Scan Info Card */}
           <Card>
             <CardHeader>

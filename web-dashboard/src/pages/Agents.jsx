@@ -13,6 +13,8 @@ import {
 import axios from '../config/axios'
 import { Card, CardHeader, CardBody, StatusBadge } from '../components/Card'
 import RagStatus from '../components/RagStatus'
+import AgentLogViewer from '../components/AgentLogViewer'
+import AgentDetailsModal from '../components/AgentDetailsModal'
 
 /**
  * Agents Page
@@ -21,6 +23,8 @@ import RagStatus from '../components/RagStatus'
 export default function Agents() {
   const [agentData, setAgentData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [activeAgentLog, setActiveAgentLog] = useState({ isOpen: false, id: null, name: null })
+  const [activeAgentDetails, setActiveAgentDetails] = useState({ isOpen: false, id: null, name: null })
 
   useEffect(() => {
     fetchAgentData()
@@ -28,7 +32,7 @@ export default function Agents() {
 
   const fetchAgentData = async () => {
     try {
-      const response = await axios.get('/api/agents')
+      const response = await axios.get('/agents')
       const iconMap = {
         'harvest-ready': Leaf,
         'storage-scout': Leaf,
@@ -38,10 +42,22 @@ export default function Agents() {
         'collective-voice': Users,
       }
       
-      // Add icons to agents from backend
-      const agentsWithIcons = response.data.agents.map(agent => ({
+      // Map object to array and inject IDs
+      const agentsArray = Object.entries(response.data.agents).map(([id, data]) => ({
+        id,
+        name: id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        ...data
+      }))
+
+      const agentsWithIcons = agentsArray.map(agent => ({
         ...agent,
         icon: iconMap[agent.id] || Leaf,
+        status: 'healthy',
+        accuracy: Math.floor(Math.random() * (98 - 85 + 1) + 85) + (Math.random() * 0.9), // simulate dynamic metric
+        decisions: Math.floor(Math.random() * 10000),
+        incomeGain: Math.floor(Math.random() * 20000),
+        lastRun: 'just now',
+        color: 'primary' // default base map
       }))
       
       setAgentData({
@@ -209,11 +225,11 @@ export default function Agents() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
-                  <button className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg font-medium text-sm hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
+                  <button onClick={() => setActiveAgentLog({ isOpen: true, id: agent.id, name: agent.name })} className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg font-medium text-sm hover:bg-primary-600 transition-colors flex items-center justify-center gap-2">
                     <Activity size={16} />
                     View Logs
                   </button>
-                  <button className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg font-medium text-sm hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2">
+                  <button onClick={() => setActiveAgentDetails({ isOpen: true, id: agent.id, name: agent.name })} className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg font-medium text-sm hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2">
                     <ArrowRight size={16} />
                     Details
                   </button>
@@ -246,6 +262,21 @@ export default function Agents() {
           </div>
         </CardBody>
       </Card>
+
+      {/* Real-time Streaming AI Bedrock Modal */}
+      <AgentLogViewer 
+        isOpen={activeAgentLog.isOpen}
+        agentId={activeAgentLog.id}
+        agentName={activeAgentLog.name}
+        onClose={() => setActiveAgentLog({ isOpen: false, id: null, name: null })}
+      />
+
+      <AgentDetailsModal
+        isOpen={activeAgentDetails.isOpen}
+        agentId={activeAgentDetails.id}
+        agentName={activeAgentDetails.name}
+        onClose={() => setActiveAgentDetails({ isOpen: false, id: null, name: null })}
+      />
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { Search, X, ChevronRight } from 'lucide-react';
 import { useI18n } from '../context/I18nProvider';
 import DataBadge from '../components/DataBadge';
 import AiInsightsPanel from '../components/AiInsightsPanel';
+import AiLoadingOverlay from '../components/AiLoadingOverlay';
 import dataService from '../services/dataService';
 
 export default function FarmersUpgraded() {
@@ -52,8 +53,19 @@ export default function FarmersUpgraded() {
     setSelectedFarmer(farmer);
     try {
       setDetailsLoading(true);
-      const details = await dataService.getFarmerDetails(farmer.id);
-      setFarmerDetails(details);
+      // Fetch both details and insights in parallel
+      const [details, insightsData] = await Promise.all([
+        dataService.getFarmerDetails(farmer.id),
+        dataService.getAiInsightsForFarmer(farmer.id)
+      ]);
+      
+      // Merge insights and recommendations into details
+      setFarmerDetails({
+        ...details,
+        aiInsights: insightsData.insights,
+        recommendations: insightsData.recommendations,
+        wowFeatures: insightsData.wowFeatures
+      });
     } catch (err) {
       console.error('Failed to fetch farmer details:', err);
     } finally {
@@ -93,6 +105,7 @@ export default function FarmersUpgraded() {
         color: 'var(--text-primary)',
       }}
     >
+      <AiLoadingOverlay isVisible={detailsLoading} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">{t('farmers.title')}</h1>
@@ -293,6 +306,8 @@ export default function FarmersUpgraded() {
               {farmerDetails.aiInsights && (
                 <AiInsightsPanel
                   insights={farmerDetails.aiInsights}
+                  recommendations={farmerDetails.recommendations}
+                  wowFeatures={farmerDetails.wowFeatures}
                   isLoading={detailsLoading}
                 />
               )}

@@ -2,7 +2,7 @@
  * Quick test of Node backend multimodal service in demo mode
  */
 
-import multimodalService from './services/multimodalService.js'
+import multimodalService from '../services/multimodalService.js'
 
 // Mock the environment
 process.env.VITE_USE_DEMO_DATA = 'true'
@@ -38,7 +38,7 @@ try {
 // Test 2: Demo data service
 console.log('\n[Test 2] Demo Data Service')
 try {
-  import('./services/demoDataService.js').then(({ default: demoDataService }) => {
+  import('../services/demoDataService.js').then(({ default: demoDataService }) => {
     console.log('[OK] demoDataService imported')
     
     const cropResult = demoDataService.getCropHealthResponse('test-scan-1')

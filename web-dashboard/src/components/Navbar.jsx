@@ -11,15 +11,19 @@ import DataBadge from './DataBadge'
  * - Logo/branding area
  * - Language switcher
  * - Theme toggle
+ * - Theme toggle
  * - Data mode badge
  * - Notifications
  * - User profile dropdown
  */
+import { useDataMode } from '../context/DataModeProvider'
+
 export default function Navbar({ onMenuClick }) {
   const [profileOpen, setProfileOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
   const { currentLanguage, changeLanguage, t } = useI18n()
+  const { dataMode } = useDataMode()
 
   const languages = [
     { code: 'en', name: 'English' },
@@ -40,52 +44,54 @@ export default function Navbar({ onMenuClick }) {
         borderBottomColor: 'var(--border-primary)',
       }}
     >
-      {/* Left Section - Menu & Logo */}
-      <div className="flex items-center gap-4">
+      {/* Left Section - Menu & Environment */}
+      <div className="flex items-center gap-6">
         <button
           onClick={onMenuClick}
-          className="p-2 rounded-lg transition-colors"
+          className="p-2.5 rounded-xl transition-all duration-300 hover:bg-white/10 active:scale-95 border border-transparent hover:border-white/10 group"
           style={{
-            backgroundColor: 'var(--bg-hover)',
             color: 'var(--text-primary)',
           }}
           aria-label="Toggle sidebar"
         >
-          <Menu size={24} />
+          <Menu size={22} className="group-hover:rotate-180 transition-transform duration-500" />
         </button>
 
-        {/* Logo & Branding */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">HL</span>
+        <div className="flex flex-col">
+          <span className="text-[11px] font-black uppercase tracking-[0.25em] text-success-500 opacity-80 leading-none mb-1.5">
+            Agricultural Intelligence
+          </span>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl font-black tracking-tight leading-none italic uppercase">HarveLogix</h1>
+            <div className="h-4 w-[1px] bg-white/20 mx-0.5" />
+            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-success/10 rounded-md border border-success/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-success">Production Environ</span>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-primary-500">HarveLogix</h1>
-            <p className="text-xs text-neutral-500">AI for Bharat</p>
-          </div>
-        </div>
-
-        {/* Environment Badge */}
-        <div className="ml-4 px-3 py-1 bg-accent-50 border border-accent-200 rounded-full">
-          <span className="text-xs font-medium text-accent-700">Development</span>
         </div>
       </div>
 
       {/* Right Section - Notifications & Profile */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Language Switcher */}
         <div className="relative">
           <button
             onClick={() => setLanguageOpen(!languageOpen)}
-            className="flex items-center gap-2 p-2 hover:bg-neutral-100 rounded-lg transition-colors text-neutral-700"
+            className="flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-white/10 group"
             aria-label="Language selector"
           >
-            <Globe size={20} />
-            <span className="text-sm font-medium uppercase">{currentLanguage}</span>
+            <Globe size={18} className="opacity-60 group-hover:rotate-12 transition-transform" />
+            <span className="text-[10px] font-black uppercase tracking-widest">{currentLanguage}</span>
+            <ChevronDown size={12} className={`opacity-40 transition-transform duration-300 ${languageOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {languageOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-2 z-50">
+            <div className="absolute right-0 mt-3 w-56 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2 z-50 overflow-hidden" 
+              style={{ boxShadow: '0 20px 50px -15px rgba(0,0,0,0.3)' }}>
+              <div className="px-4 py-2 border-b border-white/5 mb-1">
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Select Language</span>
+              </div>
               {languages.map((lang) => (
                 <button
                   key={lang.code}
@@ -93,13 +99,14 @@ export default function Navbar({ onMenuClick }) {
                     changeLanguage(lang.code)
                     setLanguageOpen(false)
                   }}
-                  className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                  className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${
                     currentLanguage === lang.code
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-neutral-700 hover:bg-neutral-50'
+                      ? 'bg-accent-500/10 text-accent-400 font-bold'
+                      : 'text-neutral-400 hover:bg-white/5 hover:text-white'
                   }`}
                 >
                   {lang.name}
+                  {currentLanguage === lang.code && <div className="w-1.5 h-1.5 rounded-full bg-accent-500" />}
                 </button>
               ))}
             </div>
@@ -109,54 +116,67 @@ export default function Navbar({ onMenuClick }) {
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 hover:bg-neutral-100 rounded-lg transition-colors text-neutral-700"
+          className="p-2.5 hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-white/10 group"
           aria-label="Toggle theme"
         >
-          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          {theme === 'light' ? 
+            <Moon size={18} className="opacity-60 group-hover:-rotate-12 transition-transform" /> : 
+            <Sun size={18} className="opacity-60 group-hover:rotate-45 transition-transform" />
+          }
         </button>
 
-        {/* Data Badge */}
-        <DataBadge mode="live" />
+        <div className="w-[1px] h-6 bg-white/10 mx-1 hidden md:block" />
 
         {/* Notifications */}
         <button
-          className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors text-neutral-700"
+          className="relative p-2.5 hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-white/10 group hidden md:flex"
           aria-label="Notifications"
         >
-          <Bell size={20} />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+          <Bell size={18} className="opacity-60 group-hover:animate-swing" />
+          <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-error rounded-full ring-2 ring-neutral-950"></span>
         </button>
 
         {/* User Profile Dropdown */}
         <div className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2 p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+            className="flex items-center gap-3 p-1.5 pr-3 hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-white/10 group"
             aria-label="User profile"
           >
-            <div className="w-8 h-8 bg-gradient-secondary rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-semibold">A</span>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-info-500 to-accent-600 p-[1px]">
+              <div className="w-full h-full rounded-[7px] bg-neutral-950 flex items-center justify-center overflow-hidden">
+                 <span className="text-white text-[10px] font-black">AD</span>
+              </div>
             </div>
-            <ChevronDown size={16} className="text-neutral-600" />
+            <div className="hidden lg:block text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-0.5">Admin</p>
+              <p className="text-[8px] font-bold opacity-40 leading-none">Root Access</p>
+            </div>
+            <ChevronDown size={14} className={`opacity-40 transition-transform duration-300 ${profileOpen ? 'rotate-180' : ''}`} />
           </button>
 
-          {/* Dropdown Menu */}
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-2 z-50">
-              <div className="px-4 py-2 border-b border-neutral-200">
-                <p className="text-sm font-semibold text-neutral-900">Admin User</p>
-                <p className="text-xs text-neutral-500">admin@harvelogix.ai</p>
+            <div className="absolute right-0 mt-3 w-64 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-3 z-50 overflow-hidden"
+              style={{ boxShadow: '0 20px 50px -15px rgba(0,0,0,0.3)' }}>
+              <div className="px-5 py-3 border-b border-white/5 mb-2">
+                <p className="text-xs font-black uppercase tracking-widest text-white">Administrator</p>
+                <p className="text-[10px] font-bold opacity-40">admin@harvelogix.ai</p>
               </div>
 
-              <button className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2">
-                <Settings size={16} />
-                Settings
-              </button>
-
-              <button className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error-50 flex items-center gap-2 border-t border-neutral-200">
-                <LogOut size={16} />
-                Logout
-              </button>
+              <div className="px-2 space-y-1">
+                <button className="w-full text-left px-4 py-2.5 text-xs text-neutral-400 hover:bg-white/5 hover:text-white rounded-lg transition-all flex items-center gap-3 group">
+                  <div className="p-1.5 rounded-md bg-white/5 group-hover:bg-accent-500/10 group-hover:text-accent-400 transition-colors">
+                    <Settings size={14} />
+                  </div>
+                  System Settings
+                </button>
+                <button className="w-full text-left px-4 py-2.5 text-xs text-error hover:bg-error/10 rounded-lg transition-all flex items-center gap-3 group">
+                  <div className="p-1.5 rounded-md bg-error/10 group-hover:bg-error group-hover:text-white transition-colors">
+                    <LogOut size={14} />
+                  </div>
+                  Logout Session
+                </button>
+              </div>
             </div>
           )}
         </div>

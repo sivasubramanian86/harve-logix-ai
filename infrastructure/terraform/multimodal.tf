@@ -23,9 +23,9 @@ variable "enable_multimodal_services" {
 }
 
 variable "bedrock_model_id" {
-  description = "Bedrock model ID for Claude Sonnet"
+  description = "Bedrock model ID for AI Agents"
   type        = string
-  default     = "anthropic.claude-sonnet-4-20250514"
+  default     = "arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc"
 }
 
 variable "max_concurrent_executions" {

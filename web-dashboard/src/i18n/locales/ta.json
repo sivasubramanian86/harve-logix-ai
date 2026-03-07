@@ -5,7 +5,9 @@
     "processors": "செயலாக்கிகள்",
     "agents": "முகவர்கள்",
     "governmentView": "அரசு பார்வை",
-    "systemHealth": "கணினி ஆரோக்கியம்"
+    "systemHealth": "கணினி ஆரோக்கியம்",
+    "settings": "Settings",
+    "faq": "FAQ"
   },
   "overview": {
     "title": "கண்ணோட்டம்",
@@ -93,5 +95,31 @@
     "theme": "தீம்",
     "light": "ஒளி",
     "dark": "இருள்"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "dataMode": "Data Mode",
+    "profile": "User Profile",
+    "name": "Name",
+    "role": "Role",
+    "location": "Primary Region",
+    "saveChanges": "Save Changes",
+    "resetDefaults": "Reset Defaults",
+    "themeDescription": "Switch between Light and Dark interface modes.",
+    "languageDescription": "Select your preferred language for the dashboard.",
+    "dataModeDescription": "Toggle between live AWS data and simulated demo data."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "search": "Search for answers...",
+    "questions": [
+      {
+        "q": "What is HarveLogixAI?",
+        "a": "HarveLogixAI is an integrated platform using Amazon Bedrock and Nova models."
+      }
+    ]
   }
 }

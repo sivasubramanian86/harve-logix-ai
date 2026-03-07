@@ -23,7 +23,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from 'lucide-react'
-import axios from '../config/axios'
+import dataService from '../services/dataService'
 import { Card, CardHeader, CardBody, MetricCard, StatusBadge } from '../components/Card'
 
 /**
@@ -40,18 +40,18 @@ export default function Overview() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('/api/metrics')
-      // Transform backend data to match component expectations
-      const backendData = response.data
+      const overviewData = await dataService.getOverviewMetrics();
+      
       setData({
-        farmers: backendData.totalFarmers || 45230,
-        processors: 5120,
-        wasteReduced: 2340000,
-        incomeUplift: 18500,
-        waterSaved: 12500000,
-        incomeGrowth: backendData.incomeGrowth || getMockData().incomeGrowth,
-        regionMetrics: getMockData().regionMetrics,
-        agentActivity: getMockData().agentActivity,
+        farmers: overviewData.farmersOnboarded,
+        processors: overviewData.processorsConnected,
+        wasteReduced: overviewData.wasteReductionRupees,
+        incomeUplift: overviewData.incomeUpliftPerAcre,
+        waterSaved: overviewData.waterSavedLitres,
+        incomeGrowth: getMockData().incomeGrowth, // Not fully wired in backend
+        regionMetrics: getMockData().regionMetrics, // Not fully wired in backend
+        agentActivity: getMockData().agentActivity, // Not fully wired in backend
+        source: overviewData.source
       })
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -107,7 +107,14 @@ export default function Overview() {
     <div className="p-8 space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900">Overview</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-neutral-900">Overview</h1>
+          {data.source === 'live' ? (
+            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-success-100 text-success-800 border border-success-200 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-success-500 animate-pulse"></div> Live Data</span>
+          ) : (
+             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 border border-warning-200">Demo Data</span>
+          )}
+        </div>
         <p className="text-neutral-600 mt-2">Real-time insights into HarveLogix AI platform performance</p>
       </div>
 

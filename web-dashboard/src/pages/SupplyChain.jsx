@@ -13,7 +13,7 @@ export default function SupplyChain() {
 
   const fetchSupplyData = async () => {
     try {
-      const response = await axios.get('/api/supply-chain')
+      const response = await axios.get('/agents/supply-chain')
       setData(response.data)
     } catch (error) {
       setData(getMockSupplyData())
@@ -45,13 +45,13 @@ export default function SupplyChain() {
     wasteInTransit: '3.2%'
   })
 
-  if (loading || !data) return <div className="p-8">Loading...</div>
+  if (loading || !data) return <div className="p-8" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Loading...</div>
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-8 space-y-8" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">Supply Chain</h1>
-        <p className="text-gray-600 mt-2">Farmer-processor connections and logistics optimization</p>
+        <h1 className="text-3xl font-bold">Supply Chain</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Farmer-processor connections and logistics optimization</p>
       </div>
 
       {/* KPIs */}
@@ -59,25 +59,25 @@ export default function SupplyChain() {
         <KPICard
           icon={Truck}
           label="Direct Connections"
-          value={data.directConnections.toLocaleString()}
+          value={(data?.directConnections || getMockSupplyData().directConnections).toLocaleString()}
           color="bg-blue-500"
         />
         <KPICard
           icon={Package}
           label="Middlemen Eliminated"
-          value={data.middlemanEliminated.toLocaleString()}
+          value={(data?.middlemanEliminated || getMockSupplyData().middlemanEliminated).toLocaleString()}
           color="bg-green-500"
         />
         <KPICard
           icon={AlertCircle}
           label="Avg Delivery Time"
-          value={data.avgDeliveryTime}
+          value={data?.avgDeliveryTime || getMockSupplyData().avgDeliveryTime}
           color="bg-yellow-500"
         />
         <KPICard
           icon={Package}
           label="Waste in Transit"
-          value={data.wasteInTransit}
+          value={data?.wasteInTransit || getMockSupplyData().wasteInTransit}
           color="bg-red-500"
         />
       </div>
@@ -88,7 +88,7 @@ export default function SupplyChain() {
         <div className="card">
           <h2 className="text-xl font-bold mb-4">Processor Utilization</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.processorUtilization}>
+            <BarChart data={data?.processorUtilization?.length > 0 ? data.processorUtilization : getMockSupplyData().processorUtilization}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="processor" />
               <YAxis />
@@ -103,7 +103,7 @@ export default function SupplyChain() {
         <div className="card">
           <h2 className="text-xl font-bold mb-4">Weekly Supply Matches</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.supplyMatches}>
+            <BarChart data={data?.supplyMatches?.length > 0 ? data.supplyMatches : getMockSupplyData().supplyMatches}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -117,11 +117,11 @@ export default function SupplyChain() {
       </div>
 
       {/* Processor Details */}
-      <div className="card">
+      <div className="p-6 rounded-lg border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
         <h2 className="text-xl font-bold mb-4">Processor Performance</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead style={{ backgroundColor: 'var(--bg-secondary)' }}>
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Processor</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Utilization</th>
@@ -130,8 +130,8 @@ export default function SupplyChain() {
               </tr>
             </thead>
             <tbody>
-              {data.processorUtilization.map((proc, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
+              {(data?.processorUtilization?.length > 0 ? data.processorUtilization : getMockSupplyData().processorUtilization).map((proc, idx) => (
+                <tr key={idx} className="border-t" style={{ borderColor: 'var(--border-primary)' }}>
                   <td className="px-6 py-4 font-medium">{proc.processor}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">

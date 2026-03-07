@@ -9,7 +9,7 @@ const bedrock = new AWS.BedrockRuntime({
   region: process.env.AWS_REGION || 'us-east-1',
 })
 
-const MODEL_ID = 'anthropic.claude-sonnet-4-20250514'
+const MODEL_ID = 'arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc'
 
 /**
  * Lambda handler for crop health analysis

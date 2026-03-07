@@ -5,7 +5,53 @@
     "processors": "Processors",
     "agents": "Agents",
     "governmentView": "Government View",
-    "systemHealth": "System Health"
+    "systemHealth": "System Health",
+    "settings": "Settings",
+    "faq": "FAQ"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "dataMode": "Data Mode",
+    "profile": "User Profile",
+    "name": "Name",
+    "role": "Role",
+    "location": "Primary Region",
+    "saveChanges": "Save Changes",
+    "resetDefaults": "Reset Defaults",
+    "themeDescription": "Switch between Light and Dark interface modes.",
+    "languageDescription": "Select your preferred language for the dashboard.",
+    "dataModeDescription": "Toggle between live AWS data and simulated demo data."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "search": "Search for answers...",
+    "categories": {
+      "general": "General",
+      "agents": "AI Agents",
+      "data": "Data & Privacy",
+      "technical": "Technical"
+    },
+    "questions": [
+      {
+        "q": "What is HarveLogixAI?",
+        "a": "HarveLogixAI is an integrated platform using Amazon Bedrock and Nova models to provide real-time agricultural intelligence, waste reduction analysis, and market matching for farmers and processors."
+      },
+      {
+        "q": "How do the AI Agents work?",
+        "a": "Our agents (Harvest, Protector, Hydro, etc.) use a multi-agent orchestration pattern. They query real-time data via MCP tools and use Nova Lite for high-speed, cost-effective reasoning."
+      },
+      {
+        "q": "Is my data secure?",
+        "a": "Yes. All data is processed using AWS Bedrock with enterprise-grade security. We use RAG (Retrieval-Augmented Generation) to ensure agents only access relevant, authorized information."
+      },
+      {
+        "q": "How do I use the AI Scanner?",
+        "a": "Simply upload an image of your crop, soil, or field. Our multimodal Nova models will analyze the visual data and provide immediate health scores and recommendations."
+      }
+    ]
   },
   "overview": {
     "title": "Overview",

@@ -236,7 +236,7 @@ Resources:
       ReservedConcurrentExecutions: !If [IsInvocationEnabled, 10, 0]
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           MULTIMODAL_SCANS_TABLE: !Ref MultimodalScansTable
           S3_BUCKET: !Ref MultimodalMediaBucket
           ENABLE_INVOCATION: !Ref EnableMultimodalServices
@@ -277,7 +277,7 @@ Resources:
       ReservedConcurrentExecutions: !If [IsInvocationEnabled, 10, 0]
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           MULTIMODAL_SCANS_TABLE: !Ref MultimodalScansTable
           S3_BUCKET: !Ref MultimodalMediaBucket
           ENABLE_INVOCATION: !Ref EnableMultimodalServices
@@ -318,7 +318,7 @@ Resources:
       ReservedConcurrentExecutions: !If [IsInvocationEnabled, 10, 0]
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           MULTIMODAL_SCANS_TABLE: !Ref MultimodalScansTable
           S3_BUCKET: !Ref MultimodalMediaBucket
           ENABLE_INVOCATION: !Ref EnableMultimodalServices
@@ -359,7 +359,7 @@ Resources:
       ReservedConcurrentExecutions: !If [IsInvocationEnabled, 10, 0]
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           MULTIMODAL_SCANS_TABLE: !Ref MultimodalScansTable
           S3_BUCKET: !Ref MultimodalMediaBucket
           ENABLE_INVOCATION: !Ref EnableMultimodalServices
@@ -400,7 +400,7 @@ Resources:
       ReservedConcurrentExecutions: !If [IsInvocationEnabled, 5, 0]
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           MULTIMODAL_SCANS_TABLE: !Ref MultimodalScansTable
           S3_BUCKET: !Ref MultimodalMediaBucket
           ENABLE_INVOCATION: !Ref EnableMultimodalServices

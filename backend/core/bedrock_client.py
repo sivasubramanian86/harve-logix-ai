@@ -22,6 +22,7 @@ from config import (
     BEDROCK_MODEL_ID,
     BEDROCK_MAX_TOKENS,
     BEDROCK_TEMPERATURE,
+    BEDROCK_MODEL_TYPE,
 )
 from utils.retry import retry_with_backoff
 from utils.errors import BedrockException
@@ -40,9 +41,9 @@ class BedrockConfig:
     """Configuration container for Bedrock models."""
     
     # Standard reasoning models (ap-south-2 available)
-    CLAUDE_SONNET_4_6 = "anthropic.claude-sonnet-4-6"
     CLAUDE_OPUS_4_5 = "anthropic.claude-opus-4-5-20251101-v1:0"
-    CLAUDE_HAIKU = "anthropic.claude-haiku-4-5-20251001-v1:0"
+    CLAUDE_HAIKU_4_5 = "anthropic.claude-haiku-4-5-20251001-v1:0"
+    CLAUDE_OPUS_4_6 = "anthropic.claude-opus-4-6-v1"
     
     # Embedding models
     TITAN_EMBED_TEXT_V2 = "amazon.titan-embed-text-v2:0"
@@ -72,6 +73,7 @@ class BedrockClient:
         region: str = AWS_REGION,
         max_tokens: int = BEDROCK_MAX_TOKENS,
         temperature: float = BEDROCK_TEMPERATURE,
+        model_type: str = BEDROCK_MODEL_TYPE,
     ):
         """
         Initialize Bedrock client.
@@ -81,17 +83,27 @@ class BedrockClient:
             region: AWS region
             max_tokens: Maximum tokens in response
             temperature: Model temperature (0-1)
+            model_type: Model type ('nova' or 'claude')
         """
         self.model_id = model_id
         self.region = region
         self.max_tokens = max_tokens
         self.temperature = temperature
-        self.client = boto3.client('bedrock-runtime', region_name=region)
+        self.model_type = model_type
+        # Route inference profiles to their respective regions
+        # ARNs contain region info: arn:aws:bedrock:REGION:ACCOUNT:application-inference-profile/ID
+        region_to_use = region
+        if model_id.lower().startswith('arn:aws:bedrock:'):
+            # Extract region from ARN
+            arn_parts = model_id.split(':')
+            if len(arn_parts) >= 4:
+                region_to_use = arn_parts[3]
+        self.client = boto3.client('bedrock-runtime', region_name=region_to_use)
         self.logger = logging.getLogger(__name__)
         self._health_check_cache = {'healthy': None, 'last_check': None}
         
         self.logger.info(
-            f"Bedrock client initialized with model: {model_id}, region: {region}"
+            f"Bedrock client initialized with model: {model_id}, region: {region}, type: {model_type}"
         )
     
     @retry_with_backoff(exceptions=(ClientError, BotoCoreError))
@@ -102,9 +114,12 @@ class BedrockClient:
         model_id: Optional[str] = None,
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None,
-    ) -> str:
+        tools: Optional[list] = None,
+        messages: Optional[list] = None,
+    ) -> Union[str, Dict[str, Any]]:
         """
         Invoke a Bedrock model for text reasoning.
+        Supports both direct model IDs and inference profile ARNs.
         
         Args:
             prompt: User input prompt
@@ -112,9 +127,11 @@ class BedrockClient:
             model_id: Optional override of default model
             max_tokens: Optional override of default max_tokens
             temperature: Optional override of default temperature
+            tools: Optional lists of tools to provide to the model
+            messages: Optional list of previous conversation messages (to support tool loop)
             
         Returns:
-            Model response text
+            Model response text or a dict containing toolUse objects
             
         Raises:
             BedrockException: If invocation fails after retries
@@ -129,8 +146,13 @@ class BedrockClient:
                 system_prompt=system_prompt,
                 max_tokens=tokens,
                 temperature=temp,
+                model_id=model_to_use,
+                tools=tools,
+                messages=messages,
             )
             
+            # For inference profile ARNs, use modelId directly
+            # The ARN format handles the routing automatically
             response = self.client.invoke_model(
                 modelId=model_to_use,
                 contentType='application/json',
@@ -139,11 +161,34 @@ class BedrockClient:
             )
             
             response_body = json.loads(response['body'].read())
-            content = response_body['content'][0]['text']
+            
+            # Parse response based on model type
+            if self.model_type.lower() == 'nova':
+                # Amazon Nova response format
+                message = response_body.get('output', {}).get('message', {})
+                content_blocks = message.get('content', [{}])
+                
+                # Check for toolUse
+                tool_uses = []
+                text_content = ""
+                for block in content_blocks:
+                    if 'toolUse' in block:
+                        tool_uses.append(block['toolUse'])
+                    if 'text' in block:
+                        text_content += block['text']
+                        
+                if tool_uses:
+                    self.logger.info(f"Bedrock returned {len(tool_uses)} tool calls")
+                    return {'type': 'tool_use', 'tools': tool_uses, 'text': text_content, 'message': message}
+                
+                content = text_content
+            else:
+                # Claude response format
+                content = response_body['content'][0]['text']
             
             self.logger.info(
                 f"Bedrock model invocation successful. Model: {model_to_use}, "
-                f"Tokens used: {response['ResponseMetadata']['HTTPHeaders'].get('x-amzn-bedrock-output-token-count', 'unknown')}"
+                f"Output tokens: {response_body.get('usage', {}).get('output_tokens', 'unknown')}"
             )
             return content
             
@@ -350,33 +395,67 @@ class BedrockClient:
         system_prompt: Optional[str] = None,
         max_tokens: int = BEDROCK_MAX_TOKENS,
         temperature: float = BEDROCK_TEMPERATURE,
+        model_id: Optional[str] = None,
+        tools: Optional[list] = None,
+        messages: Optional[list] = None,
     ) -> Dict[str, Any]:
         """
         Build Bedrock API request body.
+        Automatically handles Claude and Amazon Nova formats based on model_type.
         
         Args:
             prompt: User prompt
             system_prompt: Optional system prompt
             max_tokens: Max tokens
             temperature: Temperature
+            model_id: Model ID (unused, kept for compatibility)
+            tools: Optional tool definitions
+            messages: Optional conversation history
             
         Returns:
             Request body dictionary
         """
-        body = {
-            'anthropic_version': 'bedrock-2023-06-01',
-            'max_tokens': max_tokens,
-            'temperature': temperature,
-            'messages': [
-                {
-                    'role': 'user',
-                    'content': prompt
+        # Maintain history if provided, otherwise create single turn
+        conv_messages = messages if messages else []
+        if prompt:
+            # Append the prompt to conversation messages
+            conv_messages.append({
+                'role': 'user',
+                'content': [{'text': prompt}] if self.model_type.lower() == 'nova' else prompt
+            })
+            
+        # Use configured model type to determine format
+        if self.model_type.lower() == 'nova':
+            # Amazon Nova format: content as array with text objects
+            body = {
+                'messages': conv_messages,
+                'inferenceConfig': {
+                    'maxTokens': max_tokens,
+                    'temperature': temperature
                 }
-            ]
-        }
-        
-        if system_prompt:
-            body['system'] = system_prompt
+            }
+            if system_prompt:
+                body['system'] = [{'text': system_prompt}]
+            
+            if tools:
+                # Format tools for Nova: tools list with toolSpec
+                nova_tools = []
+                for tool in tools:
+                    nova_tools.append({
+                        'toolSpec': tool
+                    })
+                body['toolConfig'] = {'tools': nova_tools}
+                
+        else:
+            # Claude and other Anthropic models
+            body = {
+                'anthropic_version': 'bedrock-2023-06-01',
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+                'messages': conv_messages
+            }
+            if system_prompt:
+                body['system'] = system_prompt
         
         return body
     

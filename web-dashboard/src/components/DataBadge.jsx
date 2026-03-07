@@ -5,9 +5,7 @@ export default function DataBadge({ mode = 'live', timestamp }) {
   const { t } = useI18n();
 
   const isDemo = mode === 'demo';
-  const bgColor = isDemo ? 'bg-yellow-100' : 'bg-green-100';
-  const textColor = isDemo ? 'text-yellow-800' : 'text-green-800';
-  const borderColor = isDemo ? 'border-yellow-300' : 'border-green-300';
+  const colorVar = isDemo ? 'var(--color-warning)' : 'var(--color-success)';
 
   const formatTime = (date) => {
     if (!date) return '';
@@ -24,14 +22,22 @@ export default function DataBadge({ mode = 'live', timestamp }) {
 
   return (
     <div
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${bgColor} ${borderColor} ${textColor} text-xs font-medium`}
+      className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest shadow-sm"
+      style={{
+        backgroundColor: 'var(--bg-secondary)',
+        borderColor: 'var(--border-primary)',
+        color: colorVar,
+      }}
     >
-      <span className={`w-2 h-2 rounded-full ${isDemo ? 'bg-yellow-600' : 'bg-green-600'}`}></span>
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: colorVar }}></span>
+        <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: colorVar }}></span>
+      </span>
       <span>{isDemo ? t('common.demoData') : t('common.liveData')}</span>
       {timestamp && (
         <>
-          <span className="opacity-50">•</span>
-          <span className="opacity-75">{formatTime(timestamp)}</span>
+          <span className="opacity-30">|</span>
+          <span className="opacity-70 font-bold">{formatTime(timestamp)}</span>
         </>
       )}
     </div>

@@ -55,7 +55,7 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          BEDROCK_MODEL_ID: anthropic.claude-sonnet-4-20250514
+          BEDROCK_MODEL_ID: arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
           AWS_REGION: ap-south-2
           PROCESSOR_PROFILES_TABLE: harvelogix-processors-production
       Code:

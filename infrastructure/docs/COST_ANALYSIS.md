@@ -118,7 +118,7 @@ This document provides a detailed cost breakdown for deploying the HarveLogix Mu
 
 ### 3.1 Amazon Bedrock (Claude Sonnet 4.6)
 
-**Model**: `anthropic.claude-sonnet-4-20250514`
+**Model**: `arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc`
 
 **Pricing Model**: Per token (input + output)
 

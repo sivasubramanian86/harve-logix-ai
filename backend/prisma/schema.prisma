@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Farmer {
+  id               String     @id @default(uuid())
+  name             String
+  location         String
+  region           String
+  crops            String[]
+  status           String     @default("active")
+  lastDecisionDate DateTime   @default(now())
+  createdAt        DateTime   @default(now())
+
+  decisions        Decision[]
+}
+
+model Decision {
+  id             String   @id @default(uuid())
+  farmerId       String
+  date           DateTime @default(now())
+  recommendation String
+  outcome        String
+  impact         String   
+
+  farmer         Farmer   @relation(fields: [farmerId], references: [id])
+}
+
+model OpenCropYield {
+  id             String   @id @default(uuid())
+  stateName      String
+  districtName   String
+  cropYear       Int
+  season         String
+  crop           String
+  area           Float
+  production     Float
+  yield          Float
+
+  @@index([stateName])
+  @@index([crop])
+}

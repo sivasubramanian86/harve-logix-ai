@@ -22,7 +22,8 @@ async function analyzeCropHealth(file) {
 
   try {
     if (USE_DEMO) {
-      return demoDataService.getCropHealthResponse(scanId)
+      const demo = demoDataService.getCropHealthResponse(scanId)
+      return { ...demo, ...demo.data, data: undefined }
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'crop-health')
@@ -38,7 +39,8 @@ async function analyzeCropHealth(file) {
     }
   } catch (error) {
     console.error('Crop health analysis error:', error)
-    return demoDataService.getCropHealthResponse(scanId)
+    const demo = demoDataService.getCropHealthResponse(scanId)
+    return { ...demo, ...demo.data, data: undefined }
   }
 }
 
@@ -51,7 +53,8 @@ async function analyzeFieldIrrigation(file) {
 
   try {
     if (USE_DEMO) {
-      return demoDataService.getIrrigationResponse(scanId)
+      const demo = demoDataService.getIrrigationResponse(scanId)
+      return { ...demo, ...demo.data, data: undefined }
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'field-irrigation')
@@ -67,7 +70,8 @@ async function analyzeFieldIrrigation(file) {
     }
   } catch (error) {
     console.error('Field irrigation analysis error:', error)
-    return demoDataService.getIrrigationResponse(scanId)
+    const demo = demoDataService.getIrrigationResponse(scanId)
+    return { ...demo, ...demo.data, data: undefined }
   }
 }
 
@@ -80,7 +84,8 @@ async function analyzeSkyWeather(file) {
 
   try {
     if (USE_DEMO) {
-      return demoDataService.getWeatherResponse(scanId)
+      const demo = demoDataService.getWeatherResponse(scanId)
+      return { ...demo, ...demo.data, data: undefined }
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'sky-weather')
@@ -97,7 +102,8 @@ async function analyzeSkyWeather(file) {
     }
   } catch (error) {
     console.error('Sky weather analysis error:', error)
-    return demoDataService.getWeatherResponse(scanId)
+    const demo = demoDataService.getWeatherResponse(scanId)
+    return { ...demo, ...demo.data, data: undefined }
   }
 }
 
@@ -110,7 +116,8 @@ async function processVoiceQuery(file) {
 
   try {
     if (USE_DEMO) {
-      return demoDataService.getVoiceQueryResponse(scanId)
+      const demo = demoDataService.getVoiceQueryResponse(scanId)
+      return { ...demo, ...demo.data, data: undefined }
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'voice-query')
@@ -130,7 +137,8 @@ async function processVoiceQuery(file) {
     }
   } catch (error) {
     console.error('Voice query processing error:', error)
-    return demoDataService.getVoiceQueryResponse(scanId)
+    const demo = demoDataService.getVoiceQueryResponse(scanId)
+    return { ...demo, ...demo.data, data: undefined }
   }
 }
 
@@ -143,7 +151,8 @@ async function analyzeVideoScan(file) {
 
   try {
     if (USE_DEMO) {
-      return demoDataService.getVideoScanResponse(scanId)
+      const demo = demoDataService.getVideoScanResponse(scanId)
+      return { ...demo, ...demo.data, data: undefined }
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'video-scan')
@@ -159,7 +168,8 @@ async function analyzeVideoScan(file) {
     }
   } catch (error) {
     console.error('Video scan analysis error:', error)
-    return demoDataService.getVideoScanResponse(scanId)
+    const demo = demoDataService.getVideoScanResponse(scanId)
+    return { ...demo, ...demo.data, data: undefined }
   }
 }
 

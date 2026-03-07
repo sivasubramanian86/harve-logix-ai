@@ -67,7 +67,7 @@ npm start
 2. Click "Model access" in left sidebar
 3. Click "Manage model access"
 4. Enable the following models:
-   - **Claude Sonnet 4.6** (anthropic.claude-sonnet-4-20250514)
+   - **Claude Sonnet 4.6** (arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc)
    - **Claude 3 Haiku** (anthropic.claude-3-haiku-20240307-v1:0)
 
 ### Test Bedrock in Playground
@@ -94,7 +94,7 @@ const bedrock = new AWS.BedrockRuntime({
   region: process.env.AWS_REGION || 'us-east-1',
 })
 
-const MODEL_ID = 'anthropic.claude-sonnet-4-20250514'
+const MODEL_ID = 'arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc'
 ```
 
 ## 3. AWS Lambda Setup
@@ -123,7 +123,7 @@ exports.handler = async (event) => {
     const { imageUri } = JSON.parse(event.body)
 
     const params = {
-      modelId: 'anthropic.claude-sonnet-4-20250514',
+      modelId: 'arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc',
       contentType: 'application/json',
       accept: 'application/json',
       body: JSON.stringify({
@@ -351,7 +351,7 @@ DB_PORT=5432
 DB_NAME=harvelogix
 
 # Bedrock Configuration
-BEDROCK_MODEL_ID=anthropic.claude-sonnet-4-20250514
+BEDROCK_MODEL_ID=arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc
 
 # Weather API
 WEATHER_API_KEY=<openweathermap-api-key>

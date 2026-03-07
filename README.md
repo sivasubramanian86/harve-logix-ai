@@ -27,33 +27,32 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
 
 ## Solution Overview
 
-### Six Autonomous Agents
+### Six Autonomous Agents (Powered by Amazon Nova)
 
-1. **HarvestReady Agent** → Optimal harvest timing using crop phenology + market + weather (₹4,500 benefit)
-2. **StorageScout Agent** → Zero-loss storage protocol using ambient data + crop type (₹7,500 benefit)
-3. **SupplyMatch Agent** → Direct farmer-processor buyer matching (eliminates middleman, ₹20K benefit)
-4. **WaterWise Agent** → Water optimization for post-harvest operations (₹8,000 benefit)
-5. **QualityHub Agent** → Automated quality certification using Rekognition (₹5,000 benefit)
-6. **CollectiveVoice Agent** → Aggregation + collective bargaining (₹3,000 benefit)
+1. **HarvestReady Agent** → Optimal harvest timing using crop phenology + market + weather.
+2. **StorageScout Agent** → Zero-loss storage protocol using ambient data + crop type.
+3. **SupplyMatch Agent** → Direct farmer-processor buyer matching (eliminates middleman).
+4. **WaterWise Agent** → Water optimization for post-harvest operations.
+5. **QualityHub Agent** → Automated quality certification using Multimodal Nova Vision.
+6. **CollectiveVoice Agent** → Aggregation + collective bargaining.
 
 ### Architecture Highlights
 
-- **Orchestration:** AWS Bedrock Agent Core + EventBridge
-- **Real-Time State:** DynamoDB (10,000 WCU, <1ms p99 latency)
-- **Historical Data:** RDS Aurora (50M+ market prices, 1M+ crop phenology records)
-- **Analytics:** Redshift + QuickSight (government dashboards)
-- **Mobile:** React Native/Flutter with offline-first SQLite
-- **Security:** Cognito + KMS + WAF + CloudTrail
-- **Performance:** <100ms p99 agent response time, 99.99% uptime
+- **Orchestration:** Amazon Bedrock Agent Intelligence with **Nova Lite** inference profiles.
+- **Model Context Protocol (MCP):** Real-time tool execution for live sensing data.
+- **RAG (Retrieval-Augmented Generation):** Knowledge grounding for hyper-local agricultural advice.
+- **Database:** PostgreSQL with **Prisma ORM** for structured and vector data.
+- **Multimodal Support:** Voice, Image, and Video analysis for crop health and field status.
+- **Internationalization:** Support for 8+ Indian regional languages (Hindi, Gujarati, Tamil, etc.).
 
 ## Quick Start
 
 ### Prerequisites
 
-- AWS Account with appropriate permissions
-- Python 3.11+
+- AWS Account with Bedrock access (Nova Lite inference profile enabled)
+- Python 3.10+
 - Node.js 18+
-- Terraform or AWS CloudFormation
+- PostgreSQL instance
 
 ### Installation
 
@@ -63,14 +62,10 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
    cd harvelogix-ai
    ```
 
-2. **Quick Start (30 seconds)**
+2. **Quick Start (Auto)**
    ```bash
    # Windows
    start.bat
-   
-   # macOS/Linux
-   chmod +x start.sh
-   ./start.sh
    ```
 
 3. **Manual Setup**
@@ -78,7 +73,7 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
    # Backend
    cd backend
    npm install
-   npm start
+   npm run dev
    
    # Frontend (new terminal)
    cd web-dashboard
@@ -95,95 +90,63 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
 
 ```
 harvelogix-ai/
-├── .kiro/
-│   └── specs/
-│       └── harvelogix-ai/
-│           ├── requirements.md      # Functional & non-functional requirements
-│           ├── design.md            # System architecture & data models
-│           └── tasks.md             # Implementation task list
-├── backend/
-│   ├── agents/
-│   │   ├── harvest_ready_agent.py
-│   │   ├── storage_scout_agent.py
-│   │   ├── supply_match_agent.py
-│   │   ├── water_wise_agent.py
-│   │   ├── quality_hub_agent.py
-│   │   └── collective_voice_agent.py
-│   ├── core/
-│   │   ├── bedrock_orchestrator.py
-│   │   ├── eventbridge_handler.py
-│   │   └── context_manager.py
-│   ├── tests/
-│   │   ├── unit/
-│   │   ├── integration/
-│   │   └── property_based/
-│   └── requirements.txt
-├── mobile-app/
-│   ├── src/
-│   │   ├── screens/
-│   │   ├── components/
-│   │   ├── services/
-│   │   └── utils/
-│   ├── package.json
-│   └── app.json
-├── infrastructure/
-│   ├── terraform/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │   └── modules/
-│   └── cloudformation/
-├── scripts/
-│   ├── deploy-agents.sh
-│   ├── deploy-infrastructure.sh
-│   └── run-tests.sh
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── API.md
-│   ├── DEPLOYMENT.md
-│   └── CONTRIBUTING.md
-├── README.md
-├── LICENSE
-├── SECURITY.md
-└── .gitignore
+├── backend/                 # Agent Engine & API Server
+│   ├── agents/              # Autonomous AI Agents (Python)
+│   ├── core/                # Shared AI & DB Utilities
+│   ├── docs/                # Backend-specific documentation
+│   ├── routes/              # API Endpoints
+│   └── prisma/              # Database Schema & Migrations
+├── web-dashboard/           # Premium React Frontend
+│   ├── src/                 # Source code
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Dashboard screens (Overview, AI Scanner, etc.)
+│   │   ├── i18n/            # Multilingual support
+│   │   └── theme/           # Premium design system (Forest to Tech)
+│   └── docs/                # Dashboard-specific documentation
+├── docs/                    # Centralized Project Documentation
+│   ├── ARCHITECTURE.md      # System design
+│   ├── TECH_STACK.md        # Detailed technology breakdown
+│   └── README.md            # Docs index
+├── scripts/                 # Utility & Management scripts
+├── start.bat                # Automated startup script
+└── README.md                # Root project overview
 ```
 
 ## Key Features
 
 ### For Farmers
-- **Phone-based authentication** with OTP and biometric support
-- **Offline-first mobile app** (works 7 days without internet)
-- **6 one-click agent buttons** for decision support
-- **Multi-language support** (Hindi, Tamil, Kannada, Telugu, Marathi, Bengali)
-- **Real-time notifications** for supply matches, payments, scheme eligibility
-- **Income tracking dashboard** with decision history
+- **AI Actionable Recommendations**: Personalized, real-time advice from Bedrock/Nova.
+- **AI Scanner**: Multimodal (Vision/Voice) crop and field health analysis.
+- **Multi-language Support**: 8+ Indian regional languages.
+- **Income & Waste Tracking**: Real-time impact metrics.
 
 ### For Processors
-- **Direct farmer connections** (no middlemen)
-- **Supply forecasting** (30-day demand prediction)
-- **Quality certification** (automated via Rekognition)
-- **Collective aggregation** (bulk discounts, shared logistics)
+- **Direct Buyer Matching**: AI-driven connection to farmers.
+- **Supply Forecasting**: Predictive analytics for inventory management.
+- **Quality Verification**: Multimodal evidence-based certification.
 
 ### For Government
-- **Real-time dashboards** (food security, farmer welfare, supply chain)
-- **50M farmer data** (Redshift analytics)
-- **Policy insights** (waste reduction trajectory, income distribution)
-- **Scheme eligibility matching** (50+ government schemes)
-
-## Performance Targets
-
-| Metric | Target | Status |
-|--------|--------|--------|
-| Agent response time | <100ms p99 | 🎯 |
-| DynamoDB latency | <1ms p99 | 🎯 |
-| API Gateway latency | <60ms p99 | 🎯 |
-| App cold start | <2 seconds | 🎯 |
-| Uptime SLA | 99.99% | 🎯 |
-| Test coverage | 87%+ | 🎯 |
-| Farmer income increase | ₹30-50K/acre | 🎯 |
-| Waste reduction | 30% | 🎯 |
+- **Macro Dashboards**: Regional waste and income uplift analytics.
+- **Policy Insights**: Data-driven visibility into agricultural trends.
 
 ## Technology Stack
+
+For a detailed breakdown, see [TECH_STACK.md](docs/TECH_STACK.md).
+
+### AI & Reasoning
+- **LLM:** Amazon Nova Lite (`us.amazon.nova-lite-v1:0`)
+- **Agent Mesh:** Custom Python/Node.js multi-agent orchestration
+- **Tools:** MCP-driven dynamic data retrieval
+
+### Frontend (Dashboard)
+- **Framework:** React + Vite
+- **Theming:** Premium "Forest to Tech" glassmorphism
+- **I18n:** Multi-language JSON engine
+
+### Backend
+- **Core:** Express.js + Python 3.10
+- **Database:** PostgreSQL + Prisma ORM
+- **AWS Integration:** Boto3, AWS SDK
 
 ### Backend
 - **Runtime:** Python 3.11+ (AWS Lambda)

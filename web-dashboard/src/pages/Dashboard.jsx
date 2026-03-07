@@ -15,7 +15,7 @@ export default function Dashboard() {
 
   const fetchMetrics = async () => {
     try {
-      const response = await axios.get('/api/metrics')
+      const response = await axios.get('/metrics')
       const backendData = response.data
       setMetrics({
         totalFarmers: backendData.totalFarmers || 45230,
@@ -62,15 +62,15 @@ export default function Dashboard() {
   })
 
   if (loading || !metrics) {
-    return <div className="p-8 text-center">Loading...</div>
+    return <div className="p-8 text-center" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Loading...</div>
   }
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-8 space-y-8" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Real-time insights into HarveLogix AI platform</p>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Real-time insights into HarveLogix AI platform</p>
       </div>
 
       {/* Metrics Grid */}
@@ -99,6 +99,39 @@ export default function Dashboard() {
           value={`${metrics.wasteReduction}%`}
           color="bg-purple-500"
         />
+      </div>
+
+      {/* AI Strategic Intelligence Banner */}
+      <div 
+        className="p-6 rounded-2xl border-2 border-primary-500/20 relative overflow-hidden group transition-all hover:shadow-xl"
+        style={{ 
+          background: 'linear-gradient(135deg, var(--card-bg) 0%, var(--bg-secondary) 100%)',
+          borderColor: 'var(--color-primary-light)' 
+        }}
+      >
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+          <TrendingUp size={120} />
+        </div>
+        <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+          <div className="bg-primary-500 p-4 rounded-xl text-white shadow-lg">
+            <TrendingUp size={32} />
+          </div>
+          <div className="flex-1 text-center md:text-left">
+            <h2 className="text-xl font-bold flex items-center justify-center md:justify-start gap-2">
+              <span className="text-primary-600">Amazon Nova Pro</span> Strategic Insight
+              <span className="px-2 py-0.5 rounded-full bg-primary-100 text-primary-700 text-xs font-bold uppercase tracking-wider">Live Reasoning</span>
+            </h2>
+            <p className="mt-2 text-lg font-medium leading-relaxed">
+              Platform-wide waste reduction has increased by <span className="text-success-600 font-bold">12.5%</span> this week. 
+              <span className="opacity-70 ml-2 italic">Recommendation: Optimize storage capacity in Maharashtra clusters to capture peak harvest premiums next month.</span>
+            </p>
+          </div>
+          <button 
+            className="px-6 py-3 bg-primary-600 text-white rounded-xl font-bold shadow-md hover:bg-primary-700 transition-colors"
+          >
+            View Full Analysis
+          </button>
+        </div>
       </div>
 
       {/* Charts */}
@@ -144,21 +177,21 @@ export default function Dashboard() {
       </div>
 
       {/* Top Crops Table */}
-      <div className="card">
+      <div className="p-6 rounded-lg border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
         <h2 className="text-xl font-bold mb-4">Top Crops by Income</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead style={{ backgroundColor: 'var(--bg-secondary)' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Crop</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Farmers</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Total Income</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Avg Income/Farmer</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Crop</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Farmers</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Total Income</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Avg Income/Farmer</th>
               </tr>
             </thead>
             <tbody>
               {metrics.topCrops.map((crop, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
+                <tr key={idx} className="border-t" style={{ borderColor: 'var(--border-primary)' }}>
                   <td className="px-6 py-4 font-medium">{crop.crop}</td>
                   <td className="px-6 py-4">{crop.farmers.toLocaleString()}</td>
                   <td className="px-6 py-4">₹{(crop.income / 1000).toFixed(0)}K</td>

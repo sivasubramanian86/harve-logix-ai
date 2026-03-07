@@ -83,14 +83,18 @@ class MCPTool:
         self.parameters = parameters
     
     def to_schema(self) -> Dict[str, Any]:
-        """Get tool as JSON schema for Claude."""
+        """Get tool as JSON schema for Claude/Nova."""
+        # Nova and Bedrock use inputSchema, Claude directly accepts input_schema depending on API.
+        # But boto3 Bedrock Converse/Nova uses inputSchema with json format.
         return {
             'name': self.name,
             'description': self.description,
-            'input_schema': {
-                'type': 'object',
-                'properties': self.parameters.get('properties', {}),
-                'required': self.parameters.get('required', [])
+            'inputSchema': {
+                'json': {
+                    'type': 'object',
+                    'properties': self.parameters.get('properties', {}),
+                    'required': self.parameters.get('required', [])
+                }
             }
         }
 
@@ -290,6 +294,22 @@ class StrandsAgent(ABC):
         
         self.logger.info(f"Initialized Strands agent: {agent_name}")
     
+    def process(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Process input data for the agent.
+        Map JSON input to AnalysisContext and perform analysis.
+        """
+        context = AnalysisContext(
+            farmer_id=input_data.get('farmer_id', 'demo-farmer'),
+            region=input_data.get('region', 'India'),
+            crop_type=input_data.get('crop_type', 'mixed'),
+            timeframe=input_data.get('timeframe', 'next-7-days'),
+            analysis_type=input_data.get('analysis_type', 'farmer_insights'),
+            custom_params=input_data
+        )
+        result = self.analyze(context)
+        return result.to_dict()
+    
     @abstractmethod
     def analyze(self, context: AnalysisContext) -> AnalysisResult:
         """
@@ -328,7 +348,24 @@ Always provide:
 3. Confidence score (0-1)
 4. Reasoning explanation
 
-Output format: JSON with keys: insights, recommendations, metrics, confidence_score
+Output format: You MUST return a valid JSON object as the final response.
+The JSON must have the following keys:
+- "insights": A list of 3-5 concise, observational strings.
+- "recommendations": A list of dicts with "action", "impact", and "timeline".
+- "metrics": A dict of numeric key-value pairs (e.g., "predicted_yield_increase": 15.5).
+- "confidence_score": A float between 0 and 1.
+- "reasoning": A brief explanation of the synthesis.
+
+Example:
+{{
+  "insights": ["Soil nitrogen is optimal", "Upcoming rain in 3 days"],
+  "recommendations": [{{"action": "Wait for rain", "impact": "Save water", "timeline": "Next 72h"}}],
+  "metrics": {{"yield_impact": 12.5}},
+  "confidence_score": 0.9,
+  "reasoning": "Data synthesized from weather and soil sensors."
+}}
+
+Do not include any conversational text before or after the JSON.
 """
     
     def _invoke_bedrock_with_tools(
@@ -342,34 +379,75 @@ Output format: JSON with keys: insights, recommendations, metrics, confidence_sc
             user_message: User message
             
         Returns:
-            Tuple of (response_text, tool_calls)
+            Tuple of (response_text, all_executed_tools)
         """
-        # Add user message to history
-        self.conversation_history.append({
-            'role': 'user',
-            'content': user_message
-        })
+        system_prompt = self._build_system_prompt()
+        all_tool_results = []
+        
+        # In Nova, history needs to be maintained per execution
+        conversation = self.conversation_history.copy()
         
         try:
-            # Build request with tools
-            system_prompt = self._build_system_prompt()
+            # We get schemas for all tools
+            tools = ToolExecutor.get_all_tools_schema()
+            current_prompt = user_message
             
-            # Prepare messages for Bedrock
-            response = self.bedrock_client.invoke_model(
-                prompt=user_message,
-                system_prompt=system_prompt,
-            )
-            
-            # Add assistant response to history
-            self.conversation_history.append({
-                'role': 'assistant',
-                'content': response
-            })
-            
-            # Parse for tool calls (basic parsing)
-            tool_calls = self._extract_tool_calls(response)
-            
-            return response, tool_calls
+            # Allow up to 5 tool-use iterations to prevent infinite loops
+            for i in range(5):
+                response = self.bedrock_client.invoke_model(
+                    prompt=current_prompt,
+                    system_prompt=system_prompt,
+                    tools=tools,
+                    messages=conversation
+                )
+                
+                # If we passed a prompt this turn, appending it locally for our loop history
+                if current_prompt:
+                    conversation.append({
+                        'role': 'user',
+                        'content': [{'text': current_prompt}]
+                    })
+                    current_prompt = "" # We don't send the prompt again in this loop
+                
+                # If response is a dict, it means tool use was requested
+                if isinstance(response, dict) and response.get('type') == 'tool_use':
+                    assistant_message = response.get('message')
+                    tool_uses = response.get('tools', [])
+                    
+                    # Add assistant's tool-use message to conversation history
+                    conversation.append(assistant_message)
+                    
+                    # Execute all tools requested by the model
+                    tool_results_content = []
+                    for tool_use in tool_uses:
+                        tool_use_id = tool_use['toolUseId']
+                        tool_name = tool_use['name']
+                        tool_input = tool_use['input']
+                        
+                        self.logger.info(f"Executing tool {tool_name} requested by Bedrock")
+                        result = ToolExecutor.execute(tool_name, tool_input)
+                        all_tool_results.append({'tool': tool_name, 'input': tool_input, 'result': result})
+                        
+                        tool_results_content.append({
+                            'toolResult': {
+                                'toolUseId': tool_use_id,
+                                'content': [{'text': json.dumps(result)}]
+                            }
+                        })
+                    
+                    # Send tool results back to Bedrock as the user
+                    conversation.append({
+                        'role': 'user',
+                        'content': tool_results_content
+                    })
+                    
+                else:
+                    # Final text response
+                    self.conversation_history.append({'role': 'user', 'content': user_message})
+                    self.conversation_history.append({'role': 'assistant', 'content': response})
+                    return response, all_tool_results
+                    
+            return "Analysis incomplete due to exceeding tool call limits.", all_tool_results
             
         except BedrockException as e:
             self.logger.error(f"Bedrock invocation failed: {str(e)}")
@@ -425,7 +503,7 @@ Output format: JSON with keys: insights, recommendations, metrics, confidence_sc
         self.logger.info(f"Conversation history reset for {self.agent_name}")
 
 
-class HarveLogixAnalysisAgent(StrandsAgent):
+class StrandsAnalysisAgent(StrandsAgent):
     """
     Strands-based analysis agent for HarveLogixAI.
     
@@ -464,12 +542,10 @@ class HarveLogixAnalysisAgent(StrandsAgent):
             prompt = self._build_analysis_prompt(context)
             
             # Get Bedrock analysis
-            response, tool_calls = self._invoke_bedrock_with_tools(prompt)
+            response, tool_history = self._invoke_bedrock_with_tools(prompt)
             
-            # Process any tool calls
-            if tool_calls:
-                tool_results = self._process_tool_results(tool_calls)
-                self.logger.info(f"Executed {len(tool_results)} tools")
+            if tool_history:
+                self.logger.info(f"Executed {len(tool_history)} tools")
             
             # Extract structured insights
             insights, recommendations, metrics, confidence = self._extract_insights(
@@ -521,12 +597,14 @@ Use available tools to:
 5. Review farmer demographics and patterns
 
 Then provide:
-- 3-5 key insights
-- 2-3 actionable recommendations
-- Relevant metrics
-- Confidence assessment
+- 3-5 key insights (strings)
+- 2-3 actionable recommendations (objects: {{"action": string, "impact": string, "timeline": string}})
+- Relevant metrics (dictionary of string to float/int)
+- confidence_score (float 0-1)
 
 Focus on {context.analysis_type} implications for {context.crop_type} in {context.region}.
+
+IMPORTANT: Return ONLY a raw JSON object with keys: "insights", "recommendations", "metrics", "confidence_score". No preamble, no conversational filler.
 """
     
     def _extract_insights(
@@ -536,37 +614,45 @@ Focus on {context.analysis_type} implications for {context.crop_type} in {contex
     ) -> Tuple[List[str], List[Dict[str, Any]], Dict[str, float], float]:
         """
         Extract insights from Bedrock response.
-        
-        In Phase 3, this is a simple extraction. 
-        In Phase 4, use structured output parsing.
+        Attempt to parse JSON, falling back to defaults if parsing fails.
         """
-        # Placeholder insights
+        try:
+            # Attempt to extract JSON from the text using a more robust regex
+            import re
+            json_match = re.search(r'(\{.*\})', response, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(1)
+                parsed = json.loads(json_str)
+                # Ensure all required keys exist
+                insights = parsed.get('insights', [])
+                recommendations = parsed.get('recommendations', [])
+                metrics = parsed.get('metrics', {})
+                confidence = parsed.get('confidence_score', 0.8)
+                return insights, recommendations, metrics, confidence
+        except Exception as e:
+            self.logger.warning(f"Failed to parse structured JSON from agent response. Error: {e}")
+            self.logger.debug(f"Raw response: {response}")
+            # Print to stdout so it appears in Node.js logs for debugging
+            print(f"DEBUG_AGENT_RAW_RESPONSE: {response}")
+
+        # Fallback if the agent didn't return perfect JSON
         insights = [
-            f"{context.crop_type} yield trends show improvement in {context.region}",
-            f"Weather patterns favorable for {context.crop_type} in next {context.timeframe}",
-            "Market prices stable with slight upward trend"
+            f"Agent provided unstructured analysis for {context.crop_type} in {context.region}.",
+            "See reasoning for full details."
         ]
         
         recommendations = [
             {
-                'action': 'Optimize irrigation timing',
-                'impact': 'Save 15-20% water',
-                'timeline': 'Implement within 2 weeks'
-            },
-            {
-                'action': 'Harvest at recommended stage',
-                'impact': 'Maximize yield quality and income',
-                'timeline': 'Monitor growth stage weekly'
+                'action': 'Review full analysis',
+                'impact': 'Ensure all details are captured',
+                'timeline': 'Immediate'
             }
         ]
         
         metrics = {
-            'yield_trend': 0.12,  # 12% improvement
-            'water_efficiency': 0.85,
-            'market_stability': 0.90,
-            'soil_health_score': 0.75
+            'parsing_success': 0.0
         }
         
-        confidence = 0.87
+        confidence = 0.5
         
         return insights, recommendations, metrics, confidence

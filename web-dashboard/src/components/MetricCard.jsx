@@ -28,46 +28,52 @@ export default function MetricCard({
     return 'text-gray-600';
   };
 
-  const getColorClass = () => {
+  const getColorStyle = () => {
     switch (color) {
       case 'success':
-        return 'bg-green-50 border-green-200';
+        return { color: 'var(--color-success)', background: 'rgba(var(--color-success-rgb, 76, 175, 80), 0.1)' };
       case 'warning':
-        return 'bg-yellow-50 border-yellow-200';
+        return { color: 'var(--color-warning)', background: 'rgba(var(--color-warning-rgb, 255, 152, 0), 0.1)' };
       case 'error':
-        return 'bg-red-50 border-red-200';
+        return { color: 'var(--color-error)', background: 'rgba(var(--color-error-rgb, 244, 67, 54), 0.1)' };
       case 'info':
-        return 'bg-blue-50 border-blue-200';
+        return { color: 'var(--color-info)', background: 'rgba(var(--color-info-rgb, 33, 150, 243), 0.1)' };
       default:
-        return 'bg-blue-50 border-blue-200';
+        return { color: 'var(--color-info)', background: 'rgba(var(--color-info-rgb, 33, 150, 243), 0.1)' };
     }
   };
 
   return (
     <div
-      className={`p-6 rounded-lg border ${getColorClass()} transition-all hover:shadow-md`}
+      className="p-5 rounded-2xl border transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] hover:-translate-y-1.5 relative overflow-hidden group border-white/5 active:scale-[0.98]"
       style={{
         backgroundColor: 'var(--card-bg)',
-        borderColor: 'var(--border-primary)',
         color: 'var(--text-primary)',
+        backdropFilter: 'blur(16px)',
       }}
     >
-      <div className="flex items-start justify-between">
+      {/* Dynamic Glow Effect */}
+      <div 
+        className="absolute -top-10 -right-10 w-32 h-32 opacity-10 group-hover:opacity-20 transition-all duration-700 blur-3xl pointer-events-none"
+        style={{
+          background: getColorStyle().color,
+        }}
+      />
+      
+      <div className="flex items-start justify-between relative z-10">
         <div className="flex-1">
           <p
-            className="text-sm font-medium mb-2"
-            style={{ color: 'var(--text-secondary)' }}
+            className="text-[10px] font-black uppercase tracking-[0.2em] mb-3 opacity-50"
           >
             {label}
           </p>
-          <div className="flex items-baseline gap-2">
-            <h3 className="text-3xl font-bold">
+          <div className="flex items-baseline gap-1.5">
+            <h3 className="text-3xl font-black tracking-tighter">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </h3>
             {unit && (
               <span
-                className="text-sm"
-                style={{ color: 'var(--text-secondary)' }}
+                className="text-xs font-bold opacity-40 uppercase tracking-widest"
               >
                 {unit}
               </span>
@@ -75,20 +81,35 @@ export default function MetricCard({
           </div>
         </div>
         {Icon && (
-          <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-            <Icon size={24} style={{ color: 'var(--text-secondary)' }} />
+          <div 
+            className="p-3.5 rounded-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-lg bg-white/5 border border-white/10" 
+            style={{ 
+              color: getColorStyle().color,
+              boxShadow: `0 10px 20px -5px ${getColorStyle().color}20`
+            }}
+          >
+            <Icon size={22} className="drop-shadow-md" />
           </div>
         )}
       </div>
 
       {change !== undefined && (
-        <div className="mt-4 flex items-center gap-2">
-          {getTrendIcon()}
-          <span className={`text-sm font-medium ${getTrendColor()}`}>
-            {change > 0 ? '+' : ''}{change}%
-          </span>
+        <div className="mt-5 flex items-center gap-2 relative z-10">
+          <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full bg-opacity-10 ${getTrendColor().replace('text-', 'bg-')} border border-current border-opacity-10`}>
+            {getTrendIcon()}
+            <span className={`text-[10px] font-bold ${getTrendColor()}`}>
+              {change > 0 ? '+' : ''}{change}%
+            </span>
+          </div>
+          <span className="text-[10px] font-bold opacity-30 uppercase tracking-widest">vs last month</span>
         </div>
       )}
+      
+      {/* Bottom Accent Line */}
+      <div 
+        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-700"
+        style={{ backgroundColor: getColorStyle().color }}
+      />
     </div>
   );
 }

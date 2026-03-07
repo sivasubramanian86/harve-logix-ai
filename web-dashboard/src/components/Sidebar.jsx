@@ -11,6 +11,8 @@ import {
   Globe,
   ChevronRight,
   Wand2,
+  Settings,
+  HelpCircle,
 } from 'lucide-react'
 import { useI18n } from '../context/I18nProvider'
 
@@ -55,6 +57,13 @@ export default function Sidebar({ open }) {
         { icon: Activity, label: t('nav.systemHealth'), path: '/health', badge: null },
       ],
     },
+    {
+      title: 'System',
+      items: [
+        { icon: Settings, label: t('nav.settings'), path: '/settings', badge: null },
+        { icon: HelpCircle, label: t('nav.faq'), path: '/faq', badge: null },
+      ],
+    },
   ]
 
   const isActive = (path) => location.pathname === path
@@ -65,15 +74,22 @@ export default function Sidebar({ open }) {
         open ? 'w-64' : 'w-20'
       } bg-gradient-primary text-white transition-all duration-300 shadow-lg flex flex-col overflow-hidden`}
     >
-      {/* Logo Section */}
+      {/* Brand Header */}
       <div className="p-6 flex items-center gap-3 border-b border-white border-opacity-10">
-        <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Leaf size={24} />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-success-400 to-info-500 flex items-center justify-center shadow-lg shadow-success-900/20 transform transition-transform hover:scale-110 duration-300">
+          <Leaf size={24} className="text-white drop-shadow-md" />
         </div>
         {open && (
-          <div>
-            <h2 className="text-lg font-bold">HarveLogix</h2>
-            <p className="text-xs text-white text-opacity-70">AI for Bharat</p>
+          <div className="flex flex-col">
+            <h2 className="text-xl font-black tracking-tighter leading-none bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent italic">
+              HarveLogix
+            </h2>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="h-[1px] w-3 bg-accent-500 rounded-full" />
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-400 opacity-90">
+                AI for Bharat
+              </p>
+            </div>
           </div>
         )}
       </div>

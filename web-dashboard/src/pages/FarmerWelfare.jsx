@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'
-import axios from '../config/axios'
+import dataService from '../services/dataService'
 
 export default function FarmerWelfare() {
   const [data, setData] = useState(null)
@@ -12,8 +12,8 @@ export default function FarmerWelfare() {
 
   const fetchWelfareData = async () => {
     try {
-      const response = await axios.get('/api/welfare')
-      setData(response.data)
+      const response = await dataService.getGovernmentMetrics()
+      setData(response)
     } catch (error) {
       setData(getMockWelfareData())
     } finally {
@@ -48,7 +48,14 @@ export default function FarmerWelfare() {
   return (
     <div className="p-8 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">Farmer Welfare</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-gray-800">Farmer Welfare</h1>
+          {data.source === 'live' ? (
+            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> Live Data</span>
+          ) : (
+             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">Demo Data</span>
+          )}
+        </div>
         <p className="text-gray-600 mt-2">Income distribution and welfare scheme enrollment</p>
       </div>
 

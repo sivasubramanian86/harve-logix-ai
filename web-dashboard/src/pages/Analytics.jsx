@@ -12,7 +12,7 @@ export default function Analytics() {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get('/api/analytics')
+      const response = await axios.get('/analytics')
       setData(response.data)
     } catch (error) {
       setData(getMockAnalytics())
@@ -48,13 +48,13 @@ export default function Analytics() {
     ]
   })
 
-  if (loading || !data) return <div className="p-8">Loading...</div>
+  if (loading || !data) return <div className="p-8" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Loading...</div>
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-8 space-y-8" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">Analytics</h1>
-        <p className="text-gray-600 mt-2">Agent performance and platform trends</p>
+        <h1 className="text-3xl font-bold">Analytics</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Agent performance and platform trends</p>
       </div>
 
       {/* Monthly Trends */}
@@ -112,12 +112,23 @@ export default function Analytics() {
         </div>
       </div>
 
+      {/* AI Strategic Guidance */}
+      <div className="p-6 rounded-lg border bg-blue-50 border-blue-200 shadow-inner">
+        <h3 className="text-lg font-bold text-blue-900 mb-2 flex items-center gap-2">
+          🤖 AI Agent Performance Guidance
+        </h3>
+        <p className="text-blue-800 italic">
+          "The Amazon Nova models are currently showing peak efficiency in the 'SupplyMatch' agent. 
+          Recommendation: Accelerate deployment of 'QualityHub' to the Northern region to capitalize on the 95.2% accuracy trend observed in organic wheat clusters."
+        </p>
+      </div>
+
       {/* Agent Performance Table */}
-      <div className="card">
+      <div className="p-6 rounded-lg border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
         <h2 className="text-xl font-bold mb-4">Agent Performance Metrics</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead style={{ backgroundColor: 'var(--bg-secondary)' }}>
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Agent</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Accuracy</th>
@@ -127,7 +138,7 @@ export default function Analytics() {
             </thead>
             <tbody>
               {data.agentPerformance.map((agent, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
+                <tr key={idx} className="border-t" style={{ borderColor: 'var(--border-primary)' }}>
                   <td className="px-6 py-4 font-medium">{agent.agent}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">

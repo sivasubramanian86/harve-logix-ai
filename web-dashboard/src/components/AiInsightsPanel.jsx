@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Lightbulb } from 'lucide-react';
 import { useI18n } from '../context/I18nProvider';
 
-export default function AiInsightsPanel({ insights = [], wowFeatures = [], isLoading = false }) {
+export default function AiInsightsPanel({ insights = [], recommendations = [], wowFeatures = [], isLoading = false }) {
   const { t } = useI18n();
   const [expandedInsight, setExpandedInsight] = useState(null);
 
@@ -122,6 +122,60 @@ export default function AiInsightsPanel({ insights = [], wowFeatures = [], isLoa
           )}
         </div>
       </div>
+
+      {/* Actionable Recommendations Section */}
+      {((recommendations && recommendations.length > 0) || (insights && insights.length > 0)) && (
+        <div
+          className="p-6 rounded-lg border-2"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--color-primary)',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(var(--color-primary-rgb), 0.1)' }}>
+              <Lightbulb size={24} style={{ color: 'var(--color-primary)' }} />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>AI Actionable Recommendations</h3>
+              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Precision insights from Nova LLM Reasoning</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {recommendations && recommendations.length > 0 ? (
+              recommendations.map((rec, i) => (
+                <div 
+                  key={i} 
+                  className="p-5 rounded-xl border-l-4 transition-all hover:translate-y-[-2px]"
+                  style={{ 
+                    backgroundColor: 'var(--bg-secondary)', 
+                    borderColor: 'var(--color-primary)',
+                    boxShadow: 'var(--shadow-sm)'
+                  }}
+                >
+                  <h4 className="font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{rec.action}</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded" style={{ backgroundColor: 'rgba(var(--color-success-rgb), 0.1)', color: 'var(--color-success)' }}>Impact</span>
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{rec.impact}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded" style={{ backgroundColor: 'rgba(var(--color-info-rgb), 0.1)', color: 'var(--color-info)' }}>Timeline</span>
+                      <p className="text-xs font-mono" style={{ color: 'var(--text-tertiary)' }}>{rec.timeline}</p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex items-center justify-center col-span-2 p-6 rounded-xl border border-dashed" style={{ borderColor: 'var(--border-primary)', backgroundColor: 'var(--bg-secondary)' }}>
+                <p className="text-sm italic" style={{ color: 'var(--text-tertiary)' }}>No specific actionable recommendations available for this profile yet.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* WOW Features Section */}
       {wowFeatures.length > 0 && (

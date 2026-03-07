@@ -8,10 +8,12 @@ import os
 from typing import Optional
 
 # AWS Configuration
-# Note: Using us-east-1 for on-demand Bedrock access
-# ap-south-2 requires inference profiles (configure as needed for production)
-AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
-BEDROCK_MODEL_ID = os.getenv('BEDROCK_MODEL_ID', 'anthropic.claude-3-5-sonnet-20241022-v2:0')
+# Using ap-south-2 (Mumbai) as primary region per user requirements
+# Using Amazon Nova 2 Lite via inference profile in ap-south-1
+# Client automatically routes ap-south-1 profile requests to ap-south-1 region
+AWS_REGION = os.getenv('AWS_REGION', 'ap-south-2')
+BEDROCK_MODEL_ID = os.getenv('BEDROCK_MODEL_ID', 'arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc')
+BEDROCK_MODEL_TYPE = os.getenv('BEDROCK_MODEL_TYPE', 'nova')  # 'nova' or 'claude'
 
 # DynamoDB Tables
 FARMERS_TABLE = os.getenv('FARMERS_TABLE', 'farmers')

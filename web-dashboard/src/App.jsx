@@ -14,6 +14,8 @@ import Analytics from './pages/Analytics'
 import GovernmentViewUpgraded from './pages/GovernmentViewUpgraded'
 import SystemHealthUpgraded from './pages/SystemHealthUpgraded'
 import AiScannerUpgraded from './pages/AiScannerUpgraded'
+import Settings from './pages/Settings'
+import Faq from './pages/Faq'
 import './theme/variables.css'
 import i18n from './i18n/config'
 
@@ -46,6 +48,8 @@ function App() {
                 <Route path="/government" element={<GovernmentViewUpgraded />} />
                 <Route path="/health" element={<SystemHealthUpgraded />} />
                 <Route path="/ai-scanner" element={<AiScannerUpgraded />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/faq" element={<Faq />} />
                 {/* Legacy routes */}
                 <Route path="/welfare" element={<FarmerWelfare />} />
                 <Route path="/supply-chain" element={<SupplyChain />} />

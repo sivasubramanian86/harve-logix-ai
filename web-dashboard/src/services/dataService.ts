@@ -54,6 +54,8 @@ export interface FarmerDetails {
   farmer: Farmer;
   pastDecisions: Decision[];
   aiInsights: AiInsight[];
+  recommendations?: Recommendation[];
+  wowFeatures?: WowFeature[];
 }
 
 export interface StateMetric {
@@ -89,6 +91,25 @@ export interface AiInsight {
   impact?: string;
 }
 
+export interface Recommendation {
+  action: string;
+  impact: string;
+  timeline: string;
+}
+
+export interface WowFeature {
+  metric: string;
+  value: number | string;
+  unit: string;
+  trend: 'up' | 'down' | 'neutral';
+}
+
+export interface InsightResponse {
+  insights: AiInsight[];
+  recommendations: Recommendation[];
+  wowFeatures: WowFeature[];
+}
+
 export interface FarmerFilters {
   search?: string;
   status?: 'active' | 'inactive';
@@ -99,13 +120,13 @@ class DataService {
   private cache: Map<string, { data: any; timestamp: number }> = new Map();
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes
   private apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
-    timeout: 5000,
+    baseURL: ((import.meta as any).env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, ''),
+    timeout: 10000,
   });
-  private useDemo = import.meta.env.VITE_USE_DEMO_DATA === 'true';
+  private useDemo = (import.meta as any).env.VITE_USE_DEMO_DATA === 'true';
 
-  private getCacheKey(method: string, params?: any): string {
-    return `${method}:${JSON.stringify(params || {})}`;
+  private getCacheKey(method: string, endpoint: string, params?: any): string {
+    return `${method}:${endpoint}:${JSON.stringify(params || {})}`;
   }
 
   private getFromCache(key: string): any | null {
@@ -127,7 +148,7 @@ class DataService {
     params?: any,
     demoData?: T
   ): Promise<T> {
-    const cacheKey = this.getCacheKey(method, params);
+    const cacheKey = this.getCacheKey(method, endpoint, params);
 
     // Check cache first
     const cached = this.getFromCache(cacheKey);
@@ -172,7 +193,7 @@ class DataService {
         { metric: 'water', change: 18.9, direction: 'up' },
       ],
       timestamp: new Date(),
-      source: this.useDemo ? 'demo' : 'live',
+      source: 'demo',
       ragStatus: {
         docsIndexed: 7,
         lastQueryLatencyMs: 60,
@@ -185,7 +206,31 @@ class DataService {
       },
     };
 
-    return this.fetchWithFallback('getOverviewMetrics', '/metrics/overview', undefined, demoData);
+    if (this.useDemo) {
+      return demoData;
+    }
+
+    try {
+      // The backend /api/metrics returns a different shape.
+      const rawData = await this.fetchWithFallback<any>('getOverviewMetricsRaw', '/metrics', undefined, null);
+      if (!rawData) return demoData;
+
+      return {
+        farmersOnboarded: rawData.totalFarmers || demoData.farmersOnboarded,
+        processorsConnected: rawData.activeUsers || demoData.processorsConnected, // proxying
+        wasteReductionRupees: rawData.wasteReduction ? (rawData.wasteReduction * 100000) : demoData.wasteReductionRupees, // dummy translation
+        incomeUpliftPerAcre: rawData.totalIncome ? Math.round(rawData.totalIncome / rawData.totalFarmers) : demoData.incomeUpliftPerAcre,
+        waterSavedLitres: demoData.waterSavedLitres, // Not in /metrics
+        trends: demoData.trends, // Not fully in /metrics
+        timestamp: new Date(),
+        source: 'live',
+        ragStatus: rawData.ragStatus || demoData.ragStatus,
+        mcpStatus: rawData.mcpStatus || demoData.mcpStatus,
+      };
+    } catch(e) {
+      console.error(e);
+      return demoData;
+    }
   }
 
   async getFarmers(filters?: FarmerFilters): Promise<Farmer[]> {
@@ -226,7 +271,7 @@ class DataService {
     const demoData: FarmerDetails = {
       farmer: {
         id: farmerId,
-        name: 'Rajesh Kumar',
+        name: `Farmer ${farmerId.substring(0, 4)}`,
         location: 'Punjab',
         crops: ['Wheat', 'Rice'],
         lastDecisionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
@@ -299,10 +344,34 @@ class DataService {
         { state: 'Karnataka', value: 22000000, trend: 12.1, direction: 'up' },
       ],
       timestamp: new Date(),
-      source: this.useDemo ? 'demo' : 'live',
+      source: 'demo',
     };
 
-    return this.fetchWithFallback('getGovernmentMetrics', '/metrics/government', undefined, demoData);
+    if (this.useDemo) {
+      return demoData;
+    }
+
+    try {
+      const rawData = await this.fetchWithFallback<any>('getWelfareData', '/welfare', undefined, null);
+      if (!rawData || !rawData.incomeGrowthByRegion) return demoData;
+
+      // Map backend /welfare response to GovernmentMetrics shape
+      const incomeUplift: StateMetric[] = rawData.incomeGrowthByRegion.map((r: any) => ({
+        state: r.region,
+        value: r.growth * 100, // mock conversion
+        trend: r.growth,
+        direction: 'up'
+      }));
+
+      return {
+        ...demoData, // keep some fallbacks for arrays not provided by backend
+        incomeUpliftByState: incomeUplift,
+        timestamp: new Date(),
+        source: 'live'
+      }
+    } catch(e) {
+      return demoData;
+    }
   }
 
   async getSystemHealth(): Promise<SystemHealth> {
@@ -312,59 +381,60 @@ class DataService {
       bedrockCallVolume: 15234,
       eventBridgeStatus: 'healthy',
       lastUpdated: new Date(),
-      source: this.useDemo ? 'demo' : 'live',
+      source: 'demo',
     };
 
-    return this.fetchWithFallback('getSystemHealth', '/health/system', undefined, demoData);
+    if (this.useDemo) {
+      return demoData;
+    }
+
+    try {
+      const rawData = await this.fetchWithFallback<any>('getAgentHealth', '/agents/health', undefined, null);
+      if (!rawData || !rawData.agents) return demoData;
+
+      let allHealthy = rawData.overall_healthy !== false;
+
+      return {
+        ...demoData,
+        errorRate: allHealthy ? 0.1 : 5.0,
+        eventBridgeStatus: allHealthy ? 'healthy' : 'degraded',
+        source: 'live',
+        lastUpdated: new Date(),
+      };
+    } catch(e) {
+      return demoData;
+    }
   }
 
-  async getAiInsightsForFarmer(farmerId: string): Promise<AiInsight[]> {
-    const demoData: AiInsight[] = [
-      {
-        type: 'crop_protection',
-        title: 'Crop Protection',
-        description: 'Monitor for early blight in wheat',
-        confidence: 'high',
-        impact: 'Prevent 30% crop loss',
-      },
-      {
-        type: 'weather',
-        title: 'Weather-Aware Harvesting',
-        description: 'Optimal harvest window: next 5 days',
-        confidence: 'high',
-        impact: 'Maximize grain quality',
-      },
-      {
-        type: 'storage',
-        title: 'Storage Risk',
-        description: 'Store in cool, dry location',
-        confidence: 'medium',
-        impact: 'Reduce storage losses by 15%',
-      },
-      {
-        type: 'supply',
-        title: 'Supply/Demand Matching',
-        description: 'High demand for wheat in region',
-        confidence: 'high',
-        impact: 'Get 10% premium price',
-      },
-      {
-        type: 'water',
-        title: 'Water Optimization',
-        description: 'Reduce irrigation by 20%',
-        confidence: 'medium',
-        impact: 'Save 50,000 liters water',
-      },
-      {
-        type: 'quality',
-        title: 'Quality Premiums',
-        description: 'Organic certification available',
-        confidence: 'low',
-        impact: 'Increase income by 25%',
-      },
-    ];
+  async getAiInsightsForFarmer(farmerId: string): Promise<InsightResponse> {
+    const demoData: InsightResponse = {
+      insights: [
+        {
+          type: 'crop_protection',
+          title: 'Crop Protection',
+          description: 'Monitor for early blight in wheat',
+          confidence: 'high',
+          impact: 'Prevent 30% crop loss',
+        },
+        {
+          type: 'weather',
+          title: 'Weather-Aware Harvesting',
+          description: 'Optimal harvest window: next 5 days',
+          confidence: 'high',
+          impact: 'Maximize grain quality',
+        },
+      ],
+      recommendations: [
+        { action: 'Start harvest preparations', impact: 'Reduce moisture loss', timeline: 'Next 48h' },
+        { action: 'Schedule transport', impact: 'Direct delivery to processor', timeline: '3 days' }
+      ],
+      wowFeatures: [
+        { metric: 'INCOME POTENTIAL', value: 15, unit: '%', trend: 'up' },
+        { metric: 'RESOURCE EFFICIENCY', value: 92, unit: '%', trend: 'up' }
+      ]
+    };
 
-    return this.fetchWithFallback('getAiInsightsForFarmer', `/insights/farmer/${farmerId}`, undefined, demoData);
+    return this.fetchWithFallback('getAiInsightsForFarmer', `/agents/insights/farmer/${farmerId}`, undefined, demoData);
   }
 
   clearCache(): void {

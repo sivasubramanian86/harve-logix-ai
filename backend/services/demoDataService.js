@@ -16,11 +16,11 @@ function getCropHealthResponse(scanId) {
       status: 'completed',
       data: {
         health_status: 'healthy',
+        explanation: 'The crop appears vigorous and well-maintained with no visible signs of pathogen activity.',
         detected_issues: [],
         recommended_actions: [
-          'Continue current watering schedule',
-          'Monitor for pest activity',
-          'Apply balanced fertilizer in 2 weeks',
+          { action: 'Maintain schedule', urgency: 'low', details: 'Continue current watering and monitoring schedule.' },
+          { action: 'Apply fertilizer', urgency: 'low', details: 'Apply balanced fertilizer in approximately 2 weeks.' },
         ],
         confidence_score: 0.94,
       },
@@ -33,16 +33,14 @@ function getCropHealthResponse(scanId) {
       status: 'completed',
       data: {
         health_status: 'at_risk',
+        explanation: 'Early indicators of stress detected. Immediate moisture management and nutrient boost required to prevent yield loss.',
         detected_issues: [
-          'Early signs of leaf spot disease',
-          'Slight nitrogen deficiency',
-          'Minor pest damage on lower leaves',
+          { type: 'Leaf Spot', severity: 'medium', description: 'Early signs of fungal leaf spot disease detected on lower leaves.' },
+          { type: 'Nitrogen Deficiency', severity: 'low', description: 'Slight yellowing indicates emerging nitrogen deficiency.' },
         ],
         recommended_actions: [
-          'Apply fungicide spray within 48 hours',
-          'Increase nitrogen fertilizer by 20%',
-          'Monitor pest population daily',
-          'Improve air circulation in field',
+          { action: 'Fungicide spray', urgency: 'medium', details: 'Apply protective fungicide spray within 48 hours.' },
+          { action: 'Nitrogen boost', urgency: 'medium', details: 'Increase nitrogen fertilizer application by 20%.' },
         ],
         confidence_score: 0.87,
       },
@@ -55,17 +53,15 @@ function getCropHealthResponse(scanId) {
       status: 'completed',
       data: {
         health_status: 'diseased',
+        explanation: 'Critical infection levels found. Significant intervention needed immediately to salvage the crop and prevent further spread.',
         detected_issues: [
-          'Advanced powdery mildew infection',
-          'Severe nutrient deficiency',
-          'Heavy pest infestation',
+          { type: 'Powdery Mildew', severity: 'high', description: 'Advanced powdery mildew infection spreading rapidly across the field.' },
+          { type: 'Severe Deficiency', severity: 'high', description: 'Plants showing signs of acute multi-nutrient deficiency.' },
         ],
         recommended_actions: [
-          'Apply systemic fungicide immediately',
-          'Increase irrigation frequency',
-          'Apply complete fertilizer with micronutrients',
-          'Consider crop rotation after harvest',
-          'Consult local agricultural extension office',
+          { action: 'Systemic treatment', urgency: 'high', details: 'Apply systemic fungicide immediately to contain spread.' },
+          { action: 'Emergency irrigation', urgency: 'high', details: 'Increase frequency to mitigate plant stress.' },
+          { action: 'Consult Expert', urgency: 'high', details: 'Contact local agri-extension office for quarantine advice.' }
         ],
         confidence_score: 0.91,
       },
@@ -88,16 +84,15 @@ function getIrrigationResponse(scanId) {
       status: 'completed',
       data: {
         irrigation_status: 'optimal',
-        recommendations: [
-          'Maintain current irrigation schedule',
-          'Water early morning for best results',
-          'Monitor soil moisture daily',
+        explanation: 'Soil moisture levels are balanced and well within the target range for the current growth stage.',
+        recommended_actions: [
+          { action: 'Early watering', urgency: 'low', details: 'Maintain morning watering for maximum absorption.' },
+          { action: 'Moisture check', urgency: 'low', details: 'Daily manual soil check at 2-inch depth.' }
         ],
         risk_notes: [],
         water_saving_tips: [
           'Use drip irrigation to reduce water loss by 30%',
           'Mulch around plants to retain moisture',
-          'Water during cooler hours to minimize evaporation',
         ],
       },
       processing_time_ms: 980,
@@ -109,21 +104,16 @@ function getIrrigationResponse(scanId) {
       status: 'completed',
       data: {
         irrigation_status: 'under_watered',
-        recommendations: [
-          'Increase irrigation frequency by 25%',
-          'Water for longer duration each session',
-          'Check for irrigation system leaks',
-          'Increase irrigation to 2x daily during peak heat',
+        explanation: 'Visible signs of water stress. The crop requires an immediate increase in irrigation to avoid permanent wilting.',
+        recommended_actions: [
+          { action: 'Increase frequency', urgency: 'medium', details: 'Increase irrigation frequency by 25% immediately.' },
+          { action: 'Leak detection', urgency: 'medium', details: 'Audit system for potential line pressure drops.' }
         ],
         risk_notes: [
           'Soil moisture below optimal threshold',
-          'Risk of crop stress and reduced yield',
-          'Potential for heat damage to plants',
         ],
         water_saving_tips: [
-          'Install soil moisture sensors for precise watering',
-          'Use mulch to reduce evaporation',
-          'Water during early morning hours',
+          'Install soil moisture sensors for precision',
         ],
       },
       processing_time_ms: 1120,
@@ -135,22 +125,16 @@ function getIrrigationResponse(scanId) {
       status: 'completed',
       data: {
         irrigation_status: 'waterlogging',
-        recommendations: [
-          'Stop irrigation immediately',
-          'Improve field drainage',
-          'Install drainage channels if not present',
-          'Consider raised bed cultivation for future seasons',
+        explanation: 'Excessive water accumulation detected. Oxygen deprivation in roots is a significant threat; stop irrigation immediately.',
+        recommended_actions: [
+          { action: 'Stop irrigation', urgency: 'high', details: 'Cease all water application immediately.' },
+          { action: 'Drainage repair', urgency: 'high', details: 'Clear existing drainage channels or dig new ones.' }
         ],
         risk_notes: [
-          'Excessive soil moisture detected',
-          'High risk of root rot and fungal diseases',
-          'Potential for significant yield loss',
-          'Soil compaction risk from waterlogging',
+          'Excessive soil moisture: High root rot risk',
         ],
         water_saving_tips: [
-          'Implement proper drainage system',
-          'Use raised beds to improve drainage',
-          'Avoid irrigation during rainy season',
+          'Switch to raised beds for better gravity drainage',
         ],
       },
       processing_time_ms: 1340,
@@ -176,7 +160,10 @@ function getWeatherResponse(scanId) {
         rainfall_probability: 5,
         temperature_range: '28-35°C',
         wind_speed: '8-12 km/h',
-        harvest_window_advice: 'Excellent conditions for harvesting. Proceed with harvest operations.',
+        harvest_window_advice: 'Excellent conditions. Proceed with harvest.',
+        recommended_actions: [
+          { action: 'Proceed with Harvest', urgency: 'low', details: 'Weather is ideal for large scale grain harvesting.' }
+        ],
         risk_level: 'LOW',
       },
       processing_time_ms: 850,
@@ -192,7 +179,10 @@ function getWeatherResponse(scanId) {
         rainfall_probability: 40,
         temperature_range: '22-28°C',
         wind_speed: '12-18 km/h',
-        harvest_window_advice: 'Moderate risk. Consider harvesting today if possible. Rain expected tomorrow.',
+        harvest_window_advice: 'Moderate risk. Harvest today if possible.',
+        recommended_actions: [
+          { action: 'Accelerate Harvest', urgency: 'medium', details: 'Move up harvest schedule due to incoming rain.' }
+        ],
         risk_level: 'MEDIUM',
       },
       processing_time_ms: 920,
@@ -204,11 +194,15 @@ function getWeatherResponse(scanId) {
       status: 'completed',
       data: {
         sky_description: 'Dark clouds with strong wind patterns',
-        forecast_summary: 'Heavy rain and thunderstorms expected within 12 hours',
+        forecast_summary: 'Heavy rain and thunderstorms within 12 hours',
         rainfall_probability: 85,
         temperature_range: '18-24°C',
         wind_speed: '25-35 km/h',
-        harvest_window_advice: 'High risk. Delay harvesting. Secure crops and equipment. Storm approaching.',
+        harvest_window_advice: 'High risk. Delay harvesting immediately.',
+        recommended_actions: [
+          { action: 'Secure Equipment', urgency: 'high', details: 'Move portable pumps and tools to higher ground.' },
+          { action: 'Delay Harvest', urgency: 'high', details: 'Significant risk of grain damage from storm.' }
+        ],
         risk_level: 'HIGH',
       },
       processing_time_ms: 1050,
@@ -282,6 +276,7 @@ function getVideoScanResponse(scanId) {
     data: {
       duration_seconds: 180,
       frames_analyzed: 45,
+      explanation: 'Overall crop health is good with 85% of plants showing healthy growth. Minor issues detected in specific field sectors.',
       aggregated_insights: [
         'Overall crop health is good with 85% of plants showing healthy growth',
         'Detected minor pest activity in 12% of field area',
@@ -290,9 +285,9 @@ function getVideoScanResponse(scanId) {
         'Soil condition appears optimal for current growth stage',
       ],
       detected_issues: [
-        'Small patch of potential disease in northeast corner (2% of field)',
-        'Minor nutrient deficiency visible in 8% of plants',
-        'Slight water stress in elevated areas',
+        { type: 'Patch Disease', severity: 'low', description: 'Small patch of potential disease in northeast corner (2% of field)' },
+        { type: 'Nutrient Deficiency', severity: 'low', description: 'Minor nutrient deficiency visible in 8% of plants' },
+        { type: 'Water Stress', severity: 'medium', description: 'Slight water stress in elevated areas' },
       ],
       overall_health_score: 0.84,
     },
