@@ -332,12 +332,11 @@ router.get('/health', async (req, res) => {
 
 /**
  * POST /api/agents/analyze
- * Analysis agent endpoint for complex reasoning across data
- * (Placeholder for Strands agent integration coming in Phase 3)
+ * Analysis agent endpoint for complex reasoning across data using Strands agent
  */
 router.post('/analyze', async (req, res) => {
   try {
-    const { region, crop, timeframe, analysisType } = req.body
+    const { region, crop, timeframe, analysisType, farmerId } = req.body
 
     if (!crop || !analysisType) {
       return res.status(400).json({
@@ -346,20 +345,14 @@ router.post('/analyze', async (req, res) => {
       })
     }
 
-    // Placeholder response - will be replaced with Strands agent
-    const result = {
-      status: 'success',
-      agent: 'analysis-agent',
-      type: 'strands-analysis',
-      timestamp: new Date().toISOString(),
-      message: 'Analysis endpoint available. Strands agent integration coming in Phase 3.',
-      request: { region, crop, timeframe, analysisType },
-      output: {
-        insights: [],
-        recommendations: [],
-        confidence: 0
-      }
-    }
+    // Invoke Python Strands analysis agent
+    const result = await invokeAgent('strands_analysis_agent', {
+      farmer_id: farmerId || 'demo-farmer',
+      region: region || 'unknown',
+      crop_type: crop,
+      timeframe: timeframe || '30-days',
+      analysis_type: analysisType,
+    })
 
     res.json(result)
   } catch (error) {
