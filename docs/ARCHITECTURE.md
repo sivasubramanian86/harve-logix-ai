@@ -64,14 +64,27 @@ HarveLogix AI is a multi-agent post-harvest agricultural supply chain platform b
 
 ### API Layer
 
-#### REST Endpoints
+#### REST Endpoints (Live: `https://s4sofpxni6.execute-api.ap-south-2.amazonaws.com/prod`)
 ```
-GET  /api/harvest-ready          → HarvestReady Agent
-GET  /api/storage-scout          → StorageScout Agent
-GET  /api/supply-match           → SupplyMatch Agent
-GET  /api/water-wise             → WaterWise Agent
-POST /api/quality-assessment     → QualityHub Agent
-GET  /api/collective-voice       → CollectiveVoice Agent
+GET  /metrics                  → Overview metrics
+GET  /welfare                  → Farmer welfare data
+GET  /supply-chain             → Supply chain data
+GET  /analytics                → Analytics data
+GET  /farmers                  → All farmers (PostgreSQL)
+GET  /farmers/:id              → Single farmer details
+GET  /agents                   → Agent list + status
+GET  /agents/health            → Agent + Bedrock health check
+GET  /agents/insights/farmer/:id → AI insights (Strands + Nova)
+GET  /agents/supply-chain      → Supply chain agent analysis
+POST /agents/harvest-ready     → HarvestReady Agent
+POST /agents/storage-scout     → StorageScout Agent
+POST /agents/supply-match      → SupplyMatch Agent
+POST /agents/water-wise        → WaterWise Agent
+POST /agents/quality-hub       → QualityHub Agent
+POST /agents/collective-voice  → CollectiveVoice Agent
+POST /agents/analyze           → Strands Analysis Agent
+POST /multimodal/:scan-type    → AI Scanner (crop-health, etc.)
+GET  /health                   → Backend health check
 ```
 
 #### WebSocket Endpoint
@@ -83,16 +96,11 @@ WS /ws/notifications
    - Weather alerts
 ```
 
-### Compute Layer
-
-#### Bedrock Agent Core
-- **Model:** Claude 3.5 Sonnet
-- **Role:** Central orchestration and reasoning
-- **Capabilities:**
-  - Routes farmer requests to appropriate agent(s)
-  - Maintains farmer session state
-  - Invokes Lambda, DynamoDB, RDS, Rekognition as tools
-  - Handles multi-agent workflows
+#### Compute (Production)
+- **Node.js 22 LTS** on **Amazon Linux 2023** EC2 (`t3.micro`, `ap-south-2`)
+- **PM2** process manager for zero-downtime restarts
+- **AWS API Gateway HTTP API V2** as HTTPS proxy in front of EC2
+- **6 Python Strands Agents** for AI reasoning (invoked as child processes)
 
 #### Lambda Agents (6 Functions)
 

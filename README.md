@@ -16,6 +16,15 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
 - 99.99% uptime
 - AWS-native architecture
 
+## 🌐 Live Deployment
+
+| Component | URL |
+|:---|:---|
+| **Dashboard (Frontend)** | [https://d2autvkcn7doq.cloudfront.net](https://d2autvkcn7doq.cloudfront.net) |
+| **API Gateway (Backend)** | `https://s4sofpxni6.execute-api.ap-south-2.amazonaws.com/prod` |
+| **Backend** | Node.js 22 on EC2 (Amazon Linux 2023), proxied via API Gateway |
+| **Database** | AWS RDS PostgreSQL (`ap-south-2`) |
+
 ## Problem Statement
 
 - 15 million tonnes of produce wasted annually (₹92K crore loss)
@@ -51,7 +60,7 @@ Transform ₹92,000 crore annual post-harvest agricultural loss into prosperity 
 
 - AWS Account with Bedrock access (Nova Lite inference profile enabled)
 - Python 3.10+
-- Node.js 18+
+- **Node.js 22 LTS** (v22+, required — see [nodejs.org](https://nodejs.org))
 - PostgreSQL instance
 
 ### Installation
