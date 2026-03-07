@@ -39,9 +39,10 @@ class BedrockModelType(Enum):
 class BedrockConfig:
     """Configuration container for Bedrock models."""
     
-    # Standard reasoning models
-    CLAUDE_SONNET_3_5 = "anthropic.claude-3-5-sonnet-20241022-v2:0"
-    CLAUDE_SONNET_4_6 = "anthropic.claude-sonnet-4-20250514"
+    # Standard reasoning models (ap-south-2 available)
+    CLAUDE_SONNET_4_6 = "anthropic.claude-sonnet-4-6"
+    CLAUDE_OPUS_4_5 = "anthropic.claude-opus-4-5-20251101-v1:0"
+    CLAUDE_HAIKU = "anthropic.claude-haiku-4-5-20251001-v1:0"
     
     # Embedding models
     TITAN_EMBED_TEXT_V2 = "amazon.titan-embed-text-v2:0"

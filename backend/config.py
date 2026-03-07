@@ -8,7 +8,9 @@ import os
 from typing import Optional
 
 # AWS Configuration
-AWS_REGION = os.getenv('AWS_REGION', 'ap-south-1')
+# Note: Using us-east-1 for on-demand Bedrock access
+# ap-south-2 requires inference profiles (configure as needed for production)
+AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
 BEDROCK_MODEL_ID = os.getenv('BEDROCK_MODEL_ID', 'anthropic.claude-3-5-sonnet-20241022-v2:0')
 
 # DynamoDB Tables
