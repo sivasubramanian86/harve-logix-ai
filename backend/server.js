@@ -18,7 +18,8 @@ const ALLOWED_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:5000',
   'https://dashboard.harvelogix.ai',
-  'https://app.harvelogix.ai'
+  'https://app.harvelogix.ai',
+  'https://d2autvkcn7doq.cloudfront.net'
 ]
 
 const DEMO_TOKEN = process.env.DEMO_TOKEN || 'demo-token-12345'

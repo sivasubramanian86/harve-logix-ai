@@ -85,8 +85,8 @@
     "recommendation": "Recommendation",
     "outcome": "Outcome"
   },
-  "governmentView": {
-    "title": "Government View",
+  "policyInsights": {
+    "title": "Policy Insights",
     "wasteReductionByState": "Waste Reduction by State",
     "incomeUpliftByState": "Income Uplift by State",
     "adoptionRateByState": "Adoption Rate by State",

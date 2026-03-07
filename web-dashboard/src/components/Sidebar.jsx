@@ -53,7 +53,7 @@ export default function Sidebar({ open }) {
     {
       title: 'Analytics',
       items: [
-        { icon: Globe, label: t('nav.governmentView'), path: '/government', badge: null },
+        { icon: Globe, label: t('nav.policyInsights'), path: '/government', badge: null },
         { icon: Activity, label: t('nav.systemHealth'), path: '/health', badge: null },
       ],
     },
