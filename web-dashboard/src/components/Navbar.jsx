@@ -59,7 +59,7 @@ export default function Navbar({ onMenuClick }) {
 
         <div className="flex flex-col">
           <span className="text-[11px] font-black uppercase tracking-[0.25em] text-success-500 opacity-80 leading-none mb-1.5">
-            Agricultural Intelligence
+            HarveLogix Agent
           </span>
           <div className="flex items-center gap-2.5">
             <h1 className="text-xl font-black tracking-tight leading-none italic uppercase">HarveLogix</h1>

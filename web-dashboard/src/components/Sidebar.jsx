@@ -82,12 +82,12 @@ export default function Sidebar({ open }) {
         {open && (
           <div className="flex flex-col">
             <h2 className="text-xl font-black tracking-tighter leading-none bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent italic">
-              HarveLogix
+              HarveLogix Agent
             </h2>
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className="h-[1px] w-3 bg-accent-500 rounded-full" />
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-400 opacity-90">
-                AI for Bharat
+                SMART AGENT FOR BHARAT
               </p>
             </div>
           </div>

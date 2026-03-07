@@ -38,7 +38,7 @@ const AGENTS = {
  */
 function invokeAgent(agentModule, requestData) {
   return new Promise((resolve, reject) => {
-    const pythonProcess = spawn('python', [
+    const pythonProcess = spawn('/opt/harvelogix/backend/venv/bin/python3', [
       '-c',
       `
 import sys

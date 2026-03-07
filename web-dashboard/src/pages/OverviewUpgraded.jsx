@@ -206,7 +206,7 @@ export default function OverviewUpgraded() {
               WebkitTextFillColor: 'transparent',
               display: 'inline-block'
             }} className="font-extrabold italic drop-shadow-sm">
-              HarveLogix Dashboard
+              HarveLogix Agent
             </span>
           </h1>
           
