@@ -96,6 +96,15 @@
     "improving": "Improving",
     "declining": "Declining"
   },
+  "governmentView": {
+    "title": "Government Policy Insights",
+    "wasteReductionByState": "Waste Reduction by State",
+    "incomeUpliftByState": "Income Uplift by State",
+    "adoptionRateByState": "Adoption Rate by State",
+    "waterSavingsByState": "Water Savings by State",
+    "improving": "Improving",
+    "declining": "Declining"
+  },
   "systemHealth": {
     "title": "System Health",
     "agentLatency": "Agent Latency",
