@@ -12,7 +12,6 @@ import axios from 'axios'
 import { spawn } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import AWS from 'aws-sdk'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -39,9 +38,7 @@ const AGENTS = {
  */
 function invokeAgent(agentModule, requestData) {
   return new Promise((resolve, reject) => {
-    // Use system python3 or python, fallback to hardcoded path for production
-    const pythonPath = process.env.PYTHON_PATH || 'python3'
-    const pythonProcess = spawn(pythonPath, [
+    const pythonProcess = spawn('/opt/harvelogix/backend/venv/bin/python3', [
       '-c',
       `
 import sys
@@ -307,7 +304,7 @@ router.post('/collective-voice', async (req, res, next) => {
 
 /**
  * GET /api/agents/health
- * Comprehensive agent health check - calls Lambda functions
+ * Comprehensive agent health check
  */
 router.get('/health', async (req, res) => {
   const healthStatus = {
@@ -316,42 +313,30 @@ router.get('/health', async (req, res) => {
     agents: {}
   }
 
-  // Lambda functions deployed in ap-south-2
-  const lambdaFunctions = [
-    'harvelogix-020513638290-video-analyzer-dev',
-    'harvelogix-020513638290-weather-analyzer-dev',
-    'harvelogix-020513638290-voice-query-processor-dev',
-    'harvelogix-020513638290-irrigation-analyzer-dev',
-    'harvelogix-020513638290-crop-health-analyzer-dev'
-  ]
-
+  const agentNames = Object.keys(AGENTS)
   let allHealthy = true
-  const lambda = new AWS.Lambda({ region: 'ap-south-2' })
 
-  // Check each Lambda function's health using GetFunction (no invocation)
-  for (const functionName of lambdaFunctions) {
+  // Check each agent's health
+  for (const agentName of agentNames) {
     try {
-      // Use GetFunction instead of Invoke to avoid rate limits
-      const params = {
-        FunctionName: functionName
-      }
+      const result = await invokeAgent(AGENTS[agentName], {
+        test: true
+      }).catch(() => ({
+        status: 'error',
+        agent: agentName,
+        bedrock_healthy: false,
+        error: 'Agent unreachable'
+      }))
 
-      const result = await lambda.getFunction(params).promise()
-      const config = result.Configuration
-
-      healthStatus.agents[functionName] = {
-        status: 'success',
-        agent: functionName,
-        bedrock_healthy: true,
-        runtime: config.Runtime,
-        lastModified: config.LastModified,
-        timestamp: new Date().toISOString()
+      healthStatus.agents[agentName] = result
+      if (!result.bedrock_healthy && result.status !== 'success') {
+        allHealthy = false
       }
     } catch (error) {
       allHealthy = false
-      healthStatus.agents[functionName] = {
+      healthStatus.agents[agentName] = {
         status: 'error',
-        agent: functionName,
+        agent: agentName,
         bedrock_healthy: false,
         error: error.message,
         timestamp: new Date().toISOString()
@@ -361,7 +346,6 @@ router.get('/health', async (req, res) => {
 
   healthStatus.overall_healthy = allHealthy
   healthStatus.bedrock_available = allHealthy
-  healthStatus.lambda_functions_checked = lambdaFunctions.length
 
   res.json(healthStatus)
 })
