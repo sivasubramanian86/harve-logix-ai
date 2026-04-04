@@ -42,46 +42,37 @@
     "outcome": "விளைவு"
   },
   "governmentView": {
-    "title": "அரசு பார்வை",
+    "title": "அரசு கொள்கை நுண்ணறிவு",
     "wasteReductionByState": "மாநிலத்தால் கழிவு குறைப்பு",
     "incomeUpliftByState": "மாநிலத்தால் வருமான உயர்வு",
     "adoptionRateByState": "மாநிலத்தால் ஏற்றுக்கொள்ளும் விகிதம்",
     "waterSavingsByState": "மாநிலத்தால் நீர் சேமிப்பு",
-    "trend": "போக்கு",
     "improving": "மேம்பட்டு வருகிறது",
-    "declining": "குறைந்து வருகிறது"
+    "declining": "குறைந்து வருகிறது",
+    "summary": "சுருக்கம்",
+    "totalWaste": "மொத்த கழிவு குறைப்பு",
+    "avgIncome": "சராசரி வருமான உயர்வு",
+    "avgAdoption": "சராசரி ஏற்பு விகிதம்",
+    "totalWater": "மொத்த நீர் சேமிப்பு"
   },
-  "systemHealth": {
-    "title": "கணினி ஆரோக்கியம்",
-    "agentLatency": "முகவர் தாமதம்",
-    "errorRate": "பிழை விகிதம்",
-    "bedrockCallVolume": "Bedrock API அழைப்பு அளவு",
-    "eventBridgeStatus": "EventBridge நிலை",
-    "ms": "ms",
-    "percent": "%",
-    "healthy": "ஆரோக்கியமான",
-    "degraded": "சிதைந்த",
-    "critical": "முக்கியமான"
-  },
-  "aiInsights": {
-    "title": "AI நுண்ணறிவு",
-    "cropProtection": "பயிர் பாதுகாப்பு",
-    "weatherAwareHarvesting": "வானிலை-விழிப்புணர்வு அறுவடை",
-    "storageRisk": "சேமிப்பு ஆபத்து",
-    "supplyDemandMatching": "வழங்கல்/চাহिதை பொருத்தம்",
-    "waterOptimization": "நீர் உகந்தமாக்கல்",
-    "qualityPremiums": "தரம் பிரீமியம்",
-    "confidence": "நம்பிக்கை",
-    "high": "உচ்சம்",
-    "medium": "நடுத்தர",
-    "low": "குறைந்த"
-  },
-  "wowFeatures": {
-    "title": "விவசாய தாக்க அளவீடுகள்",
-    "wasteReduction": "ப பயிர் நஷ்ट தடுப்பு",
-    "incomeUplift": "விவசாயி வருமான அதிகரிப்பு",
-    "waterSaved": "நீர் பாதுகாப்பு",
-    "processorMatches": "நேரடி வாங்குபவர் இணைப்புகள்"
+  "multimodal": {
+    "aiScanner": "AI ஸ்கேனர்",
+    "cropHealthScan": "பயிர் ஆரோக்கிய ஸ்கேன்",
+    "fieldIrrigationScan": "வயல் நீர்ப்பாசன ஸ்கேன்",
+    "skyWeatherScan": "வானிலை ஸ்கேன்",
+    "voiceAssistant": "குரல் உதவியாளர்",
+    "videoScan": "வீடியோ ஸ்கேன்",
+    "uploadImage": "📤 படத்தை பதிவேற்றவும்",
+    "startCamera": "📷 கேமராவைத் தொடங்கு",
+    "stopCamera": "⏹️ கேமராவை நிறுத்து",
+    "capturePhoto": "📸 புகைப்படம் எடு",
+    "retake": "🔄 மீண்டும் எடு",
+    "clear": "✕ நீக்கு",
+    "imageReady": "படம் பகுப்பாய்விற்குத் தயார்",
+    "analyzing": "உங்கள் படம் பகுப்பாய்வு செய்யப்படுகிறது...",
+    "analysisComplete": "பகுப்பாய்வு முடிந்தது",
+    "detectedIssues": "கண்டறியப்பட்ட சிக்கல்கள்",
+    "recommendedActions": "பரிந்துரைக்கப்பட்ட நடவடிக்கைகள்"
   },
   "common": {
     "loading": "ஏற்றுகிறது...",
@@ -117,8 +108,20 @@
     "search": "Search for answers...",
     "questions": [
       {
-        "q": "What is HarveLogixAI?",
-        "a": "HarveLogixAI is an integrated platform using Amazon Bedrock and Nova models."
+        "q": "HarveLogixAI என்றால் என்ன?",
+        "a": "HarveLogixAI என்பது நிகழ்நேர விவசாய நுண்ணறிவை வழங்க அமேசான் பெட்ராக் மற்றும் நோவா மாடல்களைப் பயன்படுத்தும் ஒரு தளம்."
+      },
+      {
+        "q": "AI முகவர்கள் எவ்வாறு செயல்படுகிறார்கள்?",
+        "a": "எங்கள் முகவர்கள் (அறுவடை, பாதுகாப்பு போன்றவை) பல முகவர் ஒழுங்கமைப்பு முறையைப் பயன்படுத்துகின்றனர்."
+      },
+      {
+        "q": "எனது தரவு பாதுகாப்பானதா?",
+        "a": "ஆம். அனைத்து தரவுகளும் அமேசான் பெட்ராக் மூலம் பாதுகாப்பாக செயலாக்கப்படுகின்றன."
+      },
+      {
+        "q": "AI ஸ்கேனரை எவ்வாறு பயன்படுத்துவது?",
+        "a": "உங்கள் பயிர் அல்லது மண்ணின் படத்தைப் பதிவேற்றவும். எங்கள் நோவா மாடல்கள் உடனடியாக பரிந்துரைகளை வழங்கும்."
       }
     ]
   }

@@ -83,37 +83,37 @@ export default function AiScannerUpgraded() {
     const demoResults = {
       'crop-health': {
         status: 'success',
-        analysis: 'Crop health is excellent. Plant shows strong vegetative growth with healthy leaf coloration.',
+        analysis: t('multimodal.demo.cropHealth.analysis'),
         confidence: 0.92,
-        recommendations: ['Continue current irrigation schedule', 'Monitor for pest activity', 'Harvest in 7-10 days'],
+        recommendations: [t('multimodal.demo.cropHealth.rec1'), t('multimodal.demo.cropHealth.rec2'), t('multimodal.demo.cropHealth.rec3')],
         metrics: { healthScore: 92, diseaseRisk: 8, yieldPotential: 95 }
       },
       'field-irrigation': {
         status: 'success',
-        analysis: 'Irrigation status is optimal. Soil moisture levels are within ideal range.',
+        analysis: t('multimodal.demo.irrigation.analysis'),
         confidence: 0.88,
-        recommendations: ['Maintain current watering schedule', 'Next irrigation in 3 days', 'Monitor weather forecast'],
+        recommendations: [t('multimodal.demo.irrigation.rec1'), t('multimodal.demo.irrigation.rec1'), t('multimodal.demo.irrigation.rec3')],
         metrics: { soilMoisture: 65, irrigationEfficiency: 88, waterUsage: 'Optimal' }
       },
       'sky-weather': {
         status: 'success',
-        analysis: 'Clear skies with favorable weather conditions. No rain expected in next 48 hours.',
+        analysis: t('multimodal.demo.weather.analysis'),
         confidence: 0.85,
-        recommendations: ['Good window for pesticide application', 'Ideal harvesting conditions', 'Monitor wind patterns'],
+        recommendations: [t('multimodal.demo.weather.rec1'), t('multimodal.demo.weather.rec2'), t('multimodal.demo.weather.rec3')],
         metrics: { cloudCover: 15, humidity: 55, windSpeed: 8 }
       },
       'voice-query': {
         status: 'success',
-        analysis: 'Query processed successfully. Based on current field conditions and historical data.',
+        analysis: t('multimodal.demo.voice.analysis'),
         confidence: 0.90,
-        recommendations: ['Follow recommended actions', 'Check weather updates', 'Schedule field inspection'],
+        recommendations: [t('multimodal.demo.voice.rec1'), t('multimodal.demo.voice.rec2'), t('multimodal.demo.voice.rec3')],
         metrics: { queryAccuracy: 90, dataPoints: 150, confidence: 0.90 }
       },
       'video-scan': {
         status: 'success',
-        analysis: 'Video analysis complete. Field shows uniform crop development with no visible stress.',
+        analysis: t('multimodal.demo.video.analysis'),
         confidence: 0.87,
-        recommendations: ['Continue monitoring', 'Prepare for harvest', 'Document field conditions'],
+        recommendations: [t('multimodal.demo.video.rec1'), t('multimodal.demo.video.rec2'), t('multimodal.demo.video.rec3')],
         metrics: { uniformity: 87, stressIndicators: 0, developmentStage: 'Mature' }
       }
     }
@@ -138,6 +138,7 @@ export default function AiScannerUpgraded() {
 
       const formData = new FormData()
       formData.append('media', media)
+      formData.append('language', t('common.langCode', { defaultValue: 'en' })) // Passing the language code
 
       const endpoint = `/multimodal/${activeTab}`
       const response = await axios.post(endpoint, formData, {

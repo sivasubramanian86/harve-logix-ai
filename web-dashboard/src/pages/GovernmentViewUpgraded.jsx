@@ -204,11 +204,11 @@ export default function GovernmentViewUpgraded() {
           borderColor: 'var(--border-primary)',
         }}
       >
-        <h2 className="text-xl font-bold mb-4">Summary</h2>
+        <h2 className="text-xl font-bold mb-4">{t('governmentView.summary')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
             {
-              label: 'Total Waste Reduction',
+              label: t('governmentView.totalWaste'),
               value: `₹${(
                 (metrics?.wasteReductionByState || []).reduce(
                   (sum, item) => sum + item.value,
@@ -217,7 +217,7 @@ export default function GovernmentViewUpgraded() {
               ).toFixed(1)}M`,
             },
             {
-              label: 'Avg Income Uplift',
+              label: t('governmentView.avgIncome'),
               value: `₹${Math.round(
                 (metrics?.incomeUpliftByState || []).reduce(
                   (sum, item) => sum + item.value,
@@ -226,7 +226,7 @@ export default function GovernmentViewUpgraded() {
               )}`,
             },
             {
-              label: 'Avg Adoption Rate',
+              label: t('governmentView.avgAdoption'),
               value: `${Math.round(
                 (metrics?.adoptionByState || []).reduce(
                   (sum, item) => sum + item.value,
@@ -235,7 +235,7 @@ export default function GovernmentViewUpgraded() {
               )}%`,
             },
             {
-              label: 'Total Water Saved',
+              label: t('governmentView.totalWater'),
               value: `${(
                 (metrics?.waterSavingsByState || []).reduce(
                   (sum, item) => sum + item.value,

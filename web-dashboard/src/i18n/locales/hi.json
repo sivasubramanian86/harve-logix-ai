@@ -72,14 +72,18 @@
     "outcome": "परिणाम"
   },
   "governmentView": {
-    "title": "सरकारी दृश्य",
+    "title": "सरकारी नीति अंतर्दृष्टि",
     "wasteReductionByState": "राज्य द्वारा अपशिष्ट में कमी",
     "incomeUpliftByState": "राज्य द्वारा आय में वृद्धि",
     "adoptionRateByState": "राज्य द्वारा अपनाने की दर",
     "waterSavingsByState": "राज्य द्वारा पानी की बचत",
-    "trend": "प्रवृत्ति",
     "improving": "सुधार हो रहा है",
-    "declining": "गिरावट आ रही है"
+    "declining": "गिरावट आ रही है",
+    "summary": "सारांश",
+    "totalWaste": "कुल अपशिष्ट कमी",
+    "avgIncome": "औसत आय वृद्धि",
+    "avgAdoption": "औसत अपनाने की दर",
+    "totalWater": "कुल पानी की बचत"
   },
   "systemHealth": {
     "title": "सिस्टम स्वास्थ्य",
@@ -112,6 +116,25 @@
     "incomeUplift": "किसान आय वृद्धि",
     "waterSaved": "जल संरक्षण",
     "processorMatches": "सीधे खरीदार कनेक्शन"
+  },
+  "multimodal": {
+    "aiScanner": "एआई स्कैनर",
+    "cropHealthScan": "फसल स्वास्थ्य स्कैन",
+    "fieldIrrigationScan": "क्षेत्र सिंचाई स्कैन",
+    "skyWeatherScan": "आकाश और मौसम स्कैन",
+    "voiceAssistant": "आवाज सहायक",
+    "videoScan": "वीडियो स्कैन",
+    "uploadImage": "📤 छवि अपलोड करें",
+    "startCamera": "📷 कैमरा शुरू करें",
+    "stopCamera": "⏹️ कैमरा बंद करें",
+    "capturePhoto": "📸 फोटो खींचें",
+    "retake": "🔄 फिर से लें",
+    "clear": "✕ साफ करें",
+    "imageReady": "छवि विश्लेषण के लिए तैयार है",
+    "analyzing": "आपकी छवि का विश्लेषण किया जा रहा है...",
+    "analysisComplete": "विश्लेषण पूरा हुआ",
+    "detectedIssues": "पता लगाई गई समस्याएं",
+    "recommendedActions": "अनुशंसित कार्रवाइयां"
   },
   "common": {
     "loading": "लोड हो रहा है...",

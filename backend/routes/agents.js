@@ -66,7 +66,12 @@ function invokeAgent(agentModule, requestData) {
       const params = {
         FunctionName: lambdaName,
         InvocationType: 'RequestResponse',
-        Payload: JSON.stringify({ request_data: requestData })
+        Payload: JSON.stringify({ 
+          request_data: { 
+            ...requestData, 
+            language: requestData.language || req.body.language || 'en' 
+          } 
+        })
       };
 
       lambda.invoke(params, (err, data) => {

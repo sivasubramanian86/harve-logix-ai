@@ -73,13 +73,14 @@ class BaseAgent(ABC):
         pass
 
     @retry_with_backoff(exceptions=(ClientError,))
-    def invoke_bedrock(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+    def invoke_bedrock(self, prompt: str, system_prompt: Optional[str] = None, language: str = 'en') -> str:
         """
         Invoke Bedrock Claude model for reasoning.
 
         Args:
             prompt: User prompt
             system_prompt: Optional system prompt
+            language: Language code for response (e.g., 'hi', 'ta', 'en')
 
         Returns:
             Model response text
@@ -87,10 +88,26 @@ class BaseAgent(ABC):
         Raises:
             BedrockException: If invocation fails
         """
+        # Prepend language directive for Indian languages
+        language_map = {
+            'hi': 'Hindi',
+            'ta': 'Tamil',
+            'mr': 'Marathi',
+            'te': 'Telugu',
+            'kn': 'Kannada',
+            'gu': 'Gujarati',
+            'ml': 'Malayalam',
+            'en': 'English'
+        }
+        lang_name = language_map.get(language, 'English')
+        lang_directive = f"IMPORTANT: You MUST respond EXCLUSIVELY in {lang_name}."
+        
+        final_system_prompt = f"{lang_directive}\n\n{system_prompt}" if system_prompt else lang_directive
+
         try:
             return self.bedrock_client.invoke_model(
                 prompt=prompt,
-                system_prompt=system_prompt,
+                system_prompt=final_system_prompt,
                 model_id=self.model_id,
             )
         except BedrockException:

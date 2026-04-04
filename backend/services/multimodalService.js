@@ -16,7 +16,7 @@ const USE_DEMO = process.env.VITE_USE_DEMO_DATA === 'true' || process.env.USE_DE
 /**
  * Analyze crop health from image
  */
-async function analyzeCropHealth(file) {
+async function analyzeCropHealth(file, language = 'en') {
   const scanId = uuidv4()
   const startTime = Date.now()
 
@@ -27,7 +27,7 @@ async function analyzeCropHealth(file) {
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'crop-health')
-    const analysis = await bedrockService.analyzeCropHealth(s3Uri)
+    const analysis = await bedrockService.analyzeCropHealth(s3Uri, language)
 
     return {
       scan_id: scanId,
@@ -47,7 +47,7 @@ async function analyzeCropHealth(file) {
 /**
  * Analyze field irrigation from image
  */
-async function analyzeFieldIrrigation(file) {
+async function analyzeFieldIrrigation(file, language = 'en') {
   const scanId = uuidv4()
   const startTime = Date.now()
 
@@ -58,7 +58,7 @@ async function analyzeFieldIrrigation(file) {
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'field-irrigation')
-    const analysis = await bedrockService.analyzeIrrigation(s3Uri)
+    const analysis = await bedrockService.analyzeIrrigation(s3Uri, language)
 
     return {
       scan_id: scanId,
@@ -78,7 +78,7 @@ async function analyzeFieldIrrigation(file) {
 /**
  * Analyze sky and weather from image
  */
-async function analyzeSkyWeather(file) {
+async function analyzeSkyWeather(file, language = 'en') {
   const scanId = uuidv4()
   const startTime = Date.now()
 
@@ -90,7 +90,7 @@ async function analyzeSkyWeather(file) {
 
     const s3Uri = await s3Service.uploadFile(file, 'sky-weather')
     const weatherData = await weatherService.getForecast()
-    const analysis = await bedrockService.analyzeSkyWeather(s3Uri, weatherData)
+    const analysis = await bedrockService.analyzeSkyWeather(s3Uri, weatherData, language)
 
     return {
       scan_id: scanId,
@@ -110,7 +110,7 @@ async function analyzeSkyWeather(file) {
 /**
  * Process voice query from audio
  */
-async function processVoiceQuery(file) {
+async function processVoiceQuery(file, language = 'en') {
   const scanId = uuidv4()
   const startTime = Date.now()
 
@@ -122,7 +122,7 @@ async function processVoiceQuery(file) {
 
     const s3Uri = await s3Service.uploadFile(file, 'voice-query')
     const transcription = await transcribeService.transcribeAudio(s3Uri)
-    const response = await processWithAgents(transcription.transcript)
+    const response = await processWithAgents(transcription.transcript, language)
 
     return {
       scan_id: scanId,
@@ -145,7 +145,7 @@ async function processVoiceQuery(file) {
 /**
  * Analyze video scan
  */
-async function analyzeVideoScan(file) {
+async function analyzeVideoScan(file, language = 'en') {
   const scanId = uuidv4()
   const startTime = Date.now()
 
@@ -156,7 +156,7 @@ async function analyzeVideoScan(file) {
     }
 
     const s3Uri = await s3Service.uploadFile(file, 'video-scan')
-    const analysis = await bedrockService.analyzeVideo(s3Uri)
+    const analysis = await bedrockService.analyzeVideo(s3Uri, language)
 
     return {
       scan_id: scanId,
@@ -204,7 +204,7 @@ async function getScanDetails(scanId) {
 /**
  * Process voice query with HarveLogix agents using Bedrock Orchestration
  */
-async function processWithAgents(transcript) {
+async function processWithAgents(transcript, language = 'en') {
   try {
     const systemPrompt = `You are the HarveLogix AI Voice Orchestrator. 
 Your job is to route farmer's voice queries to specialized agents.
@@ -219,7 +219,7 @@ Analyze the user's transcript and provide a helpful response as if you consulted
 Respond ONLY with valid JSON containing a "response" key. 
 Example: {"response": "Your tomatoes are ready for harvest in 2 days. Market prices are ₹24/kg today."}`
 
-    const result = await bedrockService.invokeBedrockModel(systemPrompt, `Farmer Query: "${transcript}"`)
+    const result = await bedrockService.invokeBedrockModel(systemPrompt, `Farmer Query: "${transcript}"`, language)
     
     // If the service returns a structured object, use the reasoning or summary
     return result.reasoning || result.explanation || result.response || result.summary || JSON.stringify(result)

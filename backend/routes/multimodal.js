@@ -46,7 +46,8 @@ router.post('/crop-health', upload.single('media'), async (req, res) => {
       return res.status(400).json({ message: 'No image file provided' })
     }
 
-    const result = await multimodalService.analyzeCropHealth(req.file)
+    const { language = 'en' } = req.body
+    const result = await multimodalService.analyzeCropHealth(req.file, language)
     res.json(result)
   } catch (error) {
     console.error('Crop health analysis error:', error)
@@ -64,7 +65,8 @@ router.post('/field-irrigation', upload.single('media'), async (req, res) => {
       return res.status(400).json({ message: 'No image file provided' })
     }
 
-    const result = await multimodalService.analyzeFieldIrrigation(req.file)
+    const { language = 'en' } = req.body
+    const result = await multimodalService.analyzeFieldIrrigation(req.file, language)
     res.json(result)
   } catch (error) {
     console.error('Field irrigation analysis error:', error)
@@ -82,7 +84,8 @@ router.post('/sky-weather', upload.single('media'), async (req, res) => {
       return res.status(400).json({ message: 'No image file provided' })
     }
 
-    const result = await multimodalService.analyzeSkyWeather(req.file)
+    const { language = 'en' } = req.body
+    const result = await multimodalService.analyzeSkyWeather(req.file, language)
     res.json(result)
   } catch (error) {
     console.error('Sky weather analysis error:', error)
@@ -100,7 +103,8 @@ router.post('/voice-query', upload.single('media'), async (req, res) => {
       return res.status(400).json({ message: 'No audio file provided' })
     }
 
-    const result = await multimodalService.processVoiceQuery(req.file)
+    const { language = 'en' } = req.body
+    const result = await multimodalService.processVoiceQuery(req.file, language)
     res.json(result)
   } catch (error) {
     console.error('Voice query processing error:', error)
@@ -118,7 +122,8 @@ router.post('/video-scan', upload.single('media'), async (req, res) => {
       return res.status(400).json({ message: 'No video file provided' })
     }
 
-    const result = await multimodalService.analyzeVideoScan(req.file)
+    const { language = 'en' } = req.body
+    const result = await multimodalService.analyzeVideoScan(req.file, language)
     res.json(result)
   } catch (error) {
     console.error('Video scan analysis error:', error)

@@ -148,7 +148,7 @@
     "pendingTasks": "Pending tasks",
     "lastEvent": "Last event"
   },
-  "common": {
+    "common": {
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
@@ -159,7 +159,8 @@
     "language": "Language",
     "theme": "Theme",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "langCode": "en"
   },
   "multimodal": {
     "aiScanner": "AI Scanner",
@@ -215,6 +216,39 @@
     "scanDetails": "Scan Details",
     "noScans": "No scans yet",
     "transcript": "Transcript",
-    "response": "Response"
+    "response": "Response",
+    "demo": {
+      "cropHealth": {
+        "analysis": "Crop health is excellent. Plant shows strong vegetative growth with healthy leaf coloration.",
+        "rec1": "Continue current irrigation schedule",
+        "rec2": "Monitor for pest activity",
+        "rec3": "Harvest in 7-10 days"
+      },
+      "irrigation": {
+        "analysis": "Irrigation status is optimal. Soil moisture levels are within ideal range.",
+        "rec1": "Maintain current watering schedule",
+        "rec2": "Next irrigation in 3 days",
+        "rec3": "Monitor weather forecast"
+      },
+       "weather": {
+        "analysis": "Clear skies with favorable weather conditions. No rain expected in next 48 hours.",
+        "rec1": "Good window for pesticide application",
+        "rec2": "Ideal harvesting conditions",
+        "rec3": "Monitor wind patterns"
+      },
+      "voice": {
+        "analysis": "Query processed successfully. Based on current field conditions and historical data.",
+        "rec1": "Follow recommended actions",
+        "rec2": "Check weather updates",
+        "rec3": "Schedule field inspection",
+        "response": "Based on your recent scans and local weather, the optimal harvest window starts in 2 days. Market prices are currently peaking."
+      },
+      "video": {
+        "analysis": "Video analysis complete. Field shows uniform crop development with no visible stress.",
+        "rec1": "Continue monitoring",
+        "rec2": "Prepare for harvest",
+        "rec3": "Document field conditions"
+      }
+    }
   }
 }
