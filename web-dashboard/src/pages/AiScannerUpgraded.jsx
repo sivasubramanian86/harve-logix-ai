@@ -345,22 +345,21 @@ export default function AiScannerUpgraded() {
           {/* Scan Info Card */}
           <Card>
             <CardHeader>
-              <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>About This Scan</h3>
+              <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>{t('multimodal.aboutScan')}</h3>
             </CardHeader>
             <CardBody className="space-y-4 text-sm">
               {activeTab === 'crop-health' && (
                 <>
                   <p style={{ color: 'var(--text-secondary)' }}>
-                    Upload a photo of your crop to get instant health assessment including disease detection and
-                    treatment recommendations.
+                    {t('multimodal.cropHealth.desc')}
                   </p>
                   <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{t('multimodal.whatWeAnalyze')}</p>
                     <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                      <li>• Leaf color and texture</li>
-                      <li>• Disease symptoms</li>
-                      <li>• Nutrient deficiencies</li>
-                      <li>• Overall plant vigor</li>
+                      <li>• {t('multimodal.cropHealth.item1')}</li>
+                      <li>• {t('multimodal.cropHealth.item2')}</li>
+                      <li>• {t('multimodal.cropHealth.item3')}</li>
+                      <li>• {t('multimodal.cropHealth.item4')}</li>
                     </ul>
                   </div>
                 </>
@@ -369,16 +368,15 @@ export default function AiScannerUpgraded() {
               {activeTab === 'field-irrigation' && (
                 <>
                   <p style={{ color: 'var(--text-secondary)' }}>
-                    Analyze soil moisture and irrigation status from field images to optimize water usage and prevent
-                    waterlogging.
+                    {t('multimodal.irrigation.desc')}
                   </p>
                   <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{t('multimodal.whatWeAnalyze')}</p>
                     <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                      <li>• Soil moisture level</li>
-                      <li>• Water stress indicators</li>
-                      <li>• Drainage conditions</li>
-                      <li>• Irrigation recommendations</li>
+                      <li>• {t('multimodal.irrigation.item1')}</li>
+                      <li>• {t('multimodal.irrigation.item2')}</li>
+                      <li>• {t('multimodal.irrigation.item3')}</li>
+                      <li>• {t('multimodal.irrigation.item4')}</li>
                     </ul>
                   </div>
                 </>
@@ -387,15 +385,15 @@ export default function AiScannerUpgraded() {
               {activeTab === 'sky-weather' && (
                 <>
                   <p style={{ color: 'var(--text-secondary)' }}>
-                    Capture sky conditions to get weather forecasts and harvest timing recommendations.
+                    {t('multimodal.weather.desc')}
                   </p>
                   <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{t('multimodal.whatWeAnalyze')}</p>
                     <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                      <li>• Cloud cover and type</li>
-                      <li>• Weather patterns</li>
-                      <li>• Rainfall probability</li>
-                      <li>• Harvest window advice</li>
+                      <li>• {t('multimodal.weather.item1')}</li>
+                      <li>• {t('multimodal.weather.item2')}</li>
+                      <li>• {t('multimodal.weather.item3')}</li>
+                      <li>• {t('multimodal.weather.item4')}</li>
                     </ul>
                   </div>
                 </>
@@ -404,15 +402,15 @@ export default function AiScannerUpgraded() {
               {activeTab === 'voice-query' && (
                 <>
                   <p style={{ color: 'var(--text-secondary)' }}>
-                    Ask questions about your farm in your local language. Get instant answers from our AI agents.
+                    {t('multimodal.voice.desc')}
                   </p>
                   <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Example questions:</p>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{t('multimodal.exampleQuestions')}</p>
                     <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                      <li>• When should I harvest?</li>
-                      <li>• How much water do I need?</li>
-                      <li>• What's the market price?</li>
-                      <li>• Which processor should I contact?</li>
+                      <li>• {t('multimodal.voice.item1')}</li>
+                      <li>• {t('multimodal.voice.item2')}</li>
+                      <li>• {t('multimodal.voice.item3')}</li>
+                      <li>• {t('multimodal.voice.item4')}</li>
                     </ul>
                   </div>
                 </>
@@ -421,15 +419,15 @@ export default function AiScannerUpgraded() {
               {activeTab === 'video-scan' && (
                 <>
                   <p style={{ color: 'var(--text-secondary)' }}>
-                    Upload field video for comprehensive analysis of crop conditions and field health.
+                    {t('multimodal.video.desc')}
                   </p>
                   <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Requirements:</p>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>{t('multimodal.requirements')}</p>
                     <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                      <li>• Max 5 minutes duration</li>
-                      <li>• Max 100MB file size</li>
-                      <li>• MP4 or WebM format</li>
-                      <li>• Good lighting recommended</li>
+                      <li>• {t('multimodal.video.item1')}</li>
+                      <li>• {t('multimodal.video.item2')}</li>
+                      <li>• {t('multimodal.video.item3')}</li>
+                      <li>• {t('multimodal.video.item4')}</li>
                     </ul>
                   </div>
                 </>
