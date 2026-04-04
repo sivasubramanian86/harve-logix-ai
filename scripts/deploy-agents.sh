@@ -46,6 +46,11 @@ aws lambda update-function-code \
   --function-name harvelogix-020513638290-video-analyzer-dev \
   --zip-file fileb://quality_hub_agent.zip
 
+aws lambda update-function-code \
+  --region $REGION \
+  --function-name harvelogix-020513638290-collective-voice-dev \
+  --zip-file fileb://collective_voice_agent.zip
+
 echo ""
 echo "✅ All agents deployed successfully!"
 echo ""

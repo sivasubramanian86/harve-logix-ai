@@ -12,6 +12,7 @@ import axios from 'axios'
 import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import AWS from 'aws-sdk'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -34,10 +35,61 @@ const AGENTS = {
   'collective-voice': 'collective_voice_agent',
 }
 
+// Lambda mapping (for production/cloud execution)
+const LAMBDA_MAPPING = {
+  'harvest_ready_agent': 'harvelogix-020513638290-crop-health-analyzer-dev',
+  'water_wise_agent': 'harvelogix-020513638290-irrigation-analyzer-dev',
+  'storage_scout_agent': 'harvelogix-020513638290-weather-analyzer-dev',
+  'supply_match_agent': 'harvelogix-020513638290-voice-query-processor-dev',
+  'quality_hub_agent': 'harvelogix-020513638290-video-analyzer-dev',
+  'collective_voice_agent': 'harvelogix-020513638290-collective-voice-dev',
+}
+
+// Initialize Lambda client
+const lambda = new AWS.Lambda({
+  region: process.env.AWS_REGION || 'ap-south-2'
+})
+
 /**
  * Helper: Call Python agent module
  */
 function invokeAgent(agentModule, requestData) {
+  // Option to prefer Lambda if configured or in production
+  const useLambda = process.env.NODE_ENV === 'production' || process.env.USE_LAMBDA === 'true'
+  
+  if (useLambda && LAMBDA_MAPPING[agentModule]) {
+    const lambdaName = LAMBDA_MAPPING[agentModule];
+    console.log(`[Invoking Lambda] ${lambdaName} ...`);
+    
+    return new Promise((resolve, reject) => {
+      const params = {
+        FunctionName: lambdaName,
+        InvocationType: 'RequestResponse',
+        Payload: JSON.stringify({ request_data: requestData })
+      };
+
+      lambda.invoke(params, (err, data) => {
+        if (err) {
+          console.error(`[Lambda Error] ${lambdaName}:`, err);
+          reject(err);
+        } else {
+          try {
+            const response = JSON.parse(data.Payload);
+            // Handle Lambda error responses
+            if (response.errorMessage) {
+              reject(new Error(response.errorMessage));
+            } else {
+              resolve(response);
+            }
+          } catch (e) {
+            reject(new Error(`Failed to parse Lambda response: ${data.Payload}`));
+          }
+        }
+      });
+    });
+  }
+
+  // Local Python spawn (Dev/Fallback)
   return new Promise((resolve, reject) => {
     // Determine the Python executable path dynamically
     const isWindows = process.platform === 'win32'
@@ -81,7 +133,7 @@ except Exception as e:
       timeout: 60000 // Increase timeout for cold starts
     })
 
-    console.log(`[Invoking Agent] ${agentModule} with payload:`, JSON.stringify(requestData));
+    console.log(`[Invoking Local Agent] ${agentModule} with payload:`, JSON.stringify(requestData));
 
     // Pipe request data to standard input
     pythonProcess.stdin.write(JSON.stringify(requestData))
@@ -343,11 +395,12 @@ router.get('/health', async (req, res) => {
         crop_type: 'tomato', // Satisfy mandatory validation for health check
         current_growth_stage: 5,
         location: { latitude: 15.8, longitude: 75.6 }
-      }).catch(() => ({
+      }).catch((err) => ({
         status: 'error',
         agent: agentName,
         bedrock_healthy: false,
-        error: 'Agent unreachable'
+        error: err.message || 'Agent unreachable',
+        timestamp: new Date().toISOString()
       }))
 
       healthStatus.agents[agentName] = result

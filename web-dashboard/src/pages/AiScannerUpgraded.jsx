@@ -168,8 +168,8 @@ export default function AiScannerUpgraded() {
     <div className="p-8 space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900">{t('multimodal.aiScanner')}</h1>
-        <p className="text-neutral-600 mt-2">
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('multimodal.aiScanner')}</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
           Multimodal AI analysis for crop health, irrigation, weather, and voice queries
         </p>
       </div>
@@ -183,7 +183,7 @@ export default function AiScannerUpgraded() {
             onChange={(e) => setUseDemo(e.target.checked)}
             className="w-4 h-4 rounded border-neutral-300"
           />
-          <span className="text-sm font-medium text-neutral-700">
+          <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
             {useDemo ? t('common.demoData') : t('common.liveData')}
           </span>
         </label>
@@ -236,8 +236,8 @@ export default function AiScannerUpgraded() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-neutral-900">{currentScan?.name}</h2>
-                  <p className="text-sm text-neutral-600 mt-1">{currentScan?.description}</p>
+                  <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{currentScan?.name}</h2>
+                  <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{currentScan?.description}</p>
                 </div>
               </div>
             </CardHeader>
@@ -291,7 +291,7 @@ export default function AiScannerUpgraded() {
               </h3>
             </CardHeader>
             <CardBody className="space-y-4 pt-4">
-              <p className="text-sm text-neutral-700 font-medium">
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                 Try these pre-prepared agricultural assets to see the AI Scanner in action:
               </p>
               
@@ -329,8 +329,8 @@ export default function AiScannerUpgraded() {
                         )}
                       </div>
                       <div>
-                        <span className="text-sm font-bold text-neutral-800 block">{asset.name}</span>
-                        <span className="text-[10px] text-neutral-500 uppercase font-semibold">Ready to scan</span>
+                        <span className="text-sm font-bold block" style={{ color: 'var(--text-primary)' }}>{asset.name}</span>
+                        <span className="text-[10px] uppercase font-semibold" style={{ color: 'var(--text-secondary)' }}>Ready to scan</span>
                       </div>
                     </div>
                     <ChevronDown size={16} className="-rotate-90 text-neutral-400 group-hover:translate-x-1 transition-all" />
@@ -343,7 +343,7 @@ export default function AiScannerUpgraded() {
           {/* Scan Info Card */}
           <Card>
             <CardHeader>
-              <h3 className="font-bold text-neutral-900">About This Scan</h3>
+              <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>About This Scan</h3>
             </CardHeader>
             <CardBody className="space-y-4 text-sm">
               {activeTab === 'crop-health' && (
@@ -438,7 +438,7 @@ export default function AiScannerUpgraded() {
           {/* Recent Scans Card */}
           <Card>
             <CardHeader>
-              <h3 className="font-bold text-neutral-900">{t('multimodal.recentScans')}</h3>
+              <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>{t('multimodal.recentScans')}</h3>
             </CardHeader>
             <CardBody>
               <div className="space-y-3">

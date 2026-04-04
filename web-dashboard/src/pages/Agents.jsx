@@ -171,10 +171,9 @@ export default function Agents() {
 
   return (
     <div className="p-8 space-y-8">
-      {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900">Autonomous Agents</h1>
-        <p className="text-neutral-600 mt-2">6 specialized AI agents orchestrating post-harvest decisions</p>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Autonomous Agents</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>6 specialized AI agents orchestrating post-harvest decisions</p>
       </div>
 
       {/* Agents Grid */}
@@ -205,21 +204,21 @@ export default function Agents() {
 
                 {/* Metrics Grid */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-neutral-50 rounded-lg p-3">
-                    <p className="text-xs text-neutral-600 font-medium">Accuracy</p>
-                    <p className="text-xl font-bold text-primary-500 mt-1">{agent.accuracy}%</p>
+                  <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Accuracy</p>
+                    <p className="text-xl font-bold text-primary-500 mt-1">{typeof agent.accuracy === 'number' ? agent.accuracy.toFixed(2) : agent.accuracy}%</p>
                   </div>
-                  <div className="bg-neutral-50 rounded-lg p-3">
-                    <p className="text-xs text-neutral-600 font-medium">Decisions</p>
+                  <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Decisions</p>
                     <p className="text-xl font-bold text-secondary-500 mt-1">{agent.decisions.toLocaleString()}</p>
                   </div>
-                  <div className="bg-neutral-50 rounded-lg p-3">
-                    <p className="text-xs text-neutral-600 font-medium">Income Gain</p>
+                  <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Income Gain</p>
                     <p className="text-lg font-bold text-accent-500 mt-1">₹{agent.incomeGain.toLocaleString()}</p>
                   </div>
-                  <div className="bg-neutral-50 rounded-lg p-3">
-                    <p className="text-xs text-neutral-600 font-medium">Last Run</p>
-                    <p className="text-sm font-semibold text-neutral-700 mt-1">{agent.lastRun}</p>
+                  <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Last Run</p>
+                    <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>{agent.lastRun}</p>
                   </div>
                 </div>
 
@@ -243,21 +242,21 @@ export default function Agents() {
       {/* Agent Performance Summary */}
       <Card>
         <CardHeader>
-          <h2 className="text-lg font-bold text-neutral-900">Performance Summary</h2>
+          <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Performance Summary</h2>
         </CardHeader>
         <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <p className="text-4xl font-bold text-primary-500">92.6%</p>
-              <p className="text-neutral-600 mt-2">Average Accuracy</p>
+              <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Average Accuracy</p>
             </div>
             <div className="text-center">
               <p className="text-4xl font-bold text-secondary-500">29.4K</p>
-              <p className="text-neutral-600 mt-2">Total Decisions</p>
+              <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Total Decisions</p>
             </div>
             <div className="text-center">
               <p className="text-4xl font-bold text-accent-500">₹48K</p>
-              <p className="text-neutral-600 mt-2">Avg Income Gain</p>
+              <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Avg Income Gain</p>
             </div>
           </div>
         </CardBody>
