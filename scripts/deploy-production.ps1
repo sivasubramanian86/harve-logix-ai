@@ -16,12 +16,23 @@ foreach ($a in $agents) {
     if (Test-Path $z) { Remove-Item $z }
     Compress-Archive -Path "${a}_agent.py", 'base_agent.py', '__init__.py', '../config.py', '../utils', '../core' -DestinationPath $z
 }
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-crop-health-analyzer-dev --zip-file 'fileb://harvest_ready_agent.zip'
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-irrigation-analyzer-dev --zip-file 'fileb://water_wise_agent.zip'
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-weather-analyzer-dev --zip-file 'fileb://storage_scout_agent.zip'
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-voice-query-processor-dev --zip-file 'fileb://supply_match_agent.zip'
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-video-analyzer-dev --zip-file 'fileb://quality_hub_agent.zip'
-aws lambda update-function-code --region $REGION --function-name harvelogix-020513638290-collective-voice-dev --zip-file 'fileb://collective_voice_agent.zip'
+
+$mapping = @{
+    'harvest_ready_agent.zip' = 'harvelogix-020513638290-crop-health-analyzer-dev'
+    'water_wise_agent.zip' = 'harvelogix-020513638290-irrigation-analyzer-dev'
+    'storage_scout_agent.zip' = 'harvelogix-020513638290-weather-analyzer-dev'
+    'supply_match_agent.zip' = 'harvelogix-020513638290-voice-query-processor-dev'
+    'quality_hub_agent.zip' = 'harvelogix-020513638290-video-analyzer-dev'
+    'collective_voice_agent.zip' = 'harvelogix-020513638290-collective-voice-dev'
+}
+
+foreach ($item in $mapping.GetEnumerator()) {
+    $zip = $item.Key
+    $func = $item.Value
+    Write-Host "Updating $func..." -ForegroundColor Yellow
+    aws lambda update-function-code --region $REGION --function-name $func --zip-file "fileb://$zip"
+    aws lambda update-function-configuration --region $REGION --function-name $func --environment "Variables={BEDROCK_MODEL_ID=arn:aws:bedrock:ap-south-1:020513638290:application-inference-profile/hs79u71flmnc}"
+}
 Set-Location '../../'
 
 # 2. EC2
