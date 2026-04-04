@@ -19,13 +19,13 @@ export default function ImageCapture({ onCaptured, onError, maxSizeMB = 10, inst
     if (!validTypes.includes(file.type)) {
       const errorMsg = t('multimodal.invalidImageType')
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
       return false
     }
     if (file.size > maxBytes) {
       const errorMsg = t('multimodal.imageTooLarge', { size: maxSizeMB })
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
       return false
     }
     return true
@@ -38,7 +38,7 @@ export default function ImageCapture({ onCaptured, onError, maxSizeMB = 10, inst
       reader.onload = (event) => {
         setPreview(event.target.result)
         setError(null)
-        onCaptured(file)
+        onCaptured?.(file)
       }
       reader.readAsDataURL(file)
     }
@@ -58,7 +58,7 @@ export default function ImageCapture({ onCaptured, onError, maxSizeMB = 10, inst
     } catch (error) {
       const errorMsg = t('multimodal.cameraAccessDenied')
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
     }
   }
 
@@ -73,7 +73,7 @@ export default function ImageCapture({ onCaptured, onError, maxSizeMB = 10, inst
         if (validateFile(file)) {
           setPreview(canvasRef.current.toDataURL())
           setError(null)
-          onCaptured(file)
+          onCaptured?.(file)
           stopCamera()
         }
       }, 'image/jpeg', 0.95)

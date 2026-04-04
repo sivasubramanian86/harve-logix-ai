@@ -17,14 +17,14 @@ export default function VideoCapture({ onCaptured, onError, maxDurationSeconds =
     if (!validTypes.includes(file.type)) {
       const errorMsg = t('multimodal.invalidVideoType')
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
       return false
     }
 
     if (file.size > maxBytes) {
       const errorMsg = t('multimodal.videoTooLarge', { size: maxSizeMB })
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
       return false
     }
 
@@ -40,7 +40,7 @@ export default function VideoCapture({ onCaptured, onError, maxDurationSeconds =
         setPreview(url)
         setVideoFile(file)
         setError(null)
-        onCaptured(file)
+        onCaptured?.(file)
 
         // Validate duration
         const video = document.createElement('video')
@@ -48,7 +48,7 @@ export default function VideoCapture({ onCaptured, onError, maxDurationSeconds =
           if (video.duration > maxDurationSeconds) {
             const errorMsg = t('multimodal.videoTooLong', { duration: maxDurationSeconds })
             setError(errorMsg)
-            onError(errorMsg)
+            onError?.(errorMsg)
             setPreview(null)
             setVideoFile(null)
           }

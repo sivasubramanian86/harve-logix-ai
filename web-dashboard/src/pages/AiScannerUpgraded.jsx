@@ -121,6 +121,8 @@ export default function AiScannerUpgraded() {
   }
 
   const handleAnalyze = async (media) => {
+    if (!media) return
+    
     setLoading(true)
     setError(null)
     setResults(null)
@@ -150,6 +152,11 @@ export default function AiScannerUpgraded() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleCaptureError = (err) => {
+    setError(err)
+    setLoading(false)
   }
 
   const handleClear = () => {
@@ -239,6 +246,7 @@ export default function AiScannerUpgraded() {
               {CaptureComponent && (
                 <CaptureComponent
                   onCaptured={handleAnalyze}
+                  onError={handleCaptureError}
                   disabled={loading}
                   scanType={activeTab}
                 />
@@ -289,9 +297,11 @@ export default function AiScannerUpgraded() {
               
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', color: 'bg-red-50 border-red-100 hover:border-red-500' },
-                  { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', color: 'bg-orange-50 border-orange-100 hover:border-orange-500' },
-                  { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', color: 'bg-blue-50 border-blue-100 hover:border-blue-500' }
+                  { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', type: 'image/png', color: 'bg-red-50 border-red-100 hover:border-red-500' },
+                  { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', type: 'image/png', color: 'bg-orange-50 border-orange-100 hover:border-orange-500' },
+                  { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', type: 'image/png', color: 'bg-blue-50 border-blue-100 hover:border-blue-500' },
+                  { id: 'voice-query', name: 'Sample Voice Query', file: 'crop_ready_test.wav', type: 'audio/wav', color: 'bg-purple-50 border-purple-100 hover:border-purple-500' },
+                  { id: 'video-scan', name: 'Field Video Scan', file: 'field_scan_test.mp4', type: 'video/mp4', color: 'bg-indigo-50 border-indigo-100 hover:border-indigo-500' }
                 ].map((asset) => (
                   <button
                     key={asset.file}
@@ -300,7 +310,7 @@ export default function AiScannerUpgraded() {
                       try {
                         const response = await fetch(`/test-assets/${asset.file}`);
                         const blob = await response.blob();
-                        const file = new File([blob], asset.file, { type: 'image/png' });
+                        const file = new File([blob], asset.file, { type: asset.type });
                         handleAnalyze(file);
                       } catch (err) {
                         console.error('Failed to load test asset:', err);
@@ -309,8 +319,14 @@ export default function AiScannerUpgraded() {
                     className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left group ${asset.color}`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm flex-shrink-0 border border-neutral-100">
-                        <img src={`/test-assets/${asset.file}`} alt={asset.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                      <div className="w-12 h-12 rounded-lg bg-white shadow-sm flex-shrink-0 border border-neutral-100 flex items-center justify-center overflow-hidden">
+                        {asset.type.startsWith('image') ? (
+                          <img src={`/test-assets/${asset.file}`} alt={asset.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                        ) : asset.type.startsWith('audio') ? (
+                          <Mic size={20} className="text-purple-500" />
+                        ) : (
+                          <Video size={20} className="text-indigo-500" />
+                        )}
                       </div>
                       <div>
                         <span className="text-sm font-bold text-neutral-800 block">{asset.name}</span>

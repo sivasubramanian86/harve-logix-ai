@@ -37,7 +37,7 @@ export default function AudioCapture({ onCaptured, onError, maxDurationSeconds =
         const blob = new Blob(chunks, { type: 'audio/wav' })
         setAudioBlob(blob)
         const file = new File([blob], 'audio.wav', { type: 'audio/wav' })
-        onCaptured(file)
+        onCaptured?.(file)
         stream.getTracks().forEach(track => track.stop())
       }
 
@@ -60,7 +60,7 @@ export default function AudioCapture({ onCaptured, onError, maxDurationSeconds =
     } catch (error) {
       const errorMsg = t('multimodal.micAccessDenied')
       setError(errorMsg)
-      onError(errorMsg)
+      onError?.(errorMsg)
     }
   }
 
