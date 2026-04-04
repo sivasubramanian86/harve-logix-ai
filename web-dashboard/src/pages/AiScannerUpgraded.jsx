@@ -238,7 +238,7 @@ export default function AiScannerUpgraded() {
               {/* Capture Component */}
               {CaptureComponent && (
                 <CaptureComponent
-                  onCapture={handleAnalyze}
+                  onCaptured={handleAnalyze}
                   disabled={loading}
                   scanType={activeTab}
                 />

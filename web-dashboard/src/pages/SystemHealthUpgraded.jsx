@@ -193,13 +193,22 @@ export default function SystemHealthUpgraded() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold mb-2">Overall System Status</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              {health?.eventBridgeStatus === 'healthy'
-                ? 'All systems operational'
-                : health?.eventBridgeStatus === 'degraded'
-                ? 'Some systems experiencing issues'
-                : 'Critical issues detected'}
-            </p>
+            <div style={{ color: 'var(--text-secondary)' }}>
+              {health?.eventBridgeStatus === 'healthy' ? (
+                'All systems operational'
+              ) : (
+                <div className="space-y-1">
+                  <p className="text-yellow-600 font-semibold">Issues detected in following agents:</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {health?.failingAgents?.map(agent => (
+                      <span key={agent} className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded border border-red-200 uppercase font-bold">
+                        {agent.replace('-', ' ')}
+                      </span>
+                    )) || <span>Analyzing specific faults...</span>}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           {health && getStatusBadge(health.eventBridgeStatus)}
         </div>

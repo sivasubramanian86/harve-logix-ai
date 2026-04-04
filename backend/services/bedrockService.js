@@ -6,7 +6,11 @@
 import AWS from 'aws-sdk'
 
 const bedrock = new AWS.BedrockRuntime({
-  region: 'us-east-1', // Standardized to US-East-1 for reliable cross-region profile availability
+  region: 'ap-south-1', // Standardized to ap-south-1 for Mumbai regional Bedrock availability
+})
+
+const s3 = new AWS.S3({
+  region: 'ap-south-1', // Using Mumbai region for S3 too
 })
 
 // Nova Lite via Cross-Region Profile
@@ -102,18 +106,42 @@ async function invokeBedrockModel(systemPrompt, userPrompt, assetUri = null) {
   try {
     const content = []
 
-    // If we have an asset (image/video/audio)
+    // 1. Handle Multi-modal Content
     if (assetUri) {
+      let fileBuffer;
+      let extension;
+      
       if (assetUri.startsWith('local://')) {
         const localPath = assetUri.replace('local://', '')
-        const fileBuffer = fs.readFileSync(localPath)
-        const extension = path.extname(localPath).toLowerCase().replace('.', '')
+        fileBuffer = fs.readFileSync(localPath);
+        extension = path.extname(localPath).toLowerCase().replace('.', '');
+      } else if (assetUri.startsWith('s3://') || assetUri.includes('.s3.')) {
+        // Parse S3 URI or URL
+        console.log(`Fetching S3 asset: ${assetUri}`);
+        let bucket, key;
         
-        // Map extension to Bedrock/Nova format
-        let format = extension === 'jpg' ? 'jpeg' : extension
-        let type = 'image'
-        if (['mp4', 'webm'].includes(extension)) type = 'video'
-        
+        if (assetUri.startsWith('s3://')) {
+          const parts = assetUri.replace('s3://', '').split('/');
+          bucket = parts[0];
+          key = parts.slice(1).join('/');
+        } else {
+          // Assume HTTP S3 URL: bucket.s3.region.amazonaws.com/key
+          const url = new URL(assetUri);
+          bucket = url.hostname.split('.')[0];
+          key = url.pathname.slice(1);
+        }
+
+        const s3Response = await s3.getObject({ Bucket: bucket, Key: key }).promise();
+        fileBuffer = s3Response.Body;
+        extension = path.extname(key).toLowerCase().replace('.', '');
+      }
+
+      if (fileBuffer) {
+        let format = extension === 'jpg' ? 'jpeg' : extension;
+        let type = 'image';
+        if (['mp4', 'webm'].includes(extension)) type = 'video';
+        if (['wav', 'mp3', 'ogg'].includes(extension)) type = 'audio';
+
         content.push({
           [type]: {
             format: format,
@@ -121,20 +149,11 @@ async function invokeBedrockModel(systemPrompt, userPrompt, assetUri = null) {
               bytes: fileBuffer.toString('base64'),
             },
           },
-        })
-      } else {
-        // Bedrock native S3 URI support (if using Inference Profile with S3 access)
-        // Note: For Nova Lite direct invocation, base64 is often more reliable for short sessions
-        // However, if the asset is large, S3 is better. 
-        // For now, let's assume if it's S3, the user might want us to pull it or Nova can read it.
-        // If Nova cannot read the S3 URI directly in the content block, we'd need to fetch it.
-        // Actually, Nova typically expects a 'video' or 'image' block with S3 location too if supported.
-        content.push({
-          text: `Please analyze the asset at this location: ${assetUri}`,
-        })
+        });
       }
     }
 
+    // 2. Add Text Prompt
     content.push({
       text: userPrompt,
     })

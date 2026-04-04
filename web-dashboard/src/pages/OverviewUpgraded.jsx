@@ -321,12 +321,12 @@ export default function OverviewUpgraded() {
               </tr>
             </thead>
             <tbody>
-              {[
+              {(metrics?.stateBreakdown || [
                 { state: 'Punjab', farmers: 3200, processors: 85, waste: '₹2.5M', income: '₹3500' },
                 { state: 'Maharashtra', farmers: 2800, processors: 72, waste: '₹1.8M', income: '₹2800' },
                 { state: 'Gujarat', farmers: 2400, processors: 65, waste: '₹1.2M', income: '₹2200' },
                 { state: 'Karnataka', farmers: 2100, processors: 58, waste: '₹950K', income: '₹1900' },
-              ].map((row, idx) => (
+              ]).map((row, idx) => (
                 <tr
                   key={idx}
                   className="transition-all duration-200 hover:translate-x-1 group/row"

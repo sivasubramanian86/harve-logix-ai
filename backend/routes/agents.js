@@ -10,6 +10,7 @@
 import express from 'express'
 import axios from 'axios'
 import { spawn } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -38,7 +39,21 @@ const AGENTS = {
  */
 function invokeAgent(agentModule, requestData) {
   return new Promise((resolve, reject) => {
-    const pythonProcess = spawn('/opt/harvelogix/backend/venv/bin/python3', [
+    // Determine the Python executable path dynamically
+    const isWindows = process.platform === 'win32'
+    const venvPath = path.join(__dirname, '..', '.venv')
+    
+    // Check for local venv first, fallback to system python
+    let pythonPath = isWindows 
+      ? path.join(venvPath, 'Scripts', 'python.exe')
+      : path.join(venvPath, 'bin', 'python3')
+    
+    // If venv doesn't exist, try global python
+    if (!fs.existsSync(pythonPath)) {
+      pythonPath = isWindows ? 'python' : 'python3'
+    }
+
+    const pythonProcess = spawn(pythonPath, [
       '-c',
       `
 import sys
@@ -62,8 +77,11 @@ except Exception as e:
       `
     ], {
       cwd: path.join(__dirname, '..'),
-      timeout: 30000
+      env: { ...process.env, PYTHONPATH: path.join(__dirname, '..') },
+      timeout: 60000 // Increase timeout for cold starts
     })
+
+    console.log(`[Invoking Agent] ${agentModule} with payload:`, JSON.stringify(requestData));
 
     // Pipe request data to standard input
     pythonProcess.stdin.write(JSON.stringify(requestData))
@@ -247,8 +265,7 @@ router.post('/quality-hub', async (req, res, next) => {
     if (process.env.VITE_USE_DEMO_DATA === 'true' || process.env.USE_DEMO_DATA === 'true') {
       return next() // Skip to demo mock
     }
-
-    const { farmerId, cropType, imageS3Uri } = req.body
+    const { farmerId, farmerPhoto, cropType, imageS3Uri, batchSizeKg } = req.body
 
     if (!cropType) {
       return res.status(400).json({
@@ -261,6 +278,8 @@ router.post('/quality-hub', async (req, res, next) => {
       crop_type: cropType,
       image_s3_uri: imageS3Uri || '',
       farmer_id: farmerId || 'demo-farmer',
+      farmer_photo: farmerPhoto,
+      batch_size_kg: batchSizeKg || 1 // Support batchSizeKg
     })
 
     res.json(result)
@@ -346,6 +365,11 @@ router.get('/health', async (req, res) => {
 
   healthStatus.overall_healthy = allHealthy
   healthStatus.bedrock_available = allHealthy
+  
+  // Return list of failing agents for better UX
+  healthStatus.failing_agents = Object.entries(healthStatus.agents)
+    .filter(([_, status]) => !status.bedrock_healthy && status.status !== 'success')
+    .map(([name]) => name)
 
   res.json(healthStatus)
 })

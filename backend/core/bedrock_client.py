@@ -234,43 +234,79 @@ class BedrockClient:
             image_data = base64.b64encode(image_data).decode('utf-8')
         
         try:
-            request_body = {
-                'anthropic_version': 'bedrock-2023-06-01',
-                'max_tokens': BEDROCK_MAX_TOKENS,
-                'temperature': self.temperature,
-                'messages': [
-                    {
-                        'role': 'user',
-                        'content': [
-                            {
-                                'type': 'image',
-                                'source': {
-                                    'type': 'base64',
-                                    'media_type': image_format,
-                                    'data': image_data,
+            if self.model_type.lower() == 'nova':
+                # Use simplified format logic (image block)
+                # Map image_format like image/jpeg to just jpeg for Nova
+                ext = image_format.replace('image/', '')
+                if ext == 'jpg': ext = 'jpeg'
+                
+                request_body = {
+                    'system': [{'text': system_prompt}] if system_prompt else [],
+                    'messages': [
+                        {
+                            'role': 'user',
+                            'content': [
+                                {
+                                    'image': {
+                                        'format': ext,
+                                        'source': {
+                                            'bytes': image_data
+                                        }
+                                    }
+                                },
+                                {
+                                    'text': prompt
                                 }
-                            },
-                            {
-                                'type': 'text',
-                                'text': prompt
-                            }
-                        ]
+                            ]
+                        }
+                    ],
+                    'inferenceConfig': {
+                        'maxTokens': BEDROCK_MAX_TOKENS,
+                        'temperature': self.temperature
                     }
-                ]
-            }
-            
-            if system_prompt:
-                request_body['system'] = system_prompt
+                }
+            else:
+                # Claude format
+                request_body = {
+                    'anthropic_version': 'bedrock-2023-06-01',
+                    'max_tokens': BEDROCK_MAX_TOKENS,
+                    'temperature': self.temperature,
+                    'messages': [
+                        {
+                            'role': 'user',
+                            'content': [
+                                {
+                                    'type': 'image',
+                                    'source': {
+                                        'type': 'base64',
+                                        'media_type': image_format,
+                                        'data': image_data,
+                                    }
+                                },
+                                {
+                                    'type': 'text',
+                                    'text': prompt
+                                }
+                            ]
+                        }
+                    ]
+                }
+                if system_prompt:
+                    request_body['system'] = system_prompt
             
             response = self.client.invoke_model(
-                modelId=BedrockConfig.CLAUDE_SONNET_4_6,
+                modelId=self.model_id,
                 contentType='application/json',
                 accept='application/json',
                 body=json.dumps(request_body),
             )
             
             response_body = json.loads(response['body'].read())
-            content = response_body['content'][0]['text']
+            
+            if self.model_type.lower() == 'nova':
+                content = response_body.get('output', {}).get('message', {}).get('content', [{}])[0].get('text', '')
+            else:
+                content = response_body['content'][0]['text']
             
             self.logger.info("Bedrock multimodal invocation successful")
             return content

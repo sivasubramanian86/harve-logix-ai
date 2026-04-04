@@ -202,26 +202,34 @@ async function getScanDetails(scanId) {
 }
 
 /**
- * Process voice query with HarveLogix agents
+ * Process voice query with HarveLogix agents using Bedrock Orchestration
  */
 async function processWithAgents(transcript) {
   try {
-    const lowerTranscript = transcript.toLowerCase()
+    const systemPrompt = `You are the HarveLogix AI Voice Orchestrator. 
+Your job is to route farmer's voice queries to specialized agents.
+Available Agents:
+- HarvestReady: For optimal harvest timing and phenology.
+- StorageScout: For storage recommendations and warehouse conditions.
+- PriceOracle: For market price trends and forecasts.
+- BuyerBot: For connecting with processors and buyers.
+- FinanceFlow: For credit, insurance, and wallet queries.
+
+Analyze the user's transcript and provide a helpful response as if you consulted these agents.
+Respond ONLY with valid JSON containing a "response" key. 
+Example: {"response": "Your tomatoes are ready for harvest in 2 days. Market prices are ₹24/kg today."}`
+
+    const result = await bedrockService.invokeBedrockModel(systemPrompt, `Farmer Query: "${transcript}"`)
     
-    if (lowerTranscript.includes('harvest') || lowerTranscript.includes('when to harvest')) {
-      return 'Based on current crop maturity and market conditions, optimal harvest window is in 5-7 days. Weather forecast shows clear conditions next week.'
-    } else if (lowerTranscript.includes('water') || lowerTranscript.includes('irrigation')) {
-      return 'Current soil moisture is adequate. Next irrigation recommended in 2 days. Consider drip irrigation to save 30% water.'
-    } else if (lowerTranscript.includes('price') || lowerTranscript.includes('market')) {
-      return 'Current market price for your crop is ₹25/kg at eNAM. Nearby processor offering ₹27/kg for direct purchase.'
-    } else if (lowerTranscript.includes('buyer') || lowerTranscript.includes('processor')) {
-      return '3 processors matched within 50km radius. Best offer: ₹27/kg with free transport. Tap to view details.'
-    } else {
-      return `I understood: "${transcript}". Our AI agents are analyzing your query. You can ask about harvest timing, irrigation, market prices, or buyer connections.`
-    }
+    // If the service returns a structured object, use the reasoning or summary
+    return result.reasoning || result.explanation || result.response || result.summary || JSON.stringify(result)
   } catch (error) {
-    console.error('Agent processing error:', error)
-    throw error
+    console.error('Agent voice processing error:', error)
+    // Fallback to basic keywords if Bedrock fails
+    const lowerTranscript = transcript.toLowerCase()
+    if (lowerTranscript.includes('harvest')) return 'Optimal harvest window is in 5-7 days based on crop maturity.'
+    if (lowerTranscript.includes('price')) return 'Market prices are trending up. Current average is ₹25/kg.'
+    return `I heard: "${transcript}". Let me analyze that for you.`
   }
 }
 

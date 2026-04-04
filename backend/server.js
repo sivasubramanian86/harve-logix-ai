@@ -16,6 +16,7 @@ const PORT = 5000
 // Security Configuration
 const ALLOWED_ORIGINS = [
   'http://localhost:3000',
+  'http://127.0.0.1:3000',
   'http://localhost:5000',
   'https://dashboard.harvelogix.ai',
   'https://app.harvelogix.ai',
@@ -203,32 +204,70 @@ const generateAnalytics = () => ({
 app.get('/api/metrics', async (req, res) => {
   try {
     const totalFarmers = await prisma.farmer.count()
-    if (totalFarmers === 0) return res.json(generateMetrics())
+    if (totalFarmers === 0) return res.json(generateOriginalMetrics())
     
     // Mix dynamic DB counts with simulated real-time telemetry mathematically linked to DB Size
-    const dbMetrics = generateMetrics()
-    dbMetrics.totalFarmers = totalFarmers
-    
-    // Scale standard overview card metrics realistically alongside real farmer DB entries
-    dbMetrics.activeUsers = Math.floor(totalFarmers * 1.5) // Example: Processors + Delivery agents naturally scale w/ farmers
-    dbMetrics.totalIncome = Math.floor(totalFarmers * 75000) // Assumed Rs baseline income per farmer derived dynamically
-    dbMetrics.wasteReduction = parseFloat((totalFarmers * 0.08).toFixed(1)) // Pseudo-calculated waste reduced
+    const dbMetrics = {
+      source: 'live',
+      timestamp: new Date().toISOString(),
+      farmersOnboarded: totalFarmers,
+      processorsConnected: Math.floor(totalFarmers * 0.15) + 30, // Scale processors with farmers
+      wasteReductionRupees: totalFarmers * 15000, // Rs 15k saved per farmer
+      incomeUpliftPerAcre: 4800 + Math.floor(Math.random() * 500),
+      waterSavedLitres: totalFarmers * 80000, // 80k liters per farmer
+      
+      ragStatus: {
+        docsIndexed: 15,
+        lastQueryLatencyMs: 42,
+        lastSources: ['agricultural_knowledge_base', 'crop_yield_2025'],
+      },
+      mcpStatus: {
+        activeWorkflows: 3,
+        pendingTasks: 4,
+        lastEvent: 'Dynamic scaling applied to metrics',
+      },
+      
+      trends: [
+        { metric: 'farmers', change: 12.5, direction: 'up' },
+        { metric: 'processors', change: 8.3, direction: 'up' },
+        { metric: 'waste', change: 15.7, direction: 'up' },
+        { metric: 'income', change: 10.2, direction: 'up' },
+        { metric: 'water', change: 18.9, direction: 'up' },
+      ],
 
-    const lastMonthFarmers = Math.max(1, totalFarmers - 250)
-    dbMetrics.trends = [
-      { metric: 'farmers', change: parseFloat((((totalFarmers - lastMonthFarmers) / lastMonthFarmers) * 100).toFixed(1)), direction: 'up' },
-      { metric: 'processors', change: 8.3, direction: 'up' },
-      { metric: 'waste', change: 15.7, direction: 'up' },
-      { metric: 'income', change: 10.2, direction: 'up' },
-      { metric: 'water', change: 18.9, direction: 'up' },
-    ]
+      // New: Breakdown by region
+      stateBreakdown: await getRegionBreakdown()
+    }
 
     res.json(dbMetrics)
   } catch (error) {
-    console.error("Prisma DB Error on /api/metrics, falling back to mock:", error.message)
-    res.json(generateMetrics())
+    console.error("Prisma DB Error, falling back to mock:", error.message)
+    res.json(generateOriginalMetrics())
   }
 })
+
+// Helper for dynamic region breakdown
+async function getRegionBreakdown() {
+  const regions = ['North', 'South', 'East', 'West', 'Central']
+  const breakdown = []
+  
+  for (const region of regions) {
+    const count = await prisma.farmer.count({ where: { region } })
+    if (count > 0) {
+      breakdown.push({
+        state: region,
+        farmers: count,
+        processors: Math.floor(count * 0.1),
+        waste: `₹${((count * 15000) / 1000000).toFixed(1)}M`,
+        income: `₹${(count * 5).toFixed(0)}` // Placeholder calc
+      })
+    }
+  }
+  return breakdown
+}
+
+// Rename the old mock generator to avoid collision
+const generateOriginalMetrics = generateMetrics;
 
 app.get('/api/welfare', async (req, res) => {
   try {
@@ -528,6 +567,7 @@ app.post('/api/agents/water-wise', (req, res) => {
 app.post('/api/agents/quality-hub', (req, res) => {
   try {
     const cropType = req.body.cropType || req.body.crop_type
+    const farmerId = req.body.farmerId || req.body.farmer_id
     
     if (!cropType) {
       return res.status(400).json({ error: 'cropType is required' })

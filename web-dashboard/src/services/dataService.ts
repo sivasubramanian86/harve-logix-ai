@@ -81,6 +81,8 @@ export interface SystemHealth {
   eventBridgeStatus: 'healthy' | 'degraded' | 'critical';
   lastUpdated: Date;
   source: 'live' | 'demo';
+  failingAgents?: string[];
+  agentHealthMap?: Record<string, any>;
 }
 
 export interface AiInsight {
@@ -120,8 +122,8 @@ class DataService {
   private cache: Map<string, { data: any; timestamp: number }> = new Map();
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes
   private apiClient = axios.create({
-    baseURL: 'https://s4sofpxni6.execute-api.ap-south-2.amazonaws.com/prod',
-    timeout: 10000,
+    baseURL: (import.meta as any).env.VITE_API_URL || 'http://localhost:5000',
+    timeout: 30000, // Increased timeout for Bedrock
   });
   private useDemo = (import.meta as any).env.VITE_USE_DEMO_DATA === 'true';
 
@@ -398,6 +400,8 @@ class DataService {
         ...demoData,
         errorRate: allHealthy ? 0.1 : 5.0,
         eventBridgeStatus: allHealthy ? 'healthy' : 'degraded',
+        failingAgents: rawData.failing_agents || [],
+        agentHealthMap: rawData.agents || {},
         source: 'live',
         lastUpdated: new Date(),
       };
