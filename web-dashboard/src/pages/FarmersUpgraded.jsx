@@ -274,10 +274,10 @@ export default function FarmersUpgraded() {
                             )}`}
                           >
                             {decision.outcome === 'positive'
-                              ? '✓ Positive'
+                              ? `✓ ${t('farmers.outcomes.positive')}`
                               : decision.outcome === 'negative'
-                              ? '✗ Negative'
-                              : '→ Neutral'}
+                              ? `✗ ${t('farmers.outcomes.negative')}`
+                              : `→ ${t('farmers.outcomes.neutral')}`}
                           </span>
                         </div>
                         <p

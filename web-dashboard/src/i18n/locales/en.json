@@ -84,7 +84,12 @@
     "aiInsights": "AI Insights",
     "date": "Date",
     "recommendation": "Recommendation",
-    "outcome": "Outcome"
+    "outcome": "Outcome",
+    "outcomes": {
+      "positive": "Positive",
+      "negative": "Negative",
+      "neutral": "Neutral"
+    }
   },
   "policyInsights": {
     "title": "Policy Insights",
@@ -162,6 +167,32 @@
     "dark": "Dark",
     "langCode": "en"
   },
+  "supplyChain": {
+    "title": "Supply Chain",
+    "description": "Farmer-processor connections and logistics optimization",
+    "kpis": {
+      "connections": "Direct Connections",
+      "middlemen": "Middlemen Eliminated",
+      "deliveryTime": "Avg Delivery Time",
+      "waste": "Waste in Transit"
+    },
+    "charts": {
+      "utilization": "Processor Utilization",
+      "matches": "Weekly Supply Matches",
+      "performance": "Processor Performance"
+    },
+    "table": {
+      "processor": "Processor",
+      "utilization": "Utilization",
+      "capacity": "Capacity",
+      "status": "Status"
+    },
+    "status": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    }
+  },
   "multimodal": {
     "aiScanner": "AI Scanner",
     "cropHealthScan": "Crop Health Scan",
@@ -217,6 +248,50 @@
     "noScans": "No scans yet",
     "transcript": "Transcript",
     "response": "Response",
+    "aboutScan": "About This Scan",
+    "whatWeAnalyze": "What we analyze:",
+    "requirements": "Requirements:",
+    "exampleQuestions": "Example questions:",
+    "cropHealth": {
+      "title": "Crop Health",
+      "desc": "Upload a photo of your crop to get instant health assessment including disease detection and treatment recommendations.",
+      "item1": "Leaf color and texture",
+      "item2": "Disease symptoms",
+      "item3": "Nutrient deficiencies",
+      "item4": "Overall plant vigor"
+    },
+    "irrigation": {
+      "title": "Irrigation Status",
+      "desc": "Analyze soil moisture and irrigation status from field images to optimize water usage and prevent waterlogging.",
+      "item1": "Soil moisture level",
+      "item2": "Water stress indicators",
+      "item3": "Drainage conditions",
+      "item4": "Irrigation recommendations"
+    },
+    "weather": {
+      "title": "Sky & Weather",
+      "desc": "Capture sky conditions to get weather forecasts and harvest timing recommendations.",
+      "item1": "Cloud cover and type",
+      "item2": "Weather patterns",
+      "item3": "Rainfall probability",
+      "item4": "Harvest window advice"
+    },
+    "voice": {
+      "title": "Voice Assistant",
+      "desc": "Ask questions about your farm in your local language. Get instant answers from our AI agents.",
+      "item1": "When should I harvest?",
+      "item2": "How much water do I need?",
+      "item3": "What's the market price?",
+      "item4": "Which processor should I contact?"
+    },
+    "video": {
+      "title": "Video Analysis",
+      "desc": "Upload field video for comprehensive analysis of crop conditions and field health.",
+      "item1": "Max 5 minutes duration",
+      "item2": "Max 100MB file size",
+      "item3": "MP4 or WebM format",
+      "item4": "Good lighting recommended"
+    },
     "demo": {
       "cropHealth": {
         "analysis": "Crop health is excellent. Plant shows strong vegetative growth with healthy leaf coloration.",
