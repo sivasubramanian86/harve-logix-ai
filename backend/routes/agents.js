@@ -339,7 +339,10 @@ router.get('/health', async (req, res) => {
   for (const agentName of agentNames) {
     try {
       const result = await invokeAgent(AGENTS[agentName], {
-        test: true
+        test: true,
+        crop_type: 'tomato', // Satisfy mandatory validation for health check
+        current_growth_stage: 5,
+        location: { latitude: 15.8, longitude: 75.6 }
       }).catch(() => ({
         status: 'error',
         agent: agentName,
