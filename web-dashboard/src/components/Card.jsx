@@ -8,10 +8,15 @@ export function Card({ children, className = '', ...props }) {
   return (
     <div
       className={`
-        bg-white rounded-lg border border-neutral-200 shadow-sm
+        rounded-lg border shadow-sm
         hover:shadow-md transition-shadow duration-200
         ${className}
       `}
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--border-primary)',
+        ...props.style
+      }}
       {...props}
     >
       {children}
@@ -24,7 +29,11 @@ export function Card({ children, className = '', ...props }) {
  */
 export function CardHeader({ children, className = '', ...props }) {
   return (
-    <div className={`px-6 py-4 border-b border-neutral-200 ${className}`} {...props}>
+    <div 
+      className={`px-6 py-4 border-b ${className}`} 
+      style={{ borderColor: 'var(--border-primary)', ...props.style }}
+      {...props}
+    >
       {children}
     </div>
   )
@@ -35,7 +44,11 @@ export function CardHeader({ children, className = '', ...props }) {
  */
 export function CardBody({ children, className = '', ...props }) {
   return (
-    <div className={`px-6 py-4 ${className}`} {...props}>
+    <div 
+      className={`px-6 py-4 ${className}`} 
+      style={{ color: 'var(--text-primary)', ...props.style }}
+      {...props}
+    >
       {children}
     </div>
   )
@@ -46,7 +59,15 @@ export function CardBody({ children, className = '', ...props }) {
  */
 export function CardFooter({ children, className = '', ...props }) {
   return (
-    <div className={`px-6 py-4 border-t border-neutral-200 bg-neutral-50 rounded-b-lg ${className}`} {...props}>
+    <div 
+      className={`px-6 py-4 border-t rounded-b-lg ${className}`} 
+      style={{ 
+        backgroundColor: 'var(--bg-secondary)', 
+        borderColor: 'var(--border-primary)',
+        ...props.style 
+      }}
+      {...props}
+    >
       {children}
     </div>
   )

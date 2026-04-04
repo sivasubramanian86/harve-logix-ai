@@ -531,7 +531,7 @@ app.post('/api/agents/supply-match', (req, res) => {
           }
         ],
         no_middleman_flag: true,
-        estimated_income_rupees: quantity_kg * 48
+        estimated_income_rupees: quantity * 48
       }
     })
   } catch (error) {

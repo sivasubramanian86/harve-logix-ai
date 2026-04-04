@@ -154,7 +154,7 @@ export default function Agents() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-neutral-600">Loading agents...</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Loading agents...</p>
         </div>
       </div>
     )
@@ -200,13 +200,13 @@ export default function Agents() {
               {/* Agent Body */}
               <CardBody className="space-y-4">
                 {/* Description */}
-                <p className="text-sm text-neutral-600">{agent.description}</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{agent.description}</p>
 
                 {/* Metrics Grid */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                     <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Accuracy</p>
-                    <p className="text-xl font-bold text-primary-500 mt-1">{typeof agent.accuracy === 'number' ? agent.accuracy.toFixed(2) : agent.accuracy}%</p>
+                    <p className="text-xl font-bold text-primary-500 mt-1">{Number(agent.accuracy).toFixed(2)}%</p>
                   </div>
                   <div className="bg-neutral-50 rounded-lg p-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                     <p className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Decisions</p>
@@ -228,7 +228,15 @@ export default function Agents() {
                     <Activity size={16} />
                     View Logs
                   </button>
-                  <button onClick={() => setActiveAgentDetails({ isOpen: true, id: agent.id, name: agent.name })} className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg font-medium text-sm hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2">
+                  <button 
+                    onClick={() => setActiveAgentDetails({ isOpen: true, id: agent.id, name: agent.name })} 
+                    className="flex-1 px-4 py-2 border rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2"
+                    style={{ 
+                      borderColor: 'var(--border-primary)', 
+                      color: 'var(--text-primary)',
+                      backgroundColor: 'var(--bg-secondary)'
+                    }}
+                  >
                     <ArrowRight size={16} />
                     Details
                   </button>

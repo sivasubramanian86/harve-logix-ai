@@ -74,9 +74,23 @@ function invokeAgent(agentModule, requestData) {
           reject(err);
         } else {
           try {
-            const response = JSON.parse(data.Payload);
+            let response = JSON.parse(data.Payload);
+            
+            // Handle Lambda standard response format (statusCode, body)
+            if (response && response.statusCode && response.body) {
+              try {
+                if (typeof response.body === 'string') {
+                  response = JSON.parse(response.body);
+                } else {
+                  response = response.body;
+                }
+              } catch (e) {
+                // Not JSON in body, keep as is
+              }
+            }
+
             // Handle Lambda error responses
-            if (response.errorMessage) {
+            if (response && response.errorMessage) {
               reject(new Error(response.errorMessage));
             } else {
               resolve(response);
@@ -549,7 +563,7 @@ router.get('/insights/farmer/:id', async (req, res, next) => {
         title: text.split(':')[0] || 'AI Observation',
         description: text,
         confidence: result.confidence_score > 0.8 ? 'high' : result.confidence_score > 0.5 ? 'medium' : 'low',
-        impact: `Predicted Impact: ${((result.confidence_score || 0.85) * 100).toFixed(0)}% accuracy gain`
+        impact: `Predicted Impact: ${((result.confidence_score || 0.85) * 100).toFixed(2)}% accuracy gain`
       }
     })
 

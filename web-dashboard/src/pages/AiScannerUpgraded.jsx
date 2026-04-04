@@ -280,12 +280,12 @@ export default function AiScannerUpgraded() {
         {/* Info Sidebar */}
         <div className="space-y-6">
           {/* Test Assets Card - MOVED TO TOP */}
-          <Card className="border-2 border-primary-100 shadow-xl overflow-hidden relative">
+          <Card className="border shadow-xl overflow-hidden relative">
             <div className="absolute top-0 right-0 p-2">
               <span className="bg-primary-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Quick Start</span>
             </div>
-            <CardHeader className="bg-primary-50">
-              <h3 className="font-bold text-primary-900 flex items-center gap-2">
+            <CardHeader className="bg-primary-500/10">
+              <h3 className="font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Zap size={18} className="text-primary-600 animate-pulse" />
                 Test Your AI Scanner
               </h3>
@@ -297,11 +297,11 @@ export default function AiScannerUpgraded() {
               
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', type: 'image/png', color: 'bg-red-50 border-red-100 hover:border-red-500' },
-                  { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', type: 'image/png', color: 'bg-orange-50 border-orange-100 hover:border-orange-500' },
-                  { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', type: 'image/png', color: 'bg-blue-50 border-blue-100 hover:border-blue-500' },
-                  { id: 'voice-query', name: 'Sample Voice Query', file: 'crop_ready_test.mp3', type: 'audio/mpeg', color: 'bg-purple-50 border-purple-100 hover:border-purple-500' },
-                  { id: 'video-scan', name: 'Field Video Scan', file: 'field_scan_test.mp4', type: 'video/mp4', color: 'bg-indigo-50 border-indigo-100 hover:border-indigo-500' }
+                  { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', type: 'image/png', color: 'bg-red-500/5 hover:border-red-500/50' },
+                  { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', type: 'image/png', color: 'bg-orange-500/5 hover:border-orange-500/50' },
+                  { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', type: 'image/png', color: 'bg-blue-500/5 hover:border-blue-500/50' },
+                  { id: 'voice-query', name: 'Sample Voice Query', file: 'crop_ready_test.mp3', type: 'audio/mpeg', color: 'bg-purple-500/5 hover:border-purple-500/50' },
+                  { id: 'video-scan', name: 'Field Video Scan', file: 'field_scan_test.mp4', type: 'video/mp4', color: 'bg-indigo-500/5 hover:border-indigo-500/50' }
                 ].map((asset) => (
                   <button
                     key={asset.file}
@@ -316,10 +316,11 @@ export default function AiScannerUpgraded() {
                         console.error('Failed to load test asset:', err);
                       }
                     }}
-                    className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left group ${asset.color}`}
+                    className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left group border-transparent ${asset.color}`}
+                    style={{ borderColor: 'var(--border-primary)' }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-lg bg-white shadow-sm flex-shrink-0 border border-neutral-100 flex items-center justify-center overflow-hidden">
+                      <div className="w-12 h-12 rounded-lg shadow-sm flex-shrink-0 border flex items-center justify-center overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-primary)' }}>
                         {asset.type.startsWith('image') ? (
                           <img src={`/test-assets/${asset.file}`} alt={asset.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                         ) : asset.type.startsWith('audio') ? (
@@ -348,13 +349,13 @@ export default function AiScannerUpgraded() {
             <CardBody className="space-y-4 text-sm">
               {activeTab === 'crop-health' && (
                 <>
-                  <p className="text-neutral-600">
+                  <p style={{ color: 'var(--text-secondary)' }}>
                     Upload a photo of your crop to get instant health assessment including disease detection and
                     treatment recommendations.
                   </p>
-                  <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="font-medium text-neutral-900 mb-2">What we analyze:</p>
-                    <ul className="space-y-1 text-neutral-600">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
                       <li>• Leaf color and texture</li>
                       <li>• Disease symptoms</li>
                       <li>• Nutrient deficiencies</li>
@@ -366,13 +367,13 @@ export default function AiScannerUpgraded() {
 
               {activeTab === 'field-irrigation' && (
                 <>
-                  <p className="text-neutral-600">
+                  <p style={{ color: 'var(--text-secondary)' }}>
                     Analyze soil moisture and irrigation status from field images to optimize water usage and prevent
                     waterlogging.
                   </p>
-                  <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="font-medium text-neutral-900 mb-2">What we analyze:</p>
-                    <ul className="space-y-1 text-neutral-600">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
                       <li>• Soil moisture level</li>
                       <li>• Water stress indicators</li>
                       <li>• Drainage conditions</li>
@@ -384,12 +385,12 @@ export default function AiScannerUpgraded() {
 
               {activeTab === 'sky-weather' && (
                 <>
-                  <p className="text-neutral-600">
+                  <p style={{ color: 'var(--text-secondary)' }}>
                     Capture sky conditions to get weather forecasts and harvest timing recommendations.
                   </p>
-                  <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="font-medium text-neutral-900 mb-2">What we analyze:</p>
-                    <ul className="space-y-1 text-neutral-600">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>What we analyze:</p>
+                    <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
                       <li>• Cloud cover and type</li>
                       <li>• Weather patterns</li>
                       <li>• Rainfall probability</li>
@@ -401,12 +402,12 @@ export default function AiScannerUpgraded() {
 
               {activeTab === 'voice-query' && (
                 <>
-                  <p className="text-neutral-600">
+                  <p style={{ color: 'var(--text-secondary)' }}>
                     Ask questions about your farm in your local language. Get instant answers from our AI agents.
                   </p>
-                  <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="font-medium text-neutral-900 mb-2">Example questions:</p>
-                    <ul className="space-y-1 text-neutral-600">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Example questions:</p>
+                    <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
                       <li>• When should I harvest?</li>
                       <li>• How much water do I need?</li>
                       <li>• What's the market price?</li>
@@ -418,12 +419,12 @@ export default function AiScannerUpgraded() {
 
               {activeTab === 'video-scan' && (
                 <>
-                  <p className="text-neutral-600">
+                  <p style={{ color: 'var(--text-secondary)' }}>
                     Upload field video for comprehensive analysis of crop conditions and field health.
                   </p>
-                  <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="font-medium text-neutral-900 mb-2">Requirements:</p>
-                    <ul className="space-y-1 text-neutral-600">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <p className="font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Requirements:</p>
+                    <ul className="space-y-1" style={{ color: 'var(--text-secondary)' }}>
                       <li>• Max 5 minutes duration</li>
                       <li>• Max 100MB file size</li>
                       <li>• MP4 or WebM format</li>
@@ -442,23 +443,23 @@ export default function AiScannerUpgraded() {
             </CardHeader>
             <CardBody>
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                   <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Leaf size={18} className="text-primary-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-neutral-900 text-sm">Crop Health</p>
-                    <p className="text-xs text-neutral-600">2 hours ago</p>
+                    <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>Crop Health</p>
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>2 hours ago</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                   <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Droplet size={18} className="text-info-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-neutral-900 text-sm">Irrigation</p>
-                    <p className="text-xs text-neutral-600">Yesterday</p>
+                    <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>Irrigation</p>
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Yesterday</p>
                   </div>
                 </div>
 

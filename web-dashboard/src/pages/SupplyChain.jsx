@@ -60,57 +60,64 @@ export default function SupplyChain() {
           icon={Truck}
           label="Direct Connections"
           value={(data?.directConnections || getMockSupplyData().directConnections).toLocaleString()}
-          color="bg-blue-500"
+          color="var(--color-info)"
         />
         <KPICard
           icon={Package}
           label="Middlemen Eliminated"
           value={(data?.middlemanEliminated || getMockSupplyData().middlemanEliminated).toLocaleString()}
-          color="bg-green-500"
+          color="var(--color-success)"
         />
         <KPICard
           icon={AlertCircle}
           label="Avg Delivery Time"
           value={data?.avgDeliveryTime || getMockSupplyData().avgDeliveryTime}
-          color="bg-yellow-500"
+          color="var(--color-warning)"
         />
         <KPICard
           icon={Package}
           label="Waste in Transit"
           value={data?.wasteInTransit || getMockSupplyData().wasteInTransit}
-          color="bg-red-500"
+          color="var(--color-error)"
         />
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Processor Utilization */}
-        <div className="card">
-          <h2 className="text-xl font-bold mb-4">Processor Utilization</h2>
+        <div className="p-6 rounded-2xl border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
+          <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Processor Utilization</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={data?.processorUtilization?.length > 0 ? data.processorUtilization : getMockSupplyData().processorUtilization}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="processor" />
-              <YAxis />
-              <Tooltip formatter={(value) => `${value}%`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" />
+              <XAxis dataKey="processor" stroke="var(--text-secondary)" fontSize={12} />
+              <YAxis stroke="var(--text-secondary)" fontSize={12} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)', color: 'var(--text-primary)' }}
+                itemStyle={{ color: 'var(--text-primary)' }}
+                formatter={(value) => `${value}%`} 
+              />
               <Legend />
-              <Bar dataKey="utilization" fill="#10b981" name="Utilization %" />
+              <Bar dataKey="utilization" fill="var(--color-success)" name="Utilization %" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Supply Matches */}
-        <div className="card">
-          <h2 className="text-xl font-bold mb-4">Weekly Supply Matches</h2>
+        <div className="p-6 rounded-2xl border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
+          <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Weekly Supply Matches</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={data?.supplyMatches?.length > 0 ? data.supplyMatches : getMockSupplyData().supplyMatches}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" />
+              <XAxis dataKey="date" stroke="var(--text-secondary)" fontSize={12} />
+              <YAxis stroke="var(--text-secondary)" fontSize={12} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)', color: 'var(--text-primary)' }}
+                itemStyle={{ color: 'var(--text-primary)' }}
+              />
               <Legend />
-              <Bar dataKey="matches" fill="#059669" name="Total Matches" />
-              <Bar dataKey="successful" fill="#10b981" name="Successful" />
+              <Bar dataKey="matches" fill="var(--color-info)" name="Total Matches" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="successful" fill="var(--color-success)" name="Successful" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -135,10 +142,13 @@ export default function SupplyChain() {
                   <td className="px-6 py-4 font-medium">{proc.processor}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-24 bg-gray-200 rounded-full h-2">
+                      <div className="w-24 bg-opacity-20 rounded-full h-2" style={{ backgroundColor: 'var(--text-secondary)' }}>
                         <div
-                          className="bg-primary-500 h-2 rounded-full"
-                          style={{ width: `${proc.utilization}%` }}
+                          className="h-2 rounded-full"
+                          style={{ 
+                            width: `${proc.utilization}%`,
+                            backgroundColor: proc.utilization > 80 ? 'var(--color-error)' : proc.utilization > 60 ? 'var(--color-warning)' : 'var(--color-success)'
+                          }}
                         ></div>
                       </div>
                       <span className="text-sm">{proc.utilization}%</span>
@@ -146,11 +156,11 @@ export default function SupplyChain() {
                   </td>
                   <td className="px-6 py-4">{proc.capacity} units</td>
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      proc.utilization > 80 ? 'bg-red-100 text-red-800' :
-                      proc.utilization > 60 ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
+                    <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest" style={{ 
+                      backgroundColor: proc.utilization > 80 ? 'rgba(239, 68, 68, 0.15)' : proc.utilization > 60 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                      color: proc.utilization > 80 ? 'var(--color-error)' : proc.utilization > 60 ? 'var(--color-warning)' : 'var(--color-success)',
+                      border: `1px solid ${proc.utilization > 80 ? 'var(--color-error)' : proc.utilization > 60 ? 'var(--color-warning)' : 'var(--color-success)'}`
+                    }}>
                       {proc.utilization > 80 ? 'High' : proc.utilization > 60 ? 'Medium' : 'Low'}
                     </span>
                   </td>
@@ -166,13 +176,16 @@ export default function SupplyChain() {
 
 function KPICard({ icon: Icon, label, value, color }) {
   return (
-    <div className={`${color} text-white rounded-lg p-6 shadow-lg`}>
-      <div className="flex items-center justify-between">
+    <div className="rounded-2xl p-6 shadow-xl relative overflow-hidden group border" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-primary)' }}>
+      <div className="absolute top-0 right-0 w-24 h-24 blur-3xl opacity-10 transition-opacity group-hover:opacity-20" style={{ backgroundColor: color }} />
+      <div className="flex items-center justify-between relative z-10">
         <div>
-          <p className="text-sm opacity-90">{label}</p>
-          <p className="text-2xl font-bold mt-2">{value}</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-1">{label}</p>
+          <p className="text-2xl font-black">{value}</p>
         </div>
-        <Icon size={40} className="opacity-50" />
+        <div className="p-3 rounded-xl bg-opacity-10 group-hover:scale-110 transition-transform duration-500" style={{ backgroundColor: color, color: color }}>
+          <Icon size={24} />
+        </div>
       </div>
     </div>
   )
