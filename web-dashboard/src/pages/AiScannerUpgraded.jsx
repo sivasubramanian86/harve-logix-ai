@@ -300,7 +300,7 @@ export default function AiScannerUpgraded() {
                   { id: 'crop-health', name: 'Diseased Tomato', file: 'diseased_tomato.png', type: 'image/png', color: 'bg-red-50 border-red-100 hover:border-red-500' },
                   { id: 'field-irrigation', name: 'Dry Wheat Field', file: 'dry_wheat_field.png', type: 'image/png', color: 'bg-orange-50 border-orange-100 hover:border-orange-500' },
                   { id: 'sky-weather', name: 'Stormy Sky Farm', file: 'stormy_sky_farm.png', type: 'image/png', color: 'bg-blue-50 border-blue-100 hover:border-blue-500' },
-                  { id: 'voice-query', name: 'Sample Voice Query', file: 'crop_ready_test.wav', type: 'audio/wav', color: 'bg-purple-50 border-purple-100 hover:border-purple-500' },
+                  { id: 'voice-query', name: 'Sample Voice Query', file: 'crop_ready_test.mp3', type: 'audio/mpeg', color: 'bg-purple-50 border-purple-100 hover:border-purple-500' },
                   { id: 'video-scan', name: 'Field Video Scan', file: 'field_scan_test.mp4', type: 'video/mp4', color: 'bg-indigo-50 border-indigo-100 hover:border-indigo-500' }
                 ].map((asset) => (
                   <button
