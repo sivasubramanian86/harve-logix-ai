@@ -49,7 +49,7 @@ aws s3 mb s3://harvelogix-multimodal --region ap-south-2
 
 # 3. Enable Bedrock model
 # Go to AWS Console → Bedrock → Model Access
-# Enable: Claude Sonnet 4.6
+# Enable: Claude Haiku 4.5
 
 # 4. Get Weather API key (optional)
 # Sign up: https://openweathermap.org/api

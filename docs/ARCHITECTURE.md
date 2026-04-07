@@ -39,7 +39,20 @@ HarveLogix AI is a multi-agent post-harvest agricultural supply chain platform b
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Component Details
+## 3. AI Models & Reasoning
+
+HarveLogix AI leverages a hybrid-model strategy via **Amazon Bedrock** to balance high-reasoning accuracy with cost-effective multimodal analysis.
+
+| Capability | Model | Region | Access Method |
+|:---|:---|:---|:---|
+| **Primary Agent Reasoning** | **Claude Haiku 4.5** | `ap-south-2` | Inference Profile (`3uca3qqdrcyo`) |
+| **Multimodal Scanning** | **Amazon Nova Lite** | `us-east-1` | Cross-Region Inference (`us.amazon.nova-lite-v1:0`) |
+| **Embeddings (RAG)** | **Titan Text Embeddings v2** | `ap-south-1` | Direct Foundation Model |
+
+- **Inference Profiles:** Used to ensure high availability and regional failover for agent reasoning.
+- **Cross-Region Inference:** Enables advanced multimodal capabilities in AP-SOUTH-2 (Mumbai/Hyderabad) by routing to US regions where Nova is natively available, maintaining low-latency responses.
+
+## 4. Component Details
 
 ### Presentation Layer
 

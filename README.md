@@ -138,14 +138,12 @@ harvelogix-ai/
 - **Macro Dashboards**: Regional waste and income uplift analytics.
 - **Policy Insights**: Data-driven visibility into agricultural trends.
 
-## Technology Stack
-
-For a detailed breakdown, see [TECH_STACK.md](docs/TECH_STACK.md).
-
 ### AI & Reasoning
-- **LLM:** Amazon Nova Lite (`us.amazon.nova-lite-v1:0`)
+- **Primary Reasoning:** Amazon Bedrock (Claude Haiku 4.5 via ap-south-2 Inference Profile)
+- **Multimodal AI:** Amazon Nova Lite (`us.amazon.nova-lite-v1:0`)
 - **Agent Mesh:** Custom Python/Node.js multi-agent orchestration
 - **Tools:** MCP-driven dynamic data retrieval
+- **Vector Store:** Amazon OpenSearch Service (k-NN enabled vector store)
 
 ### Frontend (Dashboard)
 - **Framework:** React + Vite
@@ -157,11 +155,10 @@ For a detailed breakdown, see [TECH_STACK.md](docs/TECH_STACK.md).
 - **Database:** PostgreSQL + Prisma ORM
 - **AWS Integration:** Boto3, AWS SDK
 
-### Backend
-- **Runtime:** Python 3.11+ (AWS Lambda)
-- **AI/ML:** AWS Bedrock (Claude 3.5 Sonnet), AWS Rekognition
-- **Orchestration:** AWS EventBridge, Strands MCP
-- **Databases:** DynamoDB, RDS Aurora, Redshift, S3
+### Engineering & Standards
+- **Runtime:** Node.js 22 (Backend), Python 3.12 (Agents)
+- **Infrastructure:** AWS Lambda, EC2, S3, CloudFront
+- **Database:** DynamoDB, RDS (PostgreSQL), OpenSearch
 - **Testing:** pytest, Hypothesis (property-based testing)
 
 ### Frontend

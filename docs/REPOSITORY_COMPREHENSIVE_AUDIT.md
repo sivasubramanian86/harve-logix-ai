@@ -49,15 +49,15 @@ def invoke_bedrock(self, prompt: str, system_prompt: Optional[str] = None) -> st
     }
 ```
 
-### 1.2 Bedrock Models Used
+### 1.2 Bedrock Models Used (Updated April 2026)
 
 **AWS Claude Models:**
-- `anthropic.claude-3-5-sonnet-20241022-v2:0` - Default reasoning model (agent decisions)
-- `anthropic.claude-sonnet-4-20250514` - Multimodal model (image/video analysis)
+- `arn:aws:bedrock:ap-south-2:020513638290:application-inference-profile/3uca3qqdrcyo` - **Claude Haiku 4.5** (Default reasoning model for all 6 agents)
+- `us.amazon.nova-lite-v1:0` - Multimodal model (image/video analysis via cross-region inference)
 
 **Configuration Files:**
 - [.env.example](/.env.example#L13-L15) - Model ID and region configuration
-- [backend/config.py](backend/config.py) - Model constants
+- [backend/config.py](backend/config.py) - Model constants (ap-south-2 primary)
 
 ```env
 BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0

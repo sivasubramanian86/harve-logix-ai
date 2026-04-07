@@ -9,7 +9,7 @@ import logging
 from typing import Any, Dict
 from datetime import datetime
 
-from base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 from config import (
     STORAGE_TEMPLATES_TABLE,
     DEFAULT_HARVEST_INCOME_GAIN,

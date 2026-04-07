@@ -1,15 +1,15 @@
 import sys
 import os
 sys.path.append(os.path.abspath('backend'))
-from agents.strands_analysis_agent import HarveLogixAnalysisAgent, AnalysisContext
+from agents.strands_analysis_agent import StrandsAnalysisAgent, AnalysisContext
 import json
 import logging
 
 logging.basicConfig(level=logging.INFO)
 
 def run_test():
-    print("Initializing HarveLogixAnalysisAgent...")
-    agent = HarveLogixAnalysisAgent()
+    print("Initializing StrandsAnalysisAgent...")
+    agent = StrandsAnalysisAgent()
     
     context = AnalysisContext(
         farmer_id='farmer_1234',
