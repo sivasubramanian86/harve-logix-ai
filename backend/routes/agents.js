@@ -53,7 +53,7 @@ const lambda = new AWS.Lambda({
 /**
  * Helper: Call Python agent module
  */
-function invokeAgent(agentModule, requestData) {
+function invokeAgent(agentModule, requestData, req = null) {
   // Option to prefer Lambda if configured or in production
   // Force Lambda for Hackathon production stability
   const useLambda = true;
@@ -69,7 +69,7 @@ function invokeAgent(agentModule, requestData) {
         Payload: JSON.stringify({ 
           request_data: { 
             ...requestData, 
-            language: requestData.language || req.body.language || 'en' 
+            language: requestData.language || (req && req.body ? req.body.language : 'en') || 'en' 
           } 
         })
       };
@@ -219,7 +219,7 @@ router.post('/harvest-ready', async (req, res, next) => {
       market_prices: marketPrices || {},
       weather_forecast: weatherForecast || {},
       farmer_id: farmerId || 'demo-farmer',
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -252,7 +252,7 @@ router.post('/storage-scout', async (req, res, next) => {
       ambient_temp: ambientTemp || 25,
       ambient_humidity: ambientHumidity || 60,
       farmer_id: farmerId || 'demo-farmer',
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -286,7 +286,7 @@ router.post('/supply-match', async (req, res, next) => {
       quality: quality || 'standard',
       location: location || { lat: 0, lon: 0 },
       farmer_id: farmerId || 'demo-farmer',
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -319,7 +319,7 @@ router.post('/water-wise', async (req, res, next) => {
       ambient_temp: ambientTemp || 25,
       precipitation: precipitation || 0,
       farmer_id: farmerId || 'demo-farmer',
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -352,7 +352,7 @@ router.post('/quality-hub', async (req, res, next) => {
       farmer_id: farmerId || 'demo-farmer',
       farmer_photo: farmerPhoto,
       batch_size_kg: batchSizeKg || 1 // Support batchSizeKg
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -384,7 +384,7 @@ router.post('/collective-voice', async (req, res, next) => {
       crop_type: cropType,
       location: location || { lat: 0, lon: 0 },
       farmer_id: farmerId || 'demo-farmer',
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -445,7 +445,7 @@ router.post('/analyze', async (req, res) => {
       crop_type: crop,
       timeframe: timeframe || '30-days',
       analysis_type: analysisType,
-    })
+    }, req)
 
     res.json(result)
   } catch (error) {
@@ -531,7 +531,7 @@ router.get('/insights/farmer/:id', async (req, res, next) => {
       crop_type: 'mixed',
       timeframe: 'next-7-days',
       analysis_type: 'farmer_insights',
-    })
+    }, req)
 
     // Map Python AnalysisResult to Frontend-friendly AiInsight objects
     const insights = (result.insights || []).map((text, idx) => {
@@ -604,7 +604,7 @@ router.get('/supply-chain', async (req, res, next) => {
       farmer_id: 'system',
       region: 'India',
       crop_type: 'generic'
-    })
+    }, req)
 
     // Map metrics to top-level keys for SupplyChain page
     const metrics = result.metrics || {}
@@ -640,3 +640,4 @@ router.get('/supply-chain', async (req, res, next) => {
 })
 
 export default router
+

@@ -604,7 +604,8 @@ Then provide:
 
 Focus on {context.analysis_type} implications for {context.crop_type} in {context.region}.
 
-IMPORTANT: Return ONLY a raw JSON object with keys: "insights", "recommendations", "metrics", "confidence_score". No preamble, no conversational filler.
+IMPORTANT: Return ONLY a raw JSON object with keys: "insights", "recommendations", "metrics", "confidence_score", "reasoning". No preamble, no conversational filler.
+Ensure the "reasoning" key captures the synthesis of ALL data points, especially tool results.
 """
     
     def _extract_insights(
@@ -618,22 +619,58 @@ IMPORTANT: Return ONLY a raw JSON object with keys: "insights", "recommendations
         """
         try:
             # Attempt to extract JSON from the text using a more robust regex
+            # Nova/Claude sometimes wraps JSON in code blocks or adds pre/post text.
+            # This regex looks for the outermost curly braces accurately.
             import re
-            json_match = re.search(r'(\{.*\})', response, re.DOTALL)
+            
+            # Start by checking if the response is empty or mostly whitespace
+            if not response or not response.strip():
+                raise ValueError("Empty response from Bedrock")
+                
+            # Try to find the JSON block. We look for { as start and } as end, matching greedily.
+            json_match = re.search(r'(\{[\s\S]*\})', response)
             if json_match:
                 json_str = json_match.group(1)
-                parsed = json.loads(json_str)
-                # Ensure all required keys exist
-                insights = parsed.get('insights', [])
-                recommendations = parsed.get('recommendations', [])
-                metrics = parsed.get('metrics', {})
-                confidence = parsed.get('confidence_score', 0.8)
-                return insights, recommendations, metrics, confidence
+                
+                # Basic cleanup of common LLM artifacts
+                json_str = json_str.strip()
+                
+                try:
+                    parsed = json.loads(json_str)
+                    
+                    # Ensure all required keys exist, map them if they appear in different cases/formats
+                    insights = parsed.get('insights', [])
+                    recommendations = parsed.get('recommendations', [])
+                    metrics = parsed.get('metrics', {})
+                    confidence = parsed.get('confidence_score', 0.8)
+                    
+                    # If recommendations are not in expected format, try to extract them from insights
+                    if not recommendations and insights:
+                        # Sometimes models put everything in insights
+                        recommendations = [
+                            {'action': item, 'impact': 'General improvement', 'timeline': '7 days'}
+                            for item in insights if 'recommend' in item.lower() or 'should' in item.lower()
+                        ]
+                    
+                    if insights or recommendations:
+                        return insights, recommendations, metrics, confidence
+                except json.JSONDecodeError as je:
+                    self.logger.warning(f"Initial JSON parse failed: {je}. Attempting fix.")
+                    # LLMs sometimes output trailing commas or other minor syntax errors
+                    # Simple fix for trailing commas in arrays/objects
+                    fixed_json = re.sub(r',\s*([\]}])', r'\1', json_str)
+                    try:
+                        parsed = json.loads(fixed_json)
+                        return parsed.get('insights', []), parsed.get('recommendations', []), parsed.get('metrics', {}), parsed.get('confidence_score', 0.8)
+                    except:
+                        pass # Fall through to error logs
+                
         except Exception as e:
-            self.logger.warning(f"Failed to parse structured JSON from agent response. Error: {e}")
+            self.logger.warning(f"Failed to parse structured JSON from agent response. Error: {str(e)}")
             self.logger.debug(f"Raw response: {response}")
             # Print to stdout so it appears in Node.js logs for debugging
-            print(f"DEBUG_AGENT_RAW_RESPONSE: {response}")
+            print(f"DEBUG_AGENT_RAW_RESPONSE_ERROR: {str(e)}")
+            print(f"DEBUG_AGENT_RAW_RESPONSE_CONTENT: {response}")
 
         # Fallback if the agent didn't return perfect JSON
         insights = [
@@ -656,3 +693,32 @@ IMPORTANT: Return ONLY a raw JSON object with keys: "insights", "recommendations
         confidence = 0.5
         
         return insights, recommendations, metrics, confidence
+
+def lambda_handler(event, context):
+    """Lambda handler for Strands Analysis Agent."""
+    try:
+        from dataclasses import asdict
+        agent = StrandsAnalysisAgent()
+        req_data = event.get('request_data', {})
+        
+        # Map input to AnalysisContext with defaults for UI compatibility
+        analysis_ctx = AnalysisContext(
+            farmer_id=event.get('farmer_id', req_data.get('farmer_id', 'unknown')),
+            region=req_data.get('region', 'Karnataka'),
+            crop_type=req_data.get('crop_type', 'Tomato'),
+            timeframe=req_data.get('timeframe', 'Next 3 months'),
+            analysis_type=req_data.get('analysis_type', 'General Analysis'),
+            custom_params=req_data
+        )
+        
+        result = agent.analyze(analysis_ctx)
+        
+        return {
+            'statusCode': 200 if result.status == 'success' else 500,
+            'body': json.dumps(asdict(result))
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'status': 'error', 'error': str(e)})
+        }
